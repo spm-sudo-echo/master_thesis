@@ -1,0 +1,54 @@
+\documentclass[a4paper]{book} % type of document
+\usepackage[T1]{fontenc}      % font encoding
+\usepackage[utf8]{inputenc}   % spcial chars from keyboard
+\usepackage[english]{babel}   % document language
+\usepackage{graphicx}		  % images
+\usepackage{microtype}	      % font expansion and justification
+\usepackage{comment}          % multi line comments
+\usepackage[backend = biber, style=alphabetic]{biblatex}         % bibliograpy
+\usepackage[autostyle]{csquotes}
+\addbibresource{C:/Users/nikko/OneDrive/Documents/Uni/magistrale/tesi/thesis/master_thesis/chapters/01_intro/01_intro.bib}
+%\usepackage{fancyhdr} %to make "better looking" page headers
+%\pagestyle{fancy}
+
+
+\graphicspath{ {imgs/} }
+
+\usepackage{subfiles}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+
+
+\title{
+	{Thesis Title}\\
+	{\large University of Pisa}\\
+	%{\includegraphics{}}
+}
+
+\author{Niccolò Picchiarelli}
+\date{\today}
+
+
+\begin{document}
+	
+	\maketitle
+	
+	\chapter{Introduction}
+	\subfile{chapters/01_intro/01_intro}
+	\begin{comment}
+			\chapter{Implementation of interactions in simulations}
+		\section{Previous Developments}
+		\section{Steric Interactions}
+		\subsection{All to All}
+		\subsection{Range}s
+		\section{Aligning Interactions}
+		
+		\chapter{Analysis of Structure and Dynamics}
+		\section{Radial Distribution Function}
+		
+		\chapter{Inference of interaction potentials from data}
+		\chapter{Conclusion}
+	\end{comment}
+
+	\printbibliography
+\end{document}
