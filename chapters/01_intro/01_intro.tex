@@ -1,4 +1,4 @@
-\documentclass[../main.tex]{subfiles}
+\documentclass[../master_thesis_np.tex]{subfiles}
 \graphicspath{ {imgs/} }
 
 
@@ -17,7 +17,7 @@
 	
 	The aim of CELLOIDS, the project inside of which this work has taken place, is to build a micro-scale intelligent robotic system using phoretic ABPs as motors, exploiting their single and collective behaviors. The CELLOIDS’ concept for a microrobot is a phospholipids GUV (Giant Unilamellar Vesicle) filled with a suspension of ABPs. A single ABP is a Janus sphere, with an inert hemisphere and a catalytic one, which turns a fuel into some products generating a gradient in the concentration field in its vicinity; this makes the solvent flow around the particle causing it to move. The GUV’s walls are deformable and can be pushed from the inside by ABPs, leading to further deformation and, in the end, motility, mimicking the behavior of living cells that can shrink through the tiny interstices of a biological tissue. 
 	
-	In this framework, collective behaviors and emergent properties of ABPs systems, both self-induced and caused by the interaction with a rigid or deformable confinement are of paramount importance for the microrobot to work properly. Regarding the self-induced behaviors, the most investigated is Motility-Induced Phase Separation \parencite{cates_motility-induced_2015}, caused by the concurrence between the excluded volume of the particles (non superimposable hard spheres) and their activity. A confinement-induced emergent property is e.g.\ propulsion-induced accumulation, in which motile particles tend to cluster at the boundary of the confinement \parencite{C5SM01718A}.
+	In this framework, collective behaviors and emergent properties of ABPs systems, both self-induced and caused by the interaction with a rigid or deformable confinement are of paramount importance for the microrobot to work properly. Regarding the self-induced behaviors, the most investigated is Motility-Induced Phase Separation \parencite{cates_motility-induced_2015}, caused by the concurrence between the excluded volume of the particles (non superimposable hard spheres) and their activity. A confinement-induced emergent property is e.g.\ propulsion-induced accumulation, in which motile particles tend to cluster at the boundary of the confinement \parencite{marconi_towards_2015}.
 	
 	The objective of this work is to develop a model, a simulation framework and a suite of analysis tools to study how an explicit interaction potential changes single and collective behaviors of an ABP system, always keeping in mind the experimental and applied point of view. The main novelty in the model is how a potential is applied. Specialized literature focuses on two types of interactions: aligning, involving the direction of particles, and non-aligning, which can be simple central potentials like the hard sphere; it is possible to find several interactions of both types in literature but this work tries to unify the two, linking coupling between the positions of a pair of particles (force) with coupling between the orientations of said particles (torque) with the objective of developing a minimal model that tries to mimic experimental observations.
 	
@@ -30,53 +30,67 @@
 	The last objective of the project is to build a Deep Learning based tool which, when trained starting from a minimal set of simulation data, is able to infer the interaction potential between couples of particles both in simulated and experimentally observed situations.
 
 
-	\begin{comment}
-			\section{Passive Brownian Motion}
-		Before adding the self-propulsion velocity, it is worthwhile to outline some facts about Passive Brownian motion in a 2-dimensional environment.
-		Due to the collisions with the fluid molecules, a passive Brownian particle experiences random forces and torques so that its motion is purely diffusive, both in position and orientation with the following diffusion coefficients
-		\begin{equation}
-			D_t = \frac{k_B T}{\gamma_t} \quad D_r = \frac{k_B T}{\gamma_r} 
-		\end{equation}
-		
-		being $\gamma_t = 6 \pi \eta a$ and $\gamma_r = 8 \pi \eta a^3$  the respective drag coefficients, where $a$ is the particle radius and $\eta$ is the fluid viscosity. The basis to build the model upon is the Langevin equation
-		
-		\begin{equation} \label{eq:lang1}
-			m \mathbf{\ddot{r}} = -\gamma_t \mathbf{\dot{r}} + \mathbf{F}_{th}
-		\end{equation} 
-		
-		where $\mathbf{F}_{th}$ is the random force given by the collisions with the fluid molecules.
-		
-		Given that a typical BP will have a characteristic body-length in the order of $ \mathrm{\sim\mu m}$ and a velocity of $\sim\mu \mathrm{m s}^{-1}$ the system can be studied in low-Reynolds number regime being 
-		\[Re = \frac{\rho v a}{\eta} \sim 10^{-6} \]  
-		where $\rho$ is the fluid density, $v$ is the particle speed, $a$ is the particle radius and $\eta$ is the fluid viscosity and the values of density and viscosity for water were plugged in. As a consequence of this fact, inertial effects can be neglected and it is possible to study the system in the \emph{overdamped} regime, turning the Langevin equation \ref{eq:lang1} into
-		\begin{equation} \label{eq:lang2}
-			\gamma_t \mathbf{\dot{r}} = \mathbf{F}_{th}
-		\end{equation}
-		which can be rewritten as:
-		\begin{equation}
-			\mathbf{\dot{r}} = \sqrt{2D_t}\mathrm{d}\mathbf{W}
-		\end{equation}
-		where $\mathrm{d}\mathbf{W}$ is the derivative of a zero mean, variace 1 Wiener process.
-		In a homogeneous environment, rotational and translational motions are independent from each other, so that the equations of motion for a passive Brownian particle are
-		
-		\begin{equation}
-			\dot{x} = \sqrt{2D_t}dW_x, \quad \dot{y} = \sqrt{2D_t}dW_y, \quad \dot{\theta} = \sqrt{2D_r}dW_{\theta}
-		\end{equation}
-		
-		\section{Physics and Numerical Simulations of ABPs}
-		Despite the variety in single agent properties and self-propulsion mechanisms, it is possible to identify some key features that are shared between all ABP systems. The most important characteristic of an ABP is that, notwithstanding a symmetric shape (often in literature, and always in this work, spherical), each particle has a preferred axis which lies along the direction of self-propulsion.
-		
-		With this hypothesis, rotational diffusion has now become relevant since the direction of self-propulsion varies randomly with a characteristic time scale which corresponds to the inverse of the rotational diffusion coefficient $\tau_r = D_r^{-1}$. Adding self-propulsion into the equations of motion, we get:
-		\begin{equation}
-			\dot{x} = v \cos{\theta} + \sqrt{2D_t}dW_x , \quad \dot{y} = v \sin{\theta} + \sqrt{2D_t}dW_y, \quad \dot{\theta} = \sqrt{2D_r}dW_{\theta}
-		\end{equation}
-		
-		Starting from this fact, it is possible to derive the fundamental features to take into account in the simulation:
-		\begin{itemize}
-			\item[(i)] directionality over a characteristic time interval
-			\item[(ii)] orientational noise
-			\item[(iii)] absence of inertia
-		\end{itemize}
-	\end{comment}
+	\section{Passive Brownian Motion}
+	{\color{red} This and the next chapter follow \parencite{callegari_numerical_2019}.}
 
+	Before adding the self-propulsion velocity, it is worthwhile to outline some facts about Passive Brownian motion in a 2-dimensional environment.
+	Due to the collisions with the fluid molecules, a passive Brownian particle experiences random forces and torques so that its motion is purely diffusive, both in position and orientation with the following diffusion coefficients
+	\begin{equation}
+		D_t = \frac{k_B T}{\gamma_t} \quad D_r = \frac{k_B T}{\gamma_r} 
+	\end{equation}
+	
+	being $\gamma_t = 6 \pi \eta a$ and $\gamma_r = 8 \pi \eta a^3$  the respective drag coefficients, where $a$ is the particle radius and $\eta$ is the fluid viscosity. The basis to build the model upon is the Langevin equation
+	
+	\begin{equation} \label{eq:lang1}
+		m \mathbf{\ddot{r}} = -\gamma_t \mathbf{\dot{r}} + \mathbf{F}_{th}
+	\end{equation} 
+	where $\mathbf{F}_{th}$ is the random force given by the collisions with the fluid molecules.
+	
+	Given that a typical Brownian particle will have a characteristic body-length in the order of $ \mathrm{\sim\mu m}$ and a velocity of $\sim\mu \mathrm{m s}^{-1}$ the system can be studied in low-Reynolds number regime being 
+	\[Re = \frac{\rho v a}{\eta} \sim 10^{-6} \]  
+	where $\rho$ is the fluid density, $v$ is the particle speed, $a$ is the particle radius and $\eta$ is the fluid viscosity and the values of density and viscosity for water were plugged in. As a consequence of this fact, inertial effects can be neglected and it is possible to study the system in the \emph{overdamped} regime, turning the Langevin equation \ref{eq:lang1} into
+	\begin{equation} \label{eq:lang2}
+		\gamma_t \mathbf{\dot{r}} = \mathbf{F}_{th}
+	\end{equation}
+	which can be rewritten as:
+	\begin{equation}
+		\mathbf{\dot{r}} = \sqrt{2D_t}\mathrm{d}\mathbf{W}
+	\end{equation}
+	where $\mathrm{d}\mathbf{W}$ is the derivative of a zero mean, variace 1 Wiener process.
+	In a homogeneous environment, rotational and translational motions are independent from each other, so that the equations of motion for a passive Brownian particle are
+	
+	\begin{equation}
+		\dot{x} = \sqrt{2D_t}dW_x, \quad \dot{y} = \sqrt{2D_t}dW_y, \quad \dot{\theta} = \sqrt{2D_r}dW_{\theta}
+	\end{equation}
+	
+	\section{Physics and Numerical Simulations of ABPs}
+	Despite the variety in single agent properties and self-propulsion mechanisms, it is possible to identify some key features that are shared between all ABP systems. The most important characteristic of an ABP is that, notwithstanding a symmetric shape (often in literature, and always in this work, spherical), each particle has a preferred axis which lies along the direction of self-propulsion.
+	
+	With this hypothesis, rotational diffusion has now become relevant since the direction of self-propulsion varies randomly with a characteristic time scale which corresponds to the inverse of the rotational diffusion coefficient $\tau_r = D_r^{-1}$. 
+	
+	Adding a constant-magnitude self-propulsion velocity $\mathbf{v}$ into the equations of motion, we get:
+	\begin{equation}
+		\dot{x} = v \cos{\theta} + \sqrt{2D_t}dW_x , \quad \dot{y} = v \sin{\theta} + \sqrt{2D_t}dW_y, \quad \dot{\theta} = \sqrt{2D_r}dW_{\theta}
+	\end{equation}
+	where $\theta$ is the particle orientation and $v$ is the modulus of the self-propulsion velocity.
+	
+	As a consequence, the resulting finite-differences equations are:
+	\begin{equation} \label{eq:fin_diff1}
+		\begin{cases}
+			x_{n+1} = x_n + v \cos\theta \Delta t + \sqrt{2D_t \Delta t} \, W_{x,n},\\
+			y_{n+1} = y_n + v \sin\theta \Delta t + \sqrt{2D_t \Delta t} \, W_{y,n},\\
+			\theta_{n+1} = \theta_n + \omega \Delta t + \sqrt{2D_t \Delta t} \, W_{\theta,n}\\
+		\end{cases}
+	\end{equation}
+	where the case of a deterministic self-propulsion angular velocity $\omega$ is also taken into account.
+
+	It is possible to insert external forces and torques in the system, where \emph{external} means that they are not due to the self-propulsion. Even though in literature there are examples of uniform external potentials, e.g.\ electric and magnetic fields, being appliend on the ABP ensemble as a whole, in this work the only external force is the interaction between particles, which is applied in the low-Reynolds number regime as:
+	\begin{equation} \label{eq:fin_diff_with_forces}
+		\begin{cases}
+			x_{n+1} = x_n + \left( v \cos\theta + \frac{D_t}{k_B T} F_{ext,x} \right) \Delta t + \sqrt{2D_t \Delta t} \, W_{x,n},\\
+			y_{n+1} = y_n + \left( v \cos\theta + \frac{D_t}{k_B T} F_{ext,y} \right) \Delta t + \sqrt{2D_t \Delta t} \, W_{y,n},\\
+			\theta_{n+1} = \theta_n +\left(\omega + \frac{D_r}{k_B T}{}T_{ext}\right) \Delta t + \sqrt{2D_t \Delta t} \, W_{\theta,n}\\
+		\end{cases}
+	\end{equation}
+	where applying a force or a torque just linearly translates to a linear or angular velocity change, with the respective drag coefficients as proportionality constant.
 \end{document}
