@@ -28,8 +28,7 @@
 	Moreover, with the right parameters, this model is capable of showing rich collective behaviors, making it a feasible alternative to study phase transitions in a statistical physics fashion. A glorious model in this field involving aligning interactions is the Vicsek model \parencite{vicsek_novel_1995}, which captures a plethora of natural world phenomena. Present work shows how a system with coupled positions and orientations can turn into a continuous Vicsek-like case study.
 	
 	The last objective of the project is to build a Deep Learning based tool which, when trained starting from a minimal set of simulation data, is able to infer the interaction potential between couples of particles both in simulated and experimentally observed situations.
-
-
+	\newpage
 	\section{Passive Brownian Motion}
 	{\color{red} This and the next chapter follow \parencite{callegari_numerical_2019}.}
 
@@ -72,7 +71,7 @@
 	\begin{equation}
 		\dot{x} = v \cos{\theta} + \sqrt{2D_t}dW_x , \quad \dot{y} = v \sin{\theta} + \sqrt{2D_t}dW_y, \quad \dot{\theta} = \sqrt{2D_r}dW_{\theta}
 	\end{equation}
-	where $\theta$ is the particle orientation and $v$ is the modulus of the self-propulsion velocity.
+	where $\theta$ is the particle orientation and $v$ is the magnitude of the self-propulsion velocity.
 	
 	As a consequence, the resulting finite-differences equations are:
 	\begin{equation} \label{eq:fin_diff1}
@@ -93,4 +92,24 @@
 		\end{cases}
 	\end{equation}
 	where applying a force or a torque just linearly translates to a linear or angular velocity change, with the respective drag coefficients as proportionality constant.
+
+	\begin{algorithm}
+		\caption{The simulation algorithm}\label{alg:sim1}	
+		\begin{algorithmic}[1]
+			\For{i in particles in ensemble}
+			\State{$ \vec{r}_{i}\gets \vec{r}_{i,0} $}\Comment{position $\vec{r}_{i,0}$ is randomly initialized in the simulation space}
+			\State{$\theta_{i}\gets \theta_{i,0}$}\Comment {$\theta_{i,0} \sim \mathrm{Uniform}([0, 2\pi])$}
+			\State{$v\gets v_0$}\Comment{Can be initialized as a constant or a random variable}
+			\EndFor
+			\For{n in timesteps}
+				\For{i in particles in ensemble}
+				\State{$\vec{F}_{i,n} = \sum_{j}^{Np}{\vec{F}_{ij,n}}$}
+				\State{$w_{i,n} \sim \mathcal{N}(0, \sqrt{2D_t \Delta t})$}
+				\State{$z_{i,n} \sim \mathcal{N}(0, \sqrt{2D_r \Delta t})$}
+				\State{$ \vec{r}_{i,n+1}\gets \vec{r_n} + w_{i,n} + v (\cos\theta_{i,n}, \sin\theta_{i,n})\Delta t + \vec{F}_{i,n}\Delta t / \gamma _t $}
+				\State{$\theta_{i,n+1} = \theta_{i,n} + z_{i,n} + \omega_{i,n} \Delta t + T_{i,n} \Delta t/\gamma _r$}
+				\EndFor
+			\EndFor
+		\end{algorithmic}
+		\end{algorithm}
 \end{document}
