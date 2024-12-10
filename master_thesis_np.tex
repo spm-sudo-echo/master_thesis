@@ -11,14 +11,16 @@
 \usepackage{algpseudocodex}   % algorithm pseudocode
 \usepackage[backend = biber, style=alphabetic]{biblatex}         % bibliograpy
 \usepackage[autostyle]{csquotes}
+
 \addbibresource{C:/Users/nikko/OneDrive/Documents/Uni/magistrale/tesi/thesis/master_thesis/chapters/01_intro/01_intro.bib}
 \addbibresource{C:/Users/nikko/OneDrive/Documents/Uni/magistrale/tesi/thesis/master_thesis/chapters/02_impl/02_impl.bib}
 
+\graphicspath{ {C:/Users/nikko/OneDrive/Documents/Uni/magistrale/tesi/thesis/master_thesis/chapters/01_intro/imgs/} {C:/Users/nikko/OneDrive/Documents/Uni/magistrale/tesi/thesis/master_thesis/chapters/02_impl/imgs/} }
+
+\newcommand{\julia}{\includegraphics[height=0.7em]{julia-logo-color.png}}
+
 %\usepackage{fancyhdr} %to make "better looking" page headers
 %\pagestyle{fancy}
-
-
-\graphicspath{ {imgs/} }
 
 \usepackage{subfiles}
 \usepackage{hyperref}
@@ -40,9 +42,11 @@
 	\maketitle
 	
 	\chapter{Introduction}
-	\subfile{chapters/01_intro/01_intro}
+
+	\subfile{./chapters/01_intro/01_intro}
+
 	\chapter[Interaction Implementation]{Implementation of interactions in simulations}
-	\subfile{chapters/02_impl/02_impl}
+	\subfile{./chapters/02_impl/02_impl}
 	
 	\begin{comment}
 			\chapter{Implementation of interactions in simulations}
