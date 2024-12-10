@@ -30,7 +30,7 @@
 	The last objective of the project is to build a Deep Learning based tool which, when trained starting from a minimal set of simulation data, is able to infer the interaction potential between couples of particles both in simulated and experimentally observed situations.
 	\newpage
 	\section{Passive Brownian Motion}
-	{\color{red} This and the next chapter follow \parencite{callegari_numerical_2019}.}
+	{\color{blue} This and the next chapter follow \parencite{callegari_numerical_2019}.}
 
 	Before adding the self-propulsion velocity, it is worthwhile to outline some facts about Passive Brownian motion in a 2-dimensional environment.
 	Due to the collisions with the fluid molecules, a passive Brownian particle experiences random forces and torques so that its motion is purely diffusive, both in position and orientation with the following diffusion coefficients
@@ -61,8 +61,8 @@
 	\begin{equation}
 		\dot{x} = \sqrt{2D_t}dW_x, \quad \dot{y} = \sqrt{2D_t}dW_y, \quad \dot{\theta} = \sqrt{2D_r}dW_{\theta}
 	\end{equation}
-	
-	\section{Physics and Numerical Simulations of ABPs}
+
+	\section[ABP simulations]{Physics and Numerical Simulations of ABPs}
 	Despite the variety in single agent properties and self-propulsion mechanisms, it is possible to identify some key features that are shared between all ABP systems. The most important characteristic of an ABP is that, notwithstanding a symmetric shape (often in literature, and always in this work, spherical), each particle has a preferred axis which lies along the direction of self-propulsion.
 	
 	With this hypothesis, rotational diffusion has now become relevant since the direction of self-propulsion varies randomly with a characteristic time scale which corresponds to the inverse of the rotational diffusion coefficient $\tau_r = D_r^{-1}$. 
@@ -94,7 +94,7 @@
 	where applying a force or a torque just linearly translates to a linear or angular velocity change, with the respective drag coefficients as proportionality constant.
 
 	\begin{algorithm}
-		\caption{The simulation algorithm}\label{alg:sim1}	
+		\caption{The simulation algorithm} \label{alg:sim1}	
 		\begin{algorithmic}[1]
 			\For{i in particles in ensemble}
 			\State{$ \vec{r}_{i}\gets \vec{r}_{i,0} $}\Comment{position $\vec{r}_{i,0}$ is randomly initialized in the simulation space}
