@@ -1,0 +1,11 @@
+\newcommand{\julia}{\includegraphics[height=0.7em]{julia-logo-color.png}}
+
+\newcommand{\standalonebib}[1]{
+        \IfFileExists{#1.bib}{
+        % Standalone compilation
+        \addbibresource{#1.bib}
+    }{
+        % Main document compilation
+        \addbibresource{./chapters/#1/#1.bib}
+    }
+}
