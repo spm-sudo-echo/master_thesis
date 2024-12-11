@@ -12,20 +12,18 @@
 \usepackage[backend = biber, style=alphabetic]{biblatex}         % bibliograpy
 \usepackage[autostyle]{csquotes}
 
+
+\graphicspath{ {./chapters/01_intro/imgs/} {./chapters/02_impl/imgs/} }
 \addbibresource{C:/Users/nikko/OneDrive/Documents/Uni/magistrale/tesi/thesis/master_thesis/chapters/01_intro/01_intro.bib}
 \addbibresource{C:/Users/nikko/OneDrive/Documents/Uni/magistrale/tesi/thesis/master_thesis/chapters/02_impl/02_impl.bib}
-
-\graphicspath{ {C:/Users/nikko/OneDrive/Documents/Uni/magistrale/tesi/thesis/master_thesis/chapters/01_intro/imgs/} {C:/Users/nikko/OneDrive/Documents/Uni/magistrale/tesi/thesis/master_thesis/chapters/02_impl/imgs/} }
-
-\newcommand{\julia}{\includegraphics[height=0.7em]{julia-logo-color.png}}
-
 %\usepackage{fancyhdr} %to make "better looking" page headers
 %\pagestyle{fancy}
-
 \usepackage{subfiles}
+\usepackage{standalone}
 \usepackage{hyperref}
 \hypersetup{hidelinks}
 
+\newcommand{\julia}{\includegraphics[height=0.7em]{julia-logo-color.png}}
 
 \title{
 	{Thesis Title}\\
@@ -40,12 +38,9 @@
 \begin{document}
 	
 	\maketitle
-	
-	\chapter{Introduction}
 
 	\subfile{./chapters/01_intro/01_intro}
 
-	\chapter[Interaction Implementation]{Implementation of interactions in simulations}
 	\subfile{./chapters/02_impl/02_impl}
 	
 	\begin{comment}

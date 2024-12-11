@@ -2,10 +2,12 @@
 
 \newcommand{\standalonebib}[1]{
         \IfFileExists{#1.bib}{
+            \typeout{picchio local bib}
         % Standalone compilation
         \addbibresource{#1.bib}
     }{
         % Main document compilation
+        \typeout{picchio main bib}
         \addbibresource{./chapters/#1/#1.bib}
     }
 }

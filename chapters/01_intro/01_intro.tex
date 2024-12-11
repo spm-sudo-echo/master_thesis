@@ -1,7 +1,8 @@
 \documentclass[../master_thesis_np.tex]{subfiles}
+\graphicspath{{./imgs/}}
 
 \begin{document} 
-	
+\chapter{Introduction}
 	The phenomenon of (passive) Brownian Motion is a well investigated topic in physics since 1827, when Robert Brown studied the motion of pollen grains suspended in water.
 	Since then, scientists across various fields have explored the properties of Brownian Particles systems in numerous variations, one of which is Active Brownian Particles (ABP). 
 	
@@ -104,7 +105,7 @@
 				\State{$w_{i,n} \sim \mathcal{N}(0, \sqrt{2D_t \Delta t})$}
 				\State{$z_{i,n} \sim \mathcal{N}(0, \sqrt{2D_r \Delta t})$}
 				\State{$ \vec{r}_{i,n+1}\gets \vec{r_n} + w_{i,n} + v (\cos\theta_{i,n}, \sin\theta_{i,n})\Delta t + \vec{F}_{i,n}\Delta t / \gamma _t $}
-				\State{$\theta_{i,n+1} = \theta_{i,n} + z_{i,n} + \omega_{i,n} \Delta t + T_{i,n} \Delta t/\gamma _r$}
+				\State{$\theta_{i,n+1}\gets \theta_{i,n} + z_{i,n} + \omega_{i,n} \Delta t + T_{i,n} \Delta t/\gamma _r$}
 				\EndFor
 			\EndFor
 		\end{algorithmic}
