@@ -11,11 +11,6 @@
 \usepackage{algpseudocodex}   % algorithm pseudocode
 \usepackage[backend = biber, style=alphabetic]{biblatex}         % bibliograpy
 \usepackage[autostyle]{csquotes}
-
-
-\graphicspath{ {./chapters/01_intro/imgs/} {./chapters/02_impl/imgs/} }
-\addbibresource{C:/Users/nikko/OneDrive/Documents/Uni/magistrale/tesi/thesis/master_thesis/chapters/01_intro/01_intro.bib}
-\addbibresource{C:/Users/nikko/OneDrive/Documents/Uni/magistrale/tesi/thesis/master_thesis/chapters/02_impl/02_impl.bib}
 %\usepackage{fancyhdr} %to make "better looking" page headers
 %\pagestyle{fancy}
 \usepackage{subfiles}
@@ -23,7 +18,14 @@
 \usepackage{hyperref}
 \hypersetup{hidelinks}
 
-\newcommand{\julia}{\includegraphics[height=0.7em]{julia-logo-color.png}}
+\graphicspath{ {./chapters/01_intro/imgs/} {./chapters/02_impl/imgs/} }
+\input{command_def}
+
+% \addbibresource{./chapters/01_intro/01_intro.bib}
+% \addbibresource{./chapters/02_impl/02_impl.bib}
+
+\standalonebib{01_intro}
+\standalonebib{02_impl}
 
 \title{
 	{Thesis Title}\\
