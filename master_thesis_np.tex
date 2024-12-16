@@ -2,7 +2,13 @@
 \usepackage[T1]{fontenc}      % font encoding
 \usepackage[utf8]{inputenc}   % spcial chars from keyboard
 \usepackage[english]{babel}   % document language
+
 \usepackage{graphicx}		  % images
+\usepackage{wrapfig}          % wrapped figures
+\usepackage{subfig}           % subfigures
+\usepackage{caption}          % required by subfig 
+\usepackage{subcaption}       % captions in subfigures
+
 \usepackage{xcolor}           % colors
 \usepackage{microtype}	      % font expansion and justification
 \usepackage{comment}          % multi line comments
@@ -21,11 +27,9 @@
 \graphicspath{ {./chapters/01_intro/imgs/} {./chapters/02_impl/imgs/} }
 \input{command_def}
 
-% \addbibresource{./chapters/01_intro/01_intro.bib}
-% \addbibresource{./chapters/02_impl/02_impl.bib}
+\addbibresource{./chapters/01_intro/01_intro.bib}
+\addbibresource{./chapters/02_impl/02_impl.bib}
 
-\standalonebib{01_intro}
-\standalonebib{02_impl}
 
 \title{
 	{Thesis Title}\\
