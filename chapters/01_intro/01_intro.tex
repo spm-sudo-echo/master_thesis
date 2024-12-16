@@ -117,25 +117,37 @@
 		\subsection{Collective motion}
 		Investigation of collective motion is an extremely important topic in this field, since it not only lead to a better understanding of the physics behind ABPs systems, but it helped developing physical and mathematical tools such as order parameters which can be used both in simulation and experimental context. 
 		
-		\cite{martin-gomez_collective_2018} analyzes how an explicit polar aligning interaction can make the system transition to an ordered flocking phase, where almost all particles align their orientation in the same direction, even though an orientational noise is present. The model is built taking into account an aligning torque between particles $i \mathrm{and} j$ which goes as $K \sin{\theta_{i} - \theta_{j}}$, only within a certain distance, and a repulsive potential $\epsilon \left(\frac{\sigma}{r}\right)^{12}$ to take into account the excluded volume.
+		In the following section the "Vicsek model" will often be cited. This is the right time to give a brief introduction to it with the authors' words: \emph{The only rule of the model is: at each time step a given particle driven with a constant absolute velocity assumes the average direction of motion of the particles in its neighborhood of radius r with some random perturbation added.} \cite{vicsek_novel_1995}. Although extremely simple, this model is of paramount importance in the study of active matter since it can be studied in terms of a phase transition and recreates the behavior of real living systems.
 		
-		The parameters of the system are the Péclet number $\mathrm{Pe} = \frac{v_0}{\sigma \gamma}$ which is the ratio between the self propulsion velocity and the product of the characteristic length of the particles and the rotational diffusion coefficient and $g = \frac{K}{4\pi \sigma^2 \gamma}$ which quantifies the relative intensity of the orientational coupling strength and the reorienting noise. The order parameter is the mean global polarization $P = \left| \sum_{k=1}^{N} \exp{i \psi_k(t)} \right| / N$, which is $\sim 0$ in the disordered phase and $> 0$ in the flocking phase. The authors build a phase diagram in the $\mathrm{Pe}-g$ plane Figure \ref{fig:martin_flocking1}, which shows the separation between disorder and flocking as well as intermediate clustering phases, one with a microscopic cluster structure and one where a macroscopic single cluster structure arises.
+		\cite{martin-gomez_collective_2018} analyzes how an explicit polar aligning interaction can make the system transition to an ordered flocking phase, where almost all particles align their orientation in the same direction, even though an orientational noise is present. The model is built taking into account an aligning torque between particles $i$ and $j$ which goes as $K \sin{(\theta_{i} - \theta_{j})}$, only within a certain distance, and a repulsive potential $\epsilon \left(\frac{\sigma}{r}\right)^{12}$ to take into account the excluded volume.
 		
-		\begin{figure}[htp]
+		The parameters of the system are the Péclet number $\mathrm{Pe} = \frac{v_0}{\sigma \gamma}$ which is the ratio between the self propulsion velocity and the product of the characteristic length of the particles and the rotational diffusion coefficient and $g = \frac{K}{4\pi \sigma^2 \gamma}$ which quantifies the relative intensity of the orientational coupling strength and the reorienting noise. The order parameter is the mean global polarization
+		
+    	\[ P = \frac{1}{N}\left| \sum_{k=1}^{N} \exp{(i \theta_k(t))} \right|\]
+    	 which is $\sim 0$ in the disordered phase and $> 0$ in the flocking phase. The authors build a phase diagram in the $\mathrm{Pe}-g$ plane Figure \ref{fig:martin_flocking1}, which shows the separation between disorder and flocking as well as intermediate clustering phases, one with a microscopic cluster structure and one where a macroscopic single cluster structure arises.
+		
+		\begin{figure}[h]
 			\centering
 			\includegraphics[width=\textwidth]{martin_phaseseparation.png}
 			\label{fig:martin_flocking1}
 			\caption{\cite{martin-gomez_collective_2018}}
 		\end{figure}
 		
-		After noting that the phase transition happens with increasing $g$ for any $\mathrm{Pe} > 1$, authors focus on studying this transition in $g$, in the  spirit of an equilibrium phase transition, with $P$ as the order parameter and its susceptibility $\chi = N(\langle P^2 \rangle - \langle P \rangle^2)$. The behavior of the two quantities is similar to what is expected in a continuous phase transition with the critical coupling $g^c = 0.21 \pm 0.02$ (Figure \ref{fig:martin_flocking2}(b)).
+		After noting that the phase transition happens with increasing $g$ for any $\mathrm{Pe} > 1$, authors focus on studying this transition in $g$, in the  spirit of an equilibrium phase transition, with $P$ as the order parameter and its susceptibility $\chi = N(\langle P^2 \rangle - \langle P \rangle^2)$. The behavior of the two quantities is similar to what is expected in a continuous phase transition with the critical coupling $g^c = 0.21 \pm 0.02$ (Figure \ref{fig:martin_flocking3}(a)).
 		
 		In the next part authors focus on clustering phenomena, noting that the cluster size distribution decays exponentially for $g < g*$ and algebraically for $g > g*$. This defines the two phases of microscopic and macroscopic clustering.
 		Introducing two new order parameters
-		\[ P_x = \left\langle \left| \frac{1}{N} \sum_{i=1}^N \cos(\theta_i) \right| \right\rangle ;
+		\[ P_x = \left\langle \left| \frac{1}{N} \sum_{i=1}^N \cos(\theta_i) \right| \right\rangle ; \quad
 		P_y = \left\langle \left| \frac{1}{N} \sum_{i=1}^N \sin(\theta_i) \right| \right\rangle,
 		 \]
 		 it is possible to distinguish between lane-like and band-like behavior in aligned clusters.
+		 
+		 \begin{figure}[htp]
+		 	\centering
+		 	\includegraphics[width=.7\textwidth]{martin_laneband.png}
+		 	\label{fig:martin_flocking2}
+		 	\caption{\cite{martin-gomez_collective_2018}}
+		 \end{figure}
 		 
 		 The authors use the radial distribution function 
 		 \[ g(r) = \frac{1}{N} \left\langle \sum_{j \neq i} \sum_{i} \delta \left( r - |\mathbf{r}_i - \mathbf{r}_j| \right) \right\rangle
@@ -144,15 +156,29 @@
 		
 		\begin{figure}[htp]
 			\centering
-			\subfloat[][Polarization and its susceptibility]{\includegraphics[width=0.45\textwidth]{martin_phasetransition.png}}
+			\subfloat[][Polarization and its susceptibility]{\includegraphics[width=0.45\textwidth]{martin_phasetransition.png}}\quad
 		    \subfloat[][Pair correlation function and static structure factor]{\includegraphics[width=0.45\textwidth]{martin_gofr.png}}
 		    
-		    \caption{}
-		    \label{fig:martin_flocking2}
+		    \caption{\cite{martin-gomez_collective_2018}}
+		    \label{fig:martin_flocking3}
 		\end{figure}
 		
 		In \cite{caprini_spontaneous_2020}, authors investigate the alignment of instantaneous velocities in cases where motility-induced phase separation occurs. Most literature focuses on the effect that a central 2-body potential, or an explicit aligning interaction which couples the orientational degrees of freedom of single particles, has on the system, but the interplay between phase separation of particles systems and alignment in their velocity has hardly been studied.
 		
-		In the aforementioned paper, it is shown how, when ABPs systems with a simple repulsive only Weeks-Chandler-Anderson potential phase-separate in a cluster, their velocity tend to form aligned domains, regardless the self propulsion orientation. For this reason, the global polarization $\left| \sum_{k=1}^{N} \exp{i \psi_k(t)} \right| / N$, where $\psi_k(t)$ is the orientation angle of particle $k$ at time $t$, is not a good order parameter, even when the computation is restricted to clusters, thus the authors introduce the spatial correlation function of the velocity orientation $Q_i(r) = 1-2\sum_{j} \frac{d{ij}}{\mathcal{N}_k \pi } $, being $d_{ij} = \mathrm{min}\left[|\psi_i - \psi_j|, 2pi - |\psi_i - \psi_j| \right]$ the angular distance between two particles and $\mathcal{N}_k$ is the number of particles in a circular shell around the i-th particle, taken with a mean radius. 
-		 
+		In the aforementioned paper, it is shown how, when ABPs systems with a simple repulsive only Weeks-Chandler-Anderson potential phase-separate in a cluster, their velocity tend to form aligned domains, regardless the self propulsion orientation. For this reason, the global polarization is not a good order parameter, even when the computation is restricted to clusters, thus the authors introduce the spatial correlation function of the velocity orientation $Q_i(r) = 1-2\sum_{j} \frac{d{ij}}{\mathcal{N}_k \pi } $, being $d_{ij} = \mathrm{min}\left[|\theta_i - \theta_j|, 2 \pi - |\theta_i - \theta_j| \right]$ the angular distance between two particles and $\mathcal{N}_k$ is the number of particles in a circular shell around the i-th particle, taken with a thickness $\bar{r} = \mathrm{argmax} \{g(r)\}$, and mean radius $k\bar{r}$ with integer $k$. 
+		
+		It is possible to derive an order parameter from $Q(R)$ integrating it
+		\[ 
+		R = \int Q(r) dr \]
+		where the integral is performed on the cluster domain when present. 
+		This seems to be a good order parameter: varying the reorientation time $1/D_r$, $R$ is discontinuous at the point where the MIPS occurs and the result is consistent with established MIPS order parameters as shown in Figure \ref{fig:caprini1}.
+		
+		\begin{figure}[htp]
+			\centering
+			\includegraphics[width=\textwidth]{caprini2.png}
+			\label{fig:caprini1}
+			\caption{\cite{caprini_spontaneous_2020}}
+		\end{figure}
+		
+		Going on, the article shows analitically how it is possible to rewrite the equation of motion for the velocity: considering the symmetry in the hexagonal lattice which the particles arrange into, such equation involves a term which depends on the difference between particle's velocity and average velocity of the six surrounding it, thus re-obtaining a Vicsek-like model without a specific aligning interaction.
 \end{document}
