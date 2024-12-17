@@ -1,6 +1,6 @@
 \documentclass[a4paper]{book} % type of document
 \usepackage[T1]{fontenc}      % font encoding
-\usepackage[utf8]{inputenc}   % spcial chars from keyboard
+\usepackage[utf8]{inputenc}   % sepcial chars from keyboard
 \usepackage[english]{babel}   % document language
 
 \usepackage{graphicx}		  % images
@@ -10,13 +10,14 @@
 \usepackage{subcaption}       % captions in subfigures
 
 \usepackage{xcolor}           % colors
+\usepackage{chemformula}      % chemical formulas
 \usepackage{microtype}	      % font expansion and justification
 \usepackage{comment}          % multi line comments
 \usepackage{amsmath}          % math symbols
 \usepackage{algorithm}        % algorithms
 \usepackage{algpseudocodex}   % algorithm pseudocode
 \usepackage[backend = biber, style=alphabetic]{biblatex}         % bibliograpy
-\usepackage[autostyle]{csquotes}
+\usepackage[]{csquotes} % quotations
 %\usepackage{fancyhdr} %to make "better looking" page headers
 %\pagestyle{fancy}
 \usepackage{subfiles}
@@ -65,6 +66,7 @@
 		\chapter{Inference of interaction potentials from data}
 		\chapter{Conclusion}
 	\end{comment}
-
+	
+	\backmatter
 	\printbibliography
 \end{document}

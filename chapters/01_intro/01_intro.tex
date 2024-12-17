@@ -3,8 +3,7 @@
 
 \begin{document} 
 \chapter{Introduction}
-	The phenomenon of (passive) Brownian Motion is a well investigated topic in physics since 1827, when Robert Brown studied the motion of pollen grains suspended in water.
-	Since then, scientists across various fields have explored the properties of Brownian Particles systems in numerous variations, one of which is Active Brownian Particles (ABP). 
+	The phenomenon of (passive) Brownian Motion is a well investigated topic in physics since 1827, when Robert Brown studied the motion of pollen grains suspended in water. The list of physicists who dealt with the topic contains names such as Einstein and Langevin \cite{gardiner_handbook_2004}, whose main contribution is the first formalization of Brownian motion in terms of a differential equation, Ornstein and Uhlenbeck, who calculated fundamental properties such as the mean-square displacement of a Brownian particle \cite{uhlenbeck_theory_1930}. Since then, scientists across various fields have explored the properties of Brownian Particles systems in numerous variations, one of which is Active Brownian Particles (ABP). 
 	
 	ABPs are distinguished by their ability to extract energy from the environment and use it to propel themselves making them a fundamental model for non-equilibrium active matter systems.	
 	The motility mechanism can be mechanic, like cilia or flagella used by micro-organisms, or thermodynamic, like phoresis of various nature. 
@@ -12,6 +11,14 @@
 	Incorporating self-propulsion within the Brownian framework enables the emergence of numerous novel behaviors, with collective dynamics being particularly noteworthy; even if the single agent details may differ, especially in propulsion mechanisms, it is possible to build minimal statistical physics models that mimic real world dynamics, leading the way to the discovery of new physics as well as methods to analyze real living beings' behaviors and new ideas in material science. 
 	
 	There are several model features and properties that can be exploited to develop both analysis methods and new technologies based on active matter, e.g.\ self organization and clustering are relevant in the study of bacterial and algae colonies, while in the artificial world much use can be made of properties like chaining, clustering or vortices.
+	
+	\section{Micro Scale Robotics and CELLOIDS}
+	The concept of robotics at micro scale, especially for medical applications has been present in science fiction since a very long time. The first one to bring the concept into a scientific context was Richard Feynman in the famous CalTech conference \citetitle{Feynman} , from which the following quote is taken:
+	\begin{displayquote}
+		Many of the cells are very tiny, but they are very active \omissis Consider the possibility that we too can make a thing very small which does what we want — that we can manufacture an object that maneuvers at that level!
+		
+		\omissis it would be interesting in surgery if you could swallow the surgeon. You put the mechanical surgeon inside the blood vessel and it goes into the heart and "looks" around. \omissis It finds out which valve is the faulty one and takes a little knife and slices it out. Other small machines might be permanently incorporated in the body to assist some inadequately functioning organ.
+	\end{displayquote}
 	
 	The aim of CELLOIDS, the project inside of which this work has taken place, is to build a micro-scale intelligent robotic system using phoretic ABPs as motors, exploiting their single and collective behaviors. The CELLOIDS’ concept for a microrobot is a phospholipids GUV (Giant Unilamellar Vesicle) filled with a suspension of ABPs. A single ABP is a Janus sphere, with an inert hemisphere and a catalytic one, which turns a fuel into some products generating a gradient in the concentration field in its vicinity; this makes the solvent flow around the particle causing it to move. The GUV’s walls are deformable and can be pushed from the inside by ABPs, leading to further deformation and, in the end, motility, mimicking the behavior of living cells that can shrink through the tiny interstices of a biological tissue. 
 	
@@ -26,10 +33,121 @@
 	Moreover, with the right parameters, this model is capable of showing rich collective behaviors, making it a feasible alternative to study phase transitions in a statistical physics fashion. A glorious model in this field involving aligning interactions is the Vicsek model \parencite{vicsek_novel_1995}, which captures a plethora of natural world phenomena. Present work shows how a system with coupled positions and orientations can turn into a continuous Vicsek-like case study.
 	
 	The last objective of the project is to build a Deep Learning based tool which, when trained starting from a minimal set of simulation data, is able to infer the interaction potential between couples of particles both in simulated and experimentally observed situations.
-	\newpage
+	
+	
+	\section{Literature and State of the Art}
+	
+	Just with the simple framework described so far, plenty of literature has been produced on the topic. We will go through some of the  different papers that tackle the problem of understanding how active Brownian particles, both single and systems, behave with and without interactions.
+	
+	\subsection{Collective motion}
+	Investigation of collective motion is an extremely important topic in this field, since it not only lead to a better understanding of the physics behind ABPs systems, but it helped developing physical and mathematical tools such as order parameters which can be used both in simulation and experimental context. 
+	
+	In the following section the "Vicsek model" will often be cited. This is the right time to give a brief introduction to it with the authors' words: \emph{The only rule of the model is: at each time step a given particle driven with a constant absolute velocity assumes the average direction of motion of the particles in its neighborhood of radius r with some random perturbation added.} \cite{vicsek_novel_1995}. Although extremely simple, this model is of paramount importance in the study of active matter since it can be studied in terms of a phase transition and recreates in some way the behavior of real living systems.
+	
+	Although not strictly related with present work,\cite{cavagna_empirical_2010} is a seminal paper for the study of collective motion, for the problem of relating theoretical models and reality is tackled analyzing data of starling swarms in order to understand characteristics of interactions. Understandably, the system studied by Cavagna et al.~ is pretty different from the active Brownian particles ensemble investigated in this project, with the fist difference being the dimensionality (a bird swarm, just like a school of fish moves in a 3D environment), but some of the problems reported in that paper are still present in these days active matter community. A similar approach can be found in \cite{ballerini_interaction_2008}.
+	
+	The next few papers focus on systems which are more akin to what will be investigated from chapter~\ref{chap:int_impl} on. \cite{martin-gomez_collective_2018} analyzes how an explicit polar aligning interaction can make the system transition to an ordered flocking phase, where almost all particles align their orientation in the same direction, even though an orientational noise is present. The model is built taking into account an aligning torque between particles $i$ and $j$ which goes as $K \sin{(\theta_{i} - \theta_{j})}$, only within a certain distance, and a repulsive potential $\epsilon \left(\frac{\sigma}{r}\right)^{12}$ to take into account the excluded volume.
+	
+	The parameters of the system are the Péclet number $\mathrm{Pe} = \frac{v_0}{\sigma \gamma}$ which is the ratio between the self propulsion velocity and the product of the characteristic length of the particles and the rotational diffusion coefficient and $g = \frac{K}{4\pi \sigma^2 \gamma}$ which quantifies the relative intensity of the orientational coupling strength and the reorienting noise. The order parameter is the mean global polarization
+	
+   	\[ P = \frac{1}{N}\left| \sum_{k=1}^{N} \exp{(i \theta_k(t))} \right|\]
+  	 which is $\sim 0$ in the disordered phase and $> 0$ in the flocking phase. The authors build a phase diagram in the $\mathrm{Pe}-g$ plane Figure \ref{fig:martin_flocking1}, which shows the separation between disorder and flocking as well as intermediate clustering phases, one with a microscopic cluster structure and one where a macroscopic single cluster structure arises.
+	
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=\textwidth]{martin_phaseseparation.png}
+		\caption{\cite{martin-gomez_collective_2018}}
+		\label{fig:martin_flocking1}
+	\end{figure}
+	
+	After noting that the phase transition happens with increasing $g$ for any $\mathrm{Pe} > 1$, authors focus on studying this transition in $g$, in the  spirit of an equilibrium phase transition, with $P$ as the order parameter and its susceptibility $\chi = N(\langle P^2 \rangle - \langle P \rangle^2)$. The behavior of the two quantities is similar to what is expected in a continuous phase transition with the critical coupling $g^c = 0.21 \pm 0.02$ (Figure \ref{fig:martin_flocking3}(a)).
+	
+	In the next part authors focus on clustering phenomena, noting that the cluster size distribution decays exponentially for $g < g*$ and algebraically for $g > g*$. This defines the two phases of microscopic and macroscopic clustering.
+	Introducing two new order parameters
+	\[ P_x = \left\langle \left| \frac{1}{N} \sum_{i=1}^N \cos(\theta_i) \right| \right\rangle ; \quad
+	P_y = \left\langle \left| \frac{1}{N} \sum_{i=1}^N \sin(\theta_i) \right| \right\rangle,
+ \]
+ it is possible to distinguish between lane-like and band-like behavior in aligned clusters.
+ 
+ \begin{figure}[htp]
+	 	\centering
+	 	\includegraphics[width=\singfigwidth]{martin_laneband.png}
+	 	\caption{\cite{martin-gomez_collective_2018}}
+	 	\label{fig:martin_flocking2}
+ \end{figure}
+ 
+ The authors use the radial distribution function 
+ \[ g(r) = \frac{1}{N} \left\langle \sum_{j \neq i} \sum_{i} \delta \left( r - |\mathbf{r}_i - \mathbf{r}_j| \right) \right\rangle
+ \]
+	to characterize the global structure of the largest cluster. Increasing the coupling $g$ at fixed Péclet number makes the peaks higher and shifts them to larger distances, showing that the system is developing a longer range order.
+	
+	\begin{figure}[htp]
+		\centering
+		\subfloat[][Polarization and its susceptibility]{\includegraphics[width=\subfigwidth]{martin_phasetransition.png}}\quad
+  \subfloat[][Pair correlation function and static structure factor]{\includegraphics[width=\subfigwidth]{martin_gofr.png}}
+ 
+  \caption{\cite{martin-gomez_collective_2018}}
+  \label{fig:martin_flocking3}
+	\end{figure}
+	
+	In \cite{caprini_spontaneous_2020}, authors investigate the alignment of instantaneous velocities in cases where motility-induced phase separation occurs. Most literature focuses on the effect that a central 2-body potential, or an explicit aligning interaction which couples the orientational degrees of freedom of single particles, has on the system, but the interplay between phase separation of particles systems and alignment in their velocity has hardly been studied.
+	
+	In the aforementioned paper, it is shown how, when ABPs systems with a simple repulsive only Weeks-Chandler-Anderson potential phase-separate in a cluster, their velocity tend to form aligned domains, regardless the self propulsion orientation. For this reason, the global polarization is not a good order parameter, even when the computation is restricted to clusters, thus the authors introduce the spatial correlation function of the velocity orientation $Q_i(r) = 1-2\sum_{j} \frac{d{ij}}{\mathcal{N}_k \pi } $, being $d_{ij} = \mathrm{min}\left[|\theta_i - \theta_j|, 2 \pi - |\theta_i - \theta_j| \right]$ the angular distance between two particles and $\mathcal{N}_k$ is the number of particles in a circular shell around the i-th particle, taken with a thickness $\bar{r} = \mathrm{argmax} \{g(r)\}$, and mean radius $k\bar{r}$ with integer $k$. 
+	
+	It is possible to derive an order parameter from $Q(R)$ integrating it
+	\[ 
+	R = \int Q(r) dr \]
+	where the integral is performed on the cluster domain when present. 
+	This seems to be a good order parameter: varying the reorientation time $1/D_r$, $R$ is discontinuous at the point where the MIPS occurs and the result is consistent with established MIPS order parameters as shown in Figure \ref{fig:caprini1}.
+	
+	\begin{figure}[htp]
+		\centering
+		\includegraphics[width=\textwidth]{caprini2.png}
+		\caption{\cite{caprini_spontaneous_2020}}
+		\label{fig:caprini1}
+	\end{figure}
+	
+	Going on, the article shows analitically how it is possible to rewrite the equation of motion for the velocity: considering the symmetry in the hexagonal lattice which the particles arrange into, such equation involves a term which depends on the difference between particle's velocity and average velocity of the six surrounding it, thus re-obtaining a Vicsek-like model without a specific aligning interaction.
+	
+	Some of the first papers cited in this section focus on animal behavior; it is believed that to better represent animal collective motion one have to implement some kind of vision in the model. \cite{negi_emergent_2022} does so, with an aligning interaction similar to the one in \cite{martin-gomez_collective_2018}, with the difference that the total torque on particle $i$ is calculated taking into account only particles in the \emph{vision cone} of particle $i$, i.e.\ a circular sector with center of mass of $i$ as center as shown in Figure \ref{fig:negi_vision1}, with a given aperture angle and radius.
+	\vfill
+	
+	\begin{figure}[htp]
+		\centering
+		\includegraphics[width=\singfigwidth]{negi_vision1.png}
+		\caption{\cite{negi_emergent_2022}}
+		\label{fig:negi_vision1}
+	\end{figure}
+	
+	
+	Authors use some tools, such as cluster size distribution, Mean Square Displacement (MSD) and velocity correlation function to study the properties of a collection of \emph{intelligent} ABPs, but they also display some snapshot of the particles' simulation, which are particularly interesting to see what \emph{can} happen when an interaction is acting on the system, both at small and large packing fraction. 
+	
+	\begin{figure}[htp]
+		\centering
+		\subfloat[][Low packing fraction]{\includegraphics[width=\singfigwidth]{negi_vision2.png}} \\
+		\subfloat[][High packing fraction]{\includegraphics[width=\singfigwidth]{negi_vision3.png}}
+		\caption{\cite{negi_emergent_2022}}
+		\label{fig:negi_vision2}
+	\end{figure}
+	
+	\subsection{Analysis of ABPs behavior in experiments}
+	There exists quite a large literature that delves into experiments involving active Brownian particles. \cite{singh_pair_2024} analyzes what happens when two \ch{SiO2-Pt} Janus Particles come together in different configurations; authors take into account hydrodynamics and chemistry involved in the process, classifying the different possible cases. Although here we are trying to build a dry active matter simulation -means, absence of hydrodynamic and medium behavior is not simulated-papers like this accurately describe the phenomenology of these close encounters, which is essential to build minimal models that mimic real-world behavior. The main fact, supported both by simulations and experimental evidence, we can use is that particles do not long-range reorientation due to hydrodynamic or chemical interaction, and that the leading interactions are steric and near-contact chemical. 
+	
+	Dispersing Janus colloids in a \ch{H2O2} solution in a quasi-2D environment, the types of configurations particles can scatter in are limited and categorized by the authors in four dynamical states. The classification of both approach and departure states, along with a relative frequency histogram is in \ref{fig:singh_pair1}.
+	
+	\begin{figure}[htp]
+		\centering
+		\includegraphics[width=\singfigwidth]{singh_pair1.jpeg}
+		\caption{\cite{singh_pair_2024}}
+		\label{fig:singh_pair1}
+	\end{figure}
+	
+	It is evident from this article that particles exert a torque on each other at short range and this interaction, which is a product of the intrinsic asymmetry of a Janus colloid, must be considered in order to capture all the dynamics of these microswimmers.
+	
+	\cite{maity_spontaneous_2023} \textsc{collective behaviors in experiments}
 	\section{Passive Brownian Motion}
 	{\color{blue} This and the next chapter follow \parencite{callegari_numerical_2019}.}
-
+	
 	Before adding the self-propulsion velocity, it is worthwhile to outline some facts about Passive Brownian motion in a 2-dimensional environment.
 	Due to the collisions with the fluid molecules, a passive Brownian particle experiences random forces and torques so that its motion is purely diffusive, both in position and orientation with the following diffusion coefficients
 	\begin{equation}
@@ -59,47 +177,47 @@
 	\begin{equation}
 		\dot{x} = \sqrt{2D_t}dW_x, \quad \dot{y} = \sqrt{2D_t}dW_y, \quad \dot{\theta} = \sqrt{2D_r}dW_{\theta}
 	\end{equation}
-
+	
 	\section[ABP simulations]{Physics and Numerical Simulations of ABPs}
-	Despite the variety in single agent properties and self-propulsion mechanisms, it is possible to identify some key features that are shared between all ABP systems. The most important characteristic of an ABP is that, notwithstanding a symmetric shape (often in literature, and always in this work, spherical), each particle has a preferred axis which lies along the direction of self-propulsion.
-	
-	With this hypothesis, rotational diffusion has now become relevant since the direction of self-propulsion varies randomly with a characteristic time scale which corresponds to the inverse of the rotational diffusion coefficient $\tau_r = D_r^{-1}$. 
-	
-	Adding a constant-magnitude self-propulsion velocity $\mathbf{v}$ into the equations of motion, we get:
-	\begin{equation}
-		\dot{x} = v \cos{\theta} + \sqrt{2D_t}dW_x , \quad \dot{y} = v \sin{\theta} + \sqrt{2D_t}dW_y, \quad \dot{\theta} = \sqrt{2D_r}dW_{\theta}
-	\end{equation}
-	where $\theta$ is the particle orientation and $v$ is the magnitude of the self-propulsion velocity.
-	
-	As a consequence, the resulting finite-differences equations are:
-	\begin{equation} \label{eq:fin_diff1}
-		\begin{cases}
-			x_{n+1} = x_n + v \cos\theta \Delta t + \sqrt{2D_t \Delta t} \, W_{x,n},\\
-			y_{n+1} = y_n + v \sin\theta \Delta t + \sqrt{2D_t \Delta t} \, W_{y,n},\\
-			\theta_{n+1} = \theta_n + \omega \Delta t + \sqrt{2D_t \Delta t} \, W_{\theta,n}\\
-		\end{cases}
-	\end{equation}
-	where the case of a deterministic self-propulsion angular velocity $\omega$ is also taken into account.
-
-	It is possible to insert external forces and torques in the system, where \emph{external} means that they are not due to the self-propulsion. Even though in literature there are examples of uniform external potentials, e.g.\ electric and magnetic fields, being applied on the ABP ensemble as a whole, in this work the only external force is the interaction between particles, which is applied in the low-Reynolds number regime as:
-	\begin{equation} \label{eq:fin_diff_with_forces}
-		\begin{cases}
-			x_{n+1} = x_n + \left( v \cos\theta + \frac{D_t}{k_B T} F_{ext,x} \right) \Delta t + \sqrt{2D_t \Delta t} \, W_{x,n},\\
-			y_{n+1} = y_n + \left( v \cos\theta + \frac{D_t}{k_B T} F_{ext,y} \right) \Delta t + \sqrt{2D_t \Delta t} \, W_{y,n},\\
-			\theta_{n+1} = \theta_n +\left(\omega + \frac{D_r}{k_B T}{}T_{ext}\right) \Delta t + \sqrt{2D_t \Delta t} \, W_{\theta,n}\\
-		\end{cases}
-	\end{equation}
-	where applying a force or a torque just linearly translates to a linear or angular velocity change, with the respective drag coefficients as proportionality constant.
-
-	\begin{algorithm}
-		\caption{The simulation algorithm} \label{alg:sim1}	
-		\begin{algorithmic}[1]
-			\For{i in particles in ensemble}
-			\State{$ \vec{r}_{i}\gets \vec{r}_{i,0} $}\Comment{position $\vec{r}_{i,0}$ is randomly initialized in the simulation space}
-			\State{$\theta_{i}\gets \theta_{i,0}$}\Comment {$\theta_{i,0} \sim \mathrm{Uniform}([0, 2\pi])$}
-			\State{$v\gets v_0$}\Comment{Can be initialized as a constant or a random variable}
-			\EndFor
-			\For{n in timesteps}
+		Despite the variety in single agent properties and self-propulsion mechanisms, it is possible to identify some key features that are shared between all ABP systems. The most important characteristic of an ABP is that, notwithstanding a symmetric shape (often in literature, and always in this work, spherical), each particle has a preferred axis which lies along the direction of self-propulsion.
+		
+		With this hypothesis, rotational diffusion has now become relevant since the direction of self-propulsion varies randomly with a characteristic time scale which corresponds to the inverse of the rotational diffusion coefficient $\tau_r = D_r^{-1}$. 
+		
+		Adding a constant-magnitude self-propulsion velocity $\mathbf{v}$ into the equations of motion, we get:
+		\begin{equation}
+			\dot{x} = v \cos{\theta} + \sqrt{2D_t}dW_x , \quad \dot{y} = v \sin{\theta} + \sqrt{2D_t}dW_y, \quad \dot{\theta} = \sqrt{2D_r}dW_{\theta}
+		\end{equation}
+		where $\theta$ is the particle orientation and $v$ is the magnitude of the self-propulsion velocity.
+		
+		As a consequence, the resulting finite-differences equations are:
+		\begin{equation} \label{eq:fin_diff1}
+			\begin{cases}
+				x_{n+1} = x_n + v \cos\theta \Delta t + \sqrt{2D_t \Delta t} \, W_{x,n},\\
+				y_{n+1} = y_n + v \sin\theta \Delta t + \sqrt{2D_t \Delta t} \, W_{y,n},\\
+				\theta_{n+1} = \theta_n + \omega \Delta t + \sqrt{2D_t \Delta t} \, W_{\theta,n}\\
+			\end{cases}
+		\end{equation}
+		where the case of a deterministic self-propulsion angular velocity $\omega$ is also taken into account.
+		
+		It is possible to insert external forces and torques in the system, where \emph{external} means that they are not due to the self-propulsion. Even though in literature there are examples of uniform external potentials, e.g.\ electric and magnetic fields, being applied on the ABP ensemble as a whole, in this work the only external force is the interaction between particles, which is applied in the low-Reynolds number regime as:
+		\begin{equation} \label{eq:fin_diff_with_forces}
+			\begin{cases}
+				x_{n+1} = x_n + \left( v \cos\theta + \frac{D_t}{k_B T} F_{ext,x} \right) \Delta t + \sqrt{2D_t \Delta t} \, W_{x,n},\\
+				y_{n+1} = y_n + \left( v \cos\theta + \frac{D_t}{k_B T} F_{ext,y} \right) \Delta t + \sqrt{2D_t \Delta t} \, W_{y,n},\\
+				\theta_{n+1} = \theta_n +\left(\omega + \frac{D_r}{k_B T}{}T_{ext}\right) \Delta t + \sqrt{2D_t \Delta t} \, W_{\theta,n}\\
+			\end{cases}
+		\end{equation}
+		where applying a force or a torque just linearly translates to a linear or angular velocity change, with the respective drag coefficients as proportionality constant.
+		
+		\begin{algorithm}
+			\caption{The simulation algorithm} \label{alg:sim1}	
+			\begin{algorithmic}[1]
+				\For{i in particles in ensemble}
+				\State{$ \vec{r}_{i}\gets \vec{r}_{i,0} $}\Comment{position $\vec{r}_{i,0}$ is randomly initialized in the simulation space}
+				\State{$\theta_{i}\gets \theta_{i,0}$}\Comment {$\theta_{i,0} \sim \mathrm{Uniform}([0, 2\pi])$}
+				\State{$v\gets v_0$}\Comment{Can be initialized as a constant or a random variable}
+				\EndFor
+				\For{n in timesteps}
 				\For{i in particles in ensemble}
 				\State{$\vec{F}_{i,n} = \sum_{j}^{Np}{\vec{F}_{ij,n}}$}
 				\State{$w_{i,n} \sim \mathcal{N}(0, \sqrt{2D_t \Delta t})$}
@@ -107,103 +225,8 @@
 				\State{$ \vec{r}_{i,n+1}\gets \vec{r_n} + w_{i,n} + v (\cos\theta_{i,n}, \sin\theta_{i,n})\Delta t + \vec{F}_{i,n}\Delta t / \gamma _t $}
 				\State{$\theta_{i,n+1}\gets \theta_{i,n} + z_{i,n} + \omega_{i,n} \Delta t + T_{i,n} \Delta t/\gamma _r$}
 				\EndFor
-			\EndFor
-		\end{algorithmic}
+				\EndFor
+			\end{algorithmic}
 		\end{algorithm}
-		\section{Literature and State of the Art}
-		
-		Just with the simple framework described so far, plenty of literature has been produced on the topic. We will go through some of the  different papers that tackle the problem of understanding how active Brownian particles, both single and systems, behave with and without interactions.
-		
-		\subsection{Collective motion}
-		Investigation of collective motion is an extremely important topic in this field, since it not only lead to a better understanding of the physics behind ABPs systems, but it helped developing physical and mathematical tools such as order parameters which can be used both in simulation and experimental context. 
-		
-		In the following section the "Vicsek model" will often be cited. This is the right time to give a brief introduction to it with the authors' words: \emph{The only rule of the model is: at each time step a given particle driven with a constant absolute velocity assumes the average direction of motion of the particles in its neighborhood of radius r with some random perturbation added.} \cite{vicsek_novel_1995}. Although extremely simple, this model is of paramount importance in the study of active matter since it can be studied in terms of a phase transition and recreates in some way the behavior of real living systems.
-		
-		Although not strictly related with present work,\cite{cavagna_empirical_2010} is a seminal paper for the study of collective motion, for the problem of relating theoretical models and reality is tackled analyzing data of starling swarms in order to understand characteristics of interactions. Understandably, the system studied by Cavagna et al.~ is pretty different from the active Brownian particles ensemble investigated in this project, with the fist difference being the dimensionality (a bird swarm, just like a school of fish moves in a 3D environment), but some of the problems reported in that paper are still present in these days active matter community. A similar approach can be found in \cite{ballerini_interaction_2008}.
-		
-		The next few papers focus on systems which are more akin to what will be investigated from chapter \ref{chap:int_impl} on. \cite{martin-gomez_collective_2018} analyzes how an explicit polar aligning interaction can make the system transition to an ordered flocking phase, where almost all particles align their orientation in the same direction, even though an orientational noise is present. The model is built taking into account an aligning torque between particles $i$ and $j$ which goes as $K \sin{(\theta_{i} - \theta_{j})}$, only within a certain distance, and a repulsive potential $\epsilon \left(\frac{\sigma}{r}\right)^{12}$ to take into account the excluded volume.
-		
-		The parameters of the system are the Péclet number $\mathrm{Pe} = \frac{v_0}{\sigma \gamma}$ which is the ratio between the self propulsion velocity and the product of the characteristic length of the particles and the rotational diffusion coefficient and $g = \frac{K}{4\pi \sigma^2 \gamma}$ which quantifies the relative intensity of the orientational coupling strength and the reorienting noise. The order parameter is the mean global polarization
-		
-    	\[ P = \frac{1}{N}\left| \sum_{k=1}^{N} \exp{(i \theta_k(t))} \right|\]
-    	 which is $\sim 0$ in the disordered phase and $> 0$ in the flocking phase. The authors build a phase diagram in the $\mathrm{Pe}-g$ plane Figure \ref{fig:martin_flocking1}, which shows the separation between disorder and flocking as well as intermediate clustering phases, one with a microscopic cluster structure and one where a macroscopic single cluster structure arises.
-		
-		\begin{figure}[h]
-			\centering
-			\includegraphics[width=\textwidth]{martin_phaseseparation.png}
-			\caption{\cite{martin-gomez_collective_2018}}
-			\label{fig:martin_flocking1}
-		\end{figure}
-		
-		After noting that the phase transition happens with increasing $g$ for any $\mathrm{Pe} > 1$, authors focus on studying this transition in $g$, in the  spirit of an equilibrium phase transition, with $P$ as the order parameter and its susceptibility $\chi = N(\langle P^2 \rangle - \langle P \rangle^2)$. The behavior of the two quantities is similar to what is expected in a continuous phase transition with the critical coupling $g^c = 0.21 \pm 0.02$ (Figure \ref{fig:martin_flocking3}(a)).
-		
-		In the next part authors focus on clustering phenomena, noting that the cluster size distribution decays exponentially for $g < g*$ and algebraically for $g > g*$. This defines the two phases of microscopic and macroscopic clustering.
-		Introducing two new order parameters
-		\[ P_x = \left\langle \left| \frac{1}{N} \sum_{i=1}^N \cos(\theta_i) \right| \right\rangle ; \quad
-		P_y = \left\langle \left| \frac{1}{N} \sum_{i=1}^N \sin(\theta_i) \right| \right\rangle,
-		 \]
-		 it is possible to distinguish between lane-like and band-like behavior in aligned clusters.
-		 
-		 \begin{figure}[htp]
-		 	\centering
-		 	\includegraphics[width=\singfigwidth]{martin_laneband.png}
-		 	\caption{\cite{martin-gomez_collective_2018}}
-		 	\label{fig:martin_flocking2}
-		 \end{figure}
-		 
-		 The authors use the radial distribution function 
-		 \[ g(r) = \frac{1}{N} \left\langle \sum_{j \neq i} \sum_{i} \delta \left( r - |\mathbf{r}_i - \mathbf{r}_j| \right) \right\rangle
-		  \]
-		to characterize the global structure of the largest cluster. Increasing the coupling $g$ at fixed Péclet number makes the peaks higher and shifts them to larger distances, showing that the system is developing a longer range order.
-		
-		\begin{figure}[htp]
-			\centering
-			\subfloat[][Polarization and its susceptibility]{\includegraphics[width=\subfigwidth]{martin_phasetransition.png}}\quad
-		    \subfloat[][Pair correlation function and static structure factor]{\includegraphics[width=\subfigwidth]{martin_gofr.png}}
-		  
-		    \caption{\cite{martin-gomez_collective_2018}}
-		    \label{fig:martin_flocking3}
-		\end{figure}
-		
-		In \cite{caprini_spontaneous_2020}, authors investigate the alignment of instantaneous velocities in cases where motility-induced phase separation occurs. Most literature focuses on the effect that a central 2-body potential, or an explicit aligning interaction which couples the orientational degrees of freedom of single particles, has on the system, but the interplay between phase separation of particles systems and alignment in their velocity has hardly been studied.
-		
-		In the aforementioned paper, it is shown how, when ABPs systems with a simple repulsive only Weeks-Chandler-Anderson potential phase-separate in a cluster, their velocity tend to form aligned domains, regardless the self propulsion orientation. For this reason, the global polarization is not a good order parameter, even when the computation is restricted to clusters, thus the authors introduce the spatial correlation function of the velocity orientation $Q_i(r) = 1-2\sum_{j} \frac{d{ij}}{\mathcal{N}_k \pi } $, being $d_{ij} = \mathrm{min}\left[|\theta_i - \theta_j|, 2 \pi - |\theta_i - \theta_j| \right]$ the angular distance between two particles and $\mathcal{N}_k$ is the number of particles in a circular shell around the i-th particle, taken with a thickness $\bar{r} = \mathrm{argmax} \{g(r)\}$, and mean radius $k\bar{r}$ with integer $k$. 
-		
-		It is possible to derive an order parameter from $Q(R)$ integrating it
-		\[ 
-		R = \int Q(r) dr \]
-		where the integral is performed on the cluster domain when present. 
-		This seems to be a good order parameter: varying the reorientation time $1/D_r$, $R$ is discontinuous at the point where the MIPS occurs and the result is consistent with established MIPS order parameters as shown in Figure \ref{fig:caprini1}.
-		
-		\begin{figure}[htp]
-			\centering
-			\includegraphics[width=\textwidth]{caprini2.png}
-			\caption{\cite{caprini_spontaneous_2020}}
-			\label{fig:caprini1}
-		\end{figure}
-		
-		Going on, the article shows analitically how it is possible to rewrite the equation of motion for the velocity: considering the symmetry in the hexagonal lattice which the particles arrange into, such equation involves a term which depends on the difference between particle's velocity and average velocity of the six surrounding it, thus re-obtaining a Vicsek-like model without a specific aligning interaction.
-		
-		Some of the first papers cited in this section focus on animal behavior; it is believed that to better represent animal collective motion one have to implement some kind of vision in the model. \cite{negi_emergent_2022} does so, with an aligning interaction similar to the one in \cite{martin-gomez_collective_2018}, with the difference that the total torque on particle $i$ is calculated taking into account only particles in the \emph{vision cone} of particle $i$, i.e.\ a circular sector with center of mass of $i$ as center as shown in Figure \ref{fig:negi_vision1}, with a given aperture angle and radius.
-		\vfill
-		
-		\begin{figure}[htp]
-			\centering
-			\includegraphics[width=\singfigwidth]{negi_vision1.png}
-			\caption{\cite{negi_emergent_2022}}
-			\label{fig:negi_vision1}
-		\end{figure}
-		
-		
-		Authors use some tools, such as cluster size distribution, Mean Square Displacement (MSD) and velocity correlation function to study the properties of a collection of \emph{intelligent} ABPs, but they also display some snapshot of the particles' simulation, which are particularly interesting to see what \emph{can} happen when an interaction is acting on the system, both at small and large packing fraction. 
-		
-		\begin{figure}[htp]
-			\centering
-			\subfloat[][Low packing fraction]{\includegraphics[width=\singfigwidth]{negi_vision2.png}} \\
-			\subfloat[][High packing fraction]{\includegraphics[width=\singfigwidth]{negi_vision3.png}}
-			\caption{\cite{negi_emergent_2022}}
-			\label{fig:negi_vision2}
-		\end{figure}
-		
 		
 \end{document}
