@@ -117,9 +117,11 @@
 		\subsection{Collective motion}
 		Investigation of collective motion is an extremely important topic in this field, since it not only lead to a better understanding of the physics behind ABPs systems, but it helped developing physical and mathematical tools such as order parameters which can be used both in simulation and experimental context. 
 		
-		In the following section the "Vicsek model" will often be cited. This is the right time to give a brief introduction to it with the authors' words: \emph{The only rule of the model is: at each time step a given particle driven with a constant absolute velocity assumes the average direction of motion of the particles in its neighborhood of radius r with some random perturbation added.} \cite{vicsek_novel_1995}. Although extremely simple, this model is of paramount importance in the study of active matter since it can be studied in terms of a phase transition and recreates the behavior of real living systems.
+		In the following section the "Vicsek model" will often be cited. This is the right time to give a brief introduction to it with the authors' words: \emph{The only rule of the model is: at each time step a given particle driven with a constant absolute velocity assumes the average direction of motion of the particles in its neighborhood of radius r with some random perturbation added.} \cite{vicsek_novel_1995}. Although extremely simple, this model is of paramount importance in the study of active matter since it can be studied in terms of a phase transition and recreates in some way the behavior of real living systems.
 		
-		\cite{martin-gomez_collective_2018} analyzes how an explicit polar aligning interaction can make the system transition to an ordered flocking phase, where almost all particles align their orientation in the same direction, even though an orientational noise is present. The model is built taking into account an aligning torque between particles $i$ and $j$ which goes as $K \sin{(\theta_{i} - \theta_{j})}$, only within a certain distance, and a repulsive potential $\epsilon \left(\frac{\sigma}{r}\right)^{12}$ to take into account the excluded volume.
+		Although not strictly related with present work,\cite{cavagna_empirical_2010} is a seminal paper for the study of collective motion, for the problem of relating theoretical models and reality is tackled analyzing data of starling swarms in order to understand characteristics of interactions. Understandably, the system studied by Cavagna et al.~ is pretty different from the active Brownian particles ensemble investigated in this project, with the fist difference being the dimensionality (a bird swarm, just like a school of fish moves in a 3D environment), but some of the problems reported in that paper are still present in these days active matter community. A similar approach can be found in \cite{ballerini_interaction_2008}.
+		
+		The next few papers focus on systems which are more akin to what will be investigated from chapter \ref{chap:int_impl} on. \cite{martin-gomez_collective_2018} analyzes how an explicit polar aligning interaction can make the system transition to an ordered flocking phase, where almost all particles align their orientation in the same direction, even though an orientational noise is present. The model is built taking into account an aligning torque between particles $i$ and $j$ which goes as $K \sin{(\theta_{i} - \theta_{j})}$, only within a certain distance, and a repulsive potential $\epsilon \left(\frac{\sigma}{r}\right)^{12}$ to take into account the excluded volume.
 		
 		The parameters of the system are the Péclet number $\mathrm{Pe} = \frac{v_0}{\sigma \gamma}$ which is the ratio between the self propulsion velocity and the product of the characteristic length of the particles and the rotational diffusion coefficient and $g = \frac{K}{4\pi \sigma^2 \gamma}$ which quantifies the relative intensity of the orientational coupling strength and the reorienting noise. The order parameter is the mean global polarization
 		
@@ -129,8 +131,8 @@
 		\begin{figure}[h]
 			\centering
 			\includegraphics[width=\textwidth]{martin_phaseseparation.png}
-			\label{fig:martin_flocking1}
 			\caption{\cite{martin-gomez_collective_2018}}
+			\label{fig:martin_flocking1}
 		\end{figure}
 		
 		After noting that the phase transition happens with increasing $g$ for any $\mathrm{Pe} > 1$, authors focus on studying this transition in $g$, in the  spirit of an equilibrium phase transition, with $P$ as the order parameter and its susceptibility $\chi = N(\langle P^2 \rangle - \langle P \rangle^2)$. The behavior of the two quantities is similar to what is expected in a continuous phase transition with the critical coupling $g^c = 0.21 \pm 0.02$ (Figure \ref{fig:martin_flocking3}(a)).
@@ -144,9 +146,9 @@
 		 
 		 \begin{figure}[htp]
 		 	\centering
-		 	\includegraphics[width=.7\textwidth]{martin_laneband.png}
-		 	\label{fig:martin_flocking2}
+		 	\includegraphics[width=\singfigwidth]{martin_laneband.png}
 		 	\caption{\cite{martin-gomez_collective_2018}}
+		 	\label{fig:martin_flocking2}
 		 \end{figure}
 		 
 		 The authors use the radial distribution function 
@@ -156,9 +158,9 @@
 		
 		\begin{figure}[htp]
 			\centering
-			\subfloat[][Polarization and its susceptibility]{\includegraphics[width=0.45\textwidth]{martin_phasetransition.png}}\quad
-		    \subfloat[][Pair correlation function and static structure factor]{\includegraphics[width=0.45\textwidth]{martin_gofr.png}}
-		    
+			\subfloat[][Polarization and its susceptibility]{\includegraphics[width=\subfigwidth]{martin_phasetransition.png}}\quad
+		    \subfloat[][Pair correlation function and static structure factor]{\includegraphics[width=\subfigwidth]{martin_gofr.png}}
+		  
 		    \caption{\cite{martin-gomez_collective_2018}}
 		    \label{fig:martin_flocking3}
 		\end{figure}
@@ -176,9 +178,32 @@
 		\begin{figure}[htp]
 			\centering
 			\includegraphics[width=\textwidth]{caprini2.png}
-			\label{fig:caprini1}
 			\caption{\cite{caprini_spontaneous_2020}}
+			\label{fig:caprini1}
 		\end{figure}
 		
 		Going on, the article shows analitically how it is possible to rewrite the equation of motion for the velocity: considering the symmetry in the hexagonal lattice which the particles arrange into, such equation involves a term which depends on the difference between particle's velocity and average velocity of the six surrounding it, thus re-obtaining a Vicsek-like model without a specific aligning interaction.
+		
+		Some of the first papers cited in this section focus on animal behavior; it is believed that to better represent animal collective motion one have to implement some kind of vision in the model. \cite{negi_emergent_2022} does so, with an aligning interaction similar to the one in \cite{martin-gomez_collective_2018}, with the difference that the total torque on particle $i$ is calculated taking into account only particles in the \emph{vision cone} of particle $i$, i.e.\ a circular sector with center of mass of $i$ as center as shown in Figure \ref{fig:negi_vision1}, with a given aperture angle and radius.
+		\vfill
+		
+		\begin{figure}[htp]
+			\centering
+			\includegraphics[width=\singfigwidth]{negi_vision1.png}
+			\caption{\cite{negi_emergent_2022}}
+			\label{fig:negi_vision1}
+		\end{figure}
+		
+		
+		Authors use some tools, such as cluster size distribution, Mean Square Displacement (MSD) and velocity correlation function to study the properties of a collection of \emph{intelligent} ABPs, but they also display some snapshot of the particles' simulation, which are particularly interesting to see what \emph{can} happen when an interaction is acting on the system, both at small and large packing fraction. 
+		
+		\begin{figure}[htp]
+			\centering
+			\subfloat[][Low packing fraction]{\includegraphics[width=\singfigwidth]{negi_vision2.png}} \\
+			\subfloat[][High packing fraction]{\includegraphics[width=\singfigwidth]{negi_vision3.png}}
+			\caption{\cite{negi_emergent_2022}}
+			\label{fig:negi_vision2}
+		\end{figure}
+		
+		
 \end{document}
