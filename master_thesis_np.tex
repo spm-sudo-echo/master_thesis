@@ -18,6 +18,12 @@
 \usepackage{algpseudocodex}   % algorithm pseudocode
 \usepackage[backend = biber, style=alphabetic]{biblatex}         % bibliograpy
 \usepackage[]{csquotes} % quotations
+
+\makeatletter
+
+\renewenvironment{displayquote}
+{\begin{quote}\itshape}  % Begin with original quote environment and apply italics
+{\end{quote}}  % End with original quote environment
 %\usepackage{fancyhdr} %to make "better looking" page headers
 %\pagestyle{fancy}
 \usepackage{subfiles}
