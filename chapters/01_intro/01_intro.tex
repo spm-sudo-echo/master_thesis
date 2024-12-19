@@ -181,6 +181,33 @@
 		\caption{\parencite{ostapenko_curvature-guided_2018}}
 		\label{fig:ostapenko2}
 	\end{figure}
+	
+	\subsection{Inference and Machine Learning}
+	The matter of inferring interaction potentials starting from simulated data is a complicated one and many techniques can be applied to tackle it. Since the real interactions that occur between a pair of colloidal particles are mostly unknown and in principle may involve chemical gradients, hydrodynamics, electromagnetism and all kinds of interplay between these and other mechanisms, it would be extremely useful to have a tool that predicts forces between particles mapping them in terms of some kind of minimal model e.g.\ a simple central potential. Here, we will focus only on Deep Learning since that is what is used in this work. 
+	
+	In terms of machine learning model, the simplest approach is using some global attribute of the ABPs ensemble to predict the potential via a Deep Neural Network. \cite{bag_interaction_2021} aims at doing exactly that, exploiting a fact from statistical and matter physics; as authors claim, they use a theorem saying that \enquote{for the fluids with only pairwise interaction (quantum or classical), the pair potential $V(r)$ that leads to a specific $g(r)$ is unique} and the question of predicting which $V(r)$ causes a specific structural correlation like $g(r)$ or, equivalently, $S(q)$ \enquote{is a well defined one}. 
+	
+	Authors simulated both passive and active Brownian particles to see de difference between equilibrium and non-equilibrium configurations. All the tested potential were of the form $V(r_{ij}) = 4\varepsilon \left[ \left( \frac{\sigma}{r_{ij}} \right)^a - \lambda \left( \frac{\sigma}{r_{ij}} \right)^b \right]
+	$ with different values of the parameters. Letting the system reach steady state and then taking $100$ snapshots of the pair correlation function to train the network, the authors show pretty good results regarding the accordance between predicted and real potentials in all the possible phases: gas-like, crystal and liquid-like. (\ref{fig:bag1})
+	\begin{figure}[htp]
+		\centering
+		\includegraphics[width=\singfigwidth]{bag1.png}
+		\caption{\parencite{bag_interaction_2021}}
+		\label{fig:bag1}
+	\end{figure}
+	
+	The non-equilibrium case is a different matter: as soon as self-propulsion is involved, phenomena like MIPS start to occur, pushing the system to cluster. Some literature has introduced effective many-body attractive potential to explain the change in structure caused by particles' motility, even in cases where just an explicit repulsion is present, and the results presented by \citeauthor{bag_interaction_2021} seem to point in that direction as well. 
+ 	\begin{figure}[htp]
+		\centering
+		\includegraphics[width=\singfigwidth]{bag2.png}
+		\caption{\parencite{bag_interaction_2021}}
+		\label{fig:bag2}
+	\end{figure}
+	As Figure \ref{fig:bag2}(b) shows, pair correlation functions in the case of active repulsive particles is similar to that of passive attractive particles, since only structure-meaning: particles' positions-is involved, tricking the network into predicting an attractive potential. This is a good result in simulation context and sheds light on some theoretical statements, nonetheless this approach does not fit the objective of present thesis project, which tries to obtain \emph{actual} 2-body interactions in ABPs systems. 
+	
+	An alternative approach is working directly on positions and velocities of single particles. It is an accepted fact that the best way to make AI learn something about a problem is taking the invariances and symmetries of said problem are taken in to account in the model design. The most efficient way to store information about a set of interacting bodies is a graph, where vertices represent single body information like position, velocity, mass or charge and edges contain information about the potential that make pairs of particles communicate. With these facts in mind, it is clear why Graph Neural Networks (GNNs or GNs) are so popular in several fields of physics. The distinction between GNNs and GNs is that the first one is a term that represent every kind on Neural Networks related with graphs, regardless the structure, while the Graph Network framework represents a specific network with a graph structure. An actual GN is actually a container, structured as a graph, which in principle holds three networks or functions, or models: one is the edge function $\varphi^e$, which predicts edge features, a node function $\varphi^v$ which predicts single nodes features and a global function $\varphi^u$ that works in the same fashion. $\varphi^e$ maps from a pair of nodes and some information stored on the edge to a message vector which lies in the \emph{latent space}. Then, all the messages from sending nodes into a receiving one  are aggregated by means of a permutation-invariant function, namely sum,mean, max etc.; the node model $\varphi^v$ takes the aggregated messages along with the node information and predicts some feature. Finally, a global function gathers all the information and predicts a global attribute.
+	
+	In the case of interacting particles, edge function works as the force law and node function plays the role of the second Newton's law, calculating the resulting force and applying it to obtain particle's acceleration. 
 	\section{Passive Brownian Motion}
 	{\color{blue} This and the next chapter follow \parencite{callegari_numerical_2019}.}
 	
