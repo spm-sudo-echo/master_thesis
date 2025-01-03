@@ -45,6 +45,7 @@
 	
 	
 	\section{Literature and State of the Art}
+	
 	Active matter is a lively field and plenty of literature has been produced on the topic. We will go through some of the  different papers that tackle the problem of understanding how active Brownian particles, both single and systems, behave with and without interactions.
 	
 	\subsection{Collective motion}
@@ -220,7 +221,7 @@
 	
 	An alternative way of extracting the forces is using symbolic regression, which will give some insights about the functional form of the interaction potential. The modeling engine used is \emph{eureqa}, and the best model is selected between several candidates at different complexity levels, choosing a more complicated one only when it is worth it.
 	
-	A real application to active Brownian particles can use some of the already seen tactics, but it requires some tweaks with respect to the Newtonian dynamics approach. The most important change is in the physics: in a system without inertia, the meaning of acceleration is not clear and there is a linear relation between a force and a velocity. In this framework, \citeauthor{ruiz-garcia_discovering_2024} have developed a variant of the graph network by \citeauthor{cranmer_discovering_2020} that can work with ABPs dynamics. In \cite{ruiz-garcia_discovering_2024}, the graph network takes as input positions and orientations of a set of simulated ABPs and tries to predict their velocity, given the instantaneous velocity $\frac{\vec{x}(t + \Delta t) - \vec{x}(t)}{\Delta t}$ as the ground truth. In this case the role of the node function is not only to predict the velocity starting from the sum of the forces, but also of learning and adding to it the self propulsion velocity that drives the particles. This is a useful result, since after predicting the interaction force one can take the output of the node function and subtracting the edge function output in order to understand which part of the velocity can be explained through interaction and which is due to self propulsion.
+	A real application to active Brownian particles can use some of the already seen tactics, but it requires some tweaks with respect to the Newtonian dynamics approach. The most important change is in the physics: in a system without inertia, the meaning of acceleration is not clear and there is a linear relation between a force and a velocity. In this framework, \citeauthor{ruiz-garcia_discovering_2024} have developed a variant of the graph network by \citeauthor{cranmer_discovering_2020} that can work with ABPs dynamics, called ActiveNet. In \cite{ruiz-garcia_discovering_2024}, the graph network takes as input positions and orientations of a set of simulated ABPs and tries to predict their velocity, given the instantaneous velocity $\frac{\vec{x}(t + \Delta t) - \vec{x}(t)}{\Delta t}$ as the ground truth. In this case the role of the node function is not only to predict the velocity starting from the sum of the forces, but also of learning and adding to it the self propulsion velocity that drives the particles. This is a useful result, since after predicting the interaction force one can take the output of the node function and subtracting the edge function output in order to understand which part of the velocity can be explained through interaction and which is due to self propulsion.
 	A schematic representation of the ActiveNet GN is in Figure \ref{fig:ruiz1}.
 	\begin{figure}[htp]
 		\centering
@@ -228,12 +229,13 @@
 		\caption{\parencite{ruiz-garcia_discovering_2024}}
 		\label{fig:ruiz1}
 	\end{figure}
-	In order to train the network, successive iterations are done, increasing the threshold distance to consider two particles as interacting. At the end of the training, the network gets tested and results show that it works well to predict both the self-propulsive force and the interaction potential. Having an internal way of taking into account the active velocity, this method works better than static structure-based ones, like \cite{bag_interaction_2021}, in cases where MIPS takes place, learning a repulsive interaction even though the system is clustered. Clearly, ActiveNet fails at short distance, since very few data are presented. Having Brownian motion at his base, the studied system has an internal degree of randomness. The goal of a machine learning task should be to reduce the loss (difference between ground truth and predictions) to make it as small as the noise. This can be useful to estimate the diffusion coefficient and works well even with few examples, as long as the temperature is high enough. 
+	In order to train the network, successive iterations are done, increasing the threshold distance to consider two particles as interacting. At the end of the training, the network gets tested and results show that it works well to predict both the self-propulsive force and the interaction potential. Having an internal way of taking into account the active velocity, this method works better than static structure-based ones, like \cite{bag_interaction_2021}, in out of equilibrium particles ensembles where MIPS takes place, learning a repulsive interaction even though the system is clustered. Clearly, ActiveNet fails at short distance, since very few data are presented. Having Brownian motion at his base, the studied system has an internal degree of randomness. The goal of a machine learning task should be to reduce the loss (difference between ground truth and predictions) to make it as small as the noise. This can be useful to estimate the diffusion coefficient and works well even with few examples, as long as the temperature is high enough. 
 	
 	An important result of this paper is the application of the method to experimental data. The network needs some adjustments in order to work since experiments have some hurdles that must be overcome. To not be influenced by stuck particles, the network is fed with the bias that forces depend only on distances and not positions. Moreover, self-propulsion is forced to depend only on the orientation of particles. Experimental observations contain thousands of particles and their direction is clearly measurable. Results show some similarities with the expectations but not much can be said since the actual interactions are not known (even though in this case authors used electric fields and some kind of guess can be made about the interactions). Authors claim that probably symbolic regression is needed in order to discover the actual form of the interaction.
-	\section{Passive Brownian Motion}
-	{\color{blue} This and the next chapter follow \parencite{callegari_numerical_2019}.}
 	
+	\section{Background}
+	\subsection{Passive Brownian Motion}
+
 	Before adding the self-propulsion velocity, it is worthwhile to outline some facts about Passive Brownian motion in a 2-dimensional environment.
 	Due to the collisions with the fluid molecules, a passive Brownian particle experiences random forces and torques so that its motion is purely diffusive, both in position and orientation with the following diffusion coefficients
 	\begin{equation}
@@ -264,7 +266,9 @@
 		\dot{x} = \sqrt{2D_t}dW_x, \quad \dot{y} = \sqrt{2D_t}dW_y, \quad \dot{\theta} = \sqrt{2D_r}dW_{\theta}
 	\end{equation}
 	
-	\section[ABP simulations]{Physics and Numerical Simulations of ABPs}
+	Ornstein and Uhlenbeck, in a 1930 paper \citeauthor{uhlenbeck_theory_1930}, outlined all the statistical properties of Brownian motion, including the mean square displacement, which in 2 dimension read $\text{MSD}(\tau) = 4D_t \tau + \frac{4k_B T}{m} \tau_m^2 \left[e^{-\tau/\tau_m} - 1\right]$.
+	
+	\subsection[ABP simulations]{Physics and Numerical Simulations of ABPs}
 		Despite the variety in single agent properties and self-propulsion mechanisms, it is possible to identify some key features that are shared between all ABP systems. The most important characteristic of an ABP is that, notwithstanding a symmetric shape (often in literature, and always in this work, spherical), each particle has a preferred axis which lies along the direction of self-propulsion.
 		
 		With this hypothesis, rotational diffusion has now become relevant since the direction of self-propulsion varies randomly with a characteristic time scale which corresponds to the inverse of the rotational diffusion coefficient $\tau_r = D_r^{-1}$. 
@@ -285,7 +289,7 @@
 		\end{equation}
 		where the case of a deterministic self-propulsion angular velocity $\omega$ is also taken into account.
 		
-		It is possible to insert external forces and torques in the system, where \emph{external} means that they are not due to the self-propulsion. Even though in literature there are examples of uniform external potentials, e.g.\ electric and magnetic fields, being applied on the ABP ensemble as a whole, in this work the only external force is the interaction between particles, which is applied in the low-Reynolds number regime as:
+		It is possible to insert external forces and torques in the system, where \emph{external} means they are not due to the self-propulsion. Even though in literature there are examples of uniform external potentials, e.g.\ electric and magnetic fields, being applied on the ABP ensemble as a whole, in this work the only external force is the interaction between particles, which is applied in the low-Reynolds number regime as:
 		\begin{equation} \label{eq:fin_diff_with_forces}
 			\begin{cases}
 				x_{n+1} = x_n + \left( v \cos\theta + \frac{D_t}{k_B T} F_{ext,x} \right) \Delta t + \sqrt{2D_t \Delta t} \, W_{x,n},\\
@@ -314,5 +318,9 @@
 				\EndFor
 			\end{algorithmic}
 		\end{algorithm}
+		
+	\subsection{Stochastic integration and algorithms}
+	
+	
 		
 \end{document}
