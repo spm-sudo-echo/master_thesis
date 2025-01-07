@@ -236,8 +236,23 @@
 	\section{Background}
 	\subsection{Passive Brownian Motion}
 
-	Before adding the self-propulsion velocity, it is worthwhile to outline some facts about Passive Brownian motion in a 2-dimensional environment.
-	Due to the collisions with the fluid molecules, a passive Brownian particle experiences random forces and torques so that its motion is purely diffusive, both in position and orientation with the following diffusion coefficients
+	Before adding the self-propulsion velocity, it is worthwhile to outline some facts about Passive Brownian motion. The first formulation of the theory of Brownian motion was obtained by Albert Einstein in a 1905 paper, where the mean square displacement was given in terms of a linear relation with time, with a diffusion coefficient $D_t$ as $\sqrt{\bar{x}^2} = \sqrt{2D_t t}$. Here, we outline the derivation as it was presented by Paul Langevin some years afterwards, following \cite{gardiner_handbook_2004}.
+	
+	It is known from statistical mechanics that a Brownian particle in equilibrium will have as mean kinetic energy
+	\[ \langle \frac{1}{2}mv^2 \rangle =  \frac{1}{2} k_B T\]
+	where $T$ is the absolute temperature and $k_B$ is Boltzmann's constant. If we assume the same formula as in macroscopic hydrodynamics, the viscous drag acting on the particle will be of the form $-6 \pi \eta a \frac{\mathrm{d}x}{\mathrm{d}t}$, being $a$ the particle's radius and $\eta$ the viscosity of the fluid. Due to the random collisions with the fluid molecules, a passive Brownian particle experiences a \emph{fluctuating force} $X$. The equation of motion for the particle is thus
+	\[ m \frac{\mathrm{d}^2x}{\mathrm{d}t^2} = -6 \pi \eta a \frac{\mathrm{d}x}{\mathrm{d}t} + X \]
+	which we multiply by $x$ getting
+	\[ \frac{m}{2} \frac{\mathrm{d}^2}{\mathrm{d}t^2}(x^2) - mv^2  = -3 \pi \eta a \frac{\mathrm{d}(x^2)}{\mathrm{d}t} + Xx \]
+	where we called $v = \mathrm{d}x/\mathrm{d}t$. Averaging on the ensemble of particles we have
+	\[ \frac{m}{2} \frac{\mathrm{d}^2\langle x^2 \rangle}{\mathrm{d}t^2} + 3 \pi \eta a \frac{\mathrm{d}\langle x^2 \rangle}{\mathrm{d}t} = k_B T \]
+	where the value for the mean kinetic energy was plugged in and we averaged the product $Xx$ to zero, being $X$ highly irregular (in modern times we just write everything in terms of a 0 mean Gaussian stochastic process, namely a Wiener process). The general solution to the differential equation for $\langle x^2 \rangle$ is 
+	\[ \frac{\mathrm{d}\langle x^2 \rangle}{\mathrm{d}t} = \frac{k_B T}{3 \pi \eta a} + C \exp(-6 \pi \eta a t / m)\]
+	with $C$ an arbitrary constant. It is possible to neglect the exponential, since Langevin estimated its characteristic time about $10^{-8}$ s, and then integrate to get the equation
+	\[ \langle x^2 \rangle - \langle x_0^2 \rangle = \frac{k_B T}{3 \pi \eta a}t\]
+	which corresponds to what Einstein found out if $D_t \equiv k_B T/(6 \pi \eta a)$.
+	
+    Adapting this framework to our case-study, where the particle's orientation is considered, we need to take in to account both random forces and torques so that its motion is purely diffusive, both in position and orientation with the following diffusion coefficients
 	\begin{equation}
 		D_t = \frac{k_B T}{\gamma_t} \quad D_r = \frac{k_B T}{\gamma_r} 
 	\end{equation}
@@ -320,7 +335,4 @@
 		\end{algorithm}
 		
 	\subsection{Stochastic integration and algorithms}
-	
-	
-		
 \end{document}
