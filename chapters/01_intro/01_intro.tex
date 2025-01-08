@@ -241,14 +241,14 @@
 	
 	It is known from statistical mechanics that a Brownian particle in equilibrium will have as mean kinetic energy
 	\[ \langle \frac{1}{2}mv^2 \rangle =  \frac{1}{2} k_B T\]
-	where $T$ is the absolute temperature and $k_B$ is Boltzmann's constant. If we assume the same formula as in macroscopic hydrodynamics, the viscous drag acting on the particle will be of the form $-6 \pi \eta a \frac{\mathrm{d}x}{\mathrm{d}t}$, being $a$ the particle's radius and $\eta$ the viscosity of the fluid. Due to the random collisions with the fluid molecules, a passive Brownian particle experiences a \emph{fluctuating force} $X$. The equation of motion for the particle is thus
-	\[ m \frac{\mathrm{d}^2x}{\mathrm{d}t^2} = -6 \pi \eta a \frac{\mathrm{d}x}{\mathrm{d}t} + X \]
+	where $T$ is the absolute temperature and $k_B$ is Boltzmann's constant. If we assume the same formula as in macroscopic hydrodynamics, the viscous drag acting on the particle will be of the form $-6 \pi \eta a \dv{x}{t}$, being $a$ the particle's radius and $\eta$ the viscosity of the fluid. Due to the random collisions with the fluid molecules, a passive Brownian particle experiences a \emph{fluctuating force} $X$. The equation of motion for the particle is thus
+	\[ m \dv[2]{x}{t} = -6 \pi \eta a \dv{x}{t} + X \]
 	which we multiply by $x$ getting
-	\[ \frac{m}{2} \frac{\mathrm{d}^2}{\mathrm{d}t^2}(x^2) - mv^2  = -3 \pi \eta a \frac{\mathrm{d}(x^2)}{\mathrm{d}t} + Xx \]
-	where we called $v = \mathrm{d}x/\mathrm{d}t$. Averaging on the ensemble of particles we have
-	\[ \frac{m}{2} \frac{\mathrm{d}^2\langle x^2 \rangle}{\mathrm{d}t^2} + 3 \pi \eta a \frac{\mathrm{d}\langle x^2 \rangle}{\mathrm{d}t} = k_B T \]
+	\[ \frac{m}{2} \dv[2]{t}(x^2) - mv^2  = -3 \pi \eta a \dv{(x^2)}{t} + Xx \]
+	where we called $v = \dv{x}{t}$. Averaging on the ensemble of particles we have
+	\[ \frac{m}{2} \dv[2]{\langle x^2 \rangle}{t}  + 3 \pi \eta a \dv{\langle x^2 \rangle}{t} = k_B T \]
 	where the value for the mean kinetic energy was plugged in and we averaged the product $Xx$ to zero, being $X$ highly irregular (in modern times we just write everything in terms of a 0 mean Gaussian stochastic process, namely a Wiener process). The general solution to the differential equation for $\langle x^2 \rangle$ is 
-	\[ \frac{\mathrm{d}\langle x^2 \rangle}{\mathrm{d}t} = \frac{k_B T}{3 \pi \eta a} + C \exp(-6 \pi \eta a t / m)\]
+	\[ \dv{\langle x^2 \rangle}{t} = \frac{k_B T}{3 \pi \eta a} + C \exp(-6 \pi \eta a t / m)\]
 	with $C$ an arbitrary constant. It is possible to neglect the exponential, since Langevin estimated its characteristic time about $10^{-8}$ s, and then integrate to get the equation
 	\[ \langle x^2 \rangle - \langle x_0^2 \rangle = \frac{k_B T}{3 \pi \eta a}t\]
 	which corresponds to what Einstein found out if $D_t \equiv k_B T/(6 \pi \eta a)$.
@@ -273,13 +273,13 @@
 	\end{equation}
 	which can be rewritten as:
 	\begin{equation}
-		\mathbf{\dot{r}} = \sqrt{2D_t}\mathrm{d}\mathbf{W}
+		\mathbf{\dot{r}} = \sqrt{2D_t} \dd{\mathbf{W}}
 	\end{equation}
-	where $\mathrm{d}\mathbf{W}$ is the derivative of a zero mean, variance 1 Wiener process.
+	where $\dd{\mathbf{W}}$ is the derivative of a zero mean, variance 1 Wiener process.
 	In a homogeneous environment, rotational and translational motions are independent from each other, so that the equations of motion for a passive Brownian particle are
 	
 	\begin{equation}
-		\dot{x} = \sqrt{2D_t}dW_x, \quad \dot{y} = \sqrt{2D_t}\mathrm{d}W_y, \quad \dot{\theta} = \sqrt{2D_r}\mathrm{d}W_{\theta}
+		\dot{x} = \sqrt{2D_t}\dd{W_x}, \quad \dot{y} = \sqrt{2D_t}\dd{W_y}, \quad \dot{\theta} = \sqrt{2D_r}\dd{W_{\theta}}
 	\end{equation}
 	
 	%Ornstein and Uhlenbeck, in a 1930 paper \citeauthor{uhlenbeck_theory_1930}, outlined all the statistical properties of Brownian motion, including the mean square displacement, which in 2 dimension read $\text{MSD}(\tau) = 4D_t \tau + \frac{4k_B T}{m} \tau_m^2 \left[e^{-\tau/\tau_m} - 1\right]$.
@@ -291,15 +291,15 @@
 		
 		Adding a constant-magnitude self-propulsion velocity $\mathbf{v}$ into the equations of motion, we get:
 		\begin{equation}
-			\dot{x} = v \cos{\theta} + \sqrt{2D_t}dW_x , \quad \dot{y} = v \sin{\theta} + \sqrt{2D_t}dW_y, \quad \dot{\theta} = \sqrt{2D_r}dW_{\theta}
+			\dot{x} = v \cos{\theta} + \sqrt{2D_t}\dd{W_x} , \quad \dot{y} = v \sin{\theta} + \sqrt{2D_t}\dd{W_y}, \quad \dot{\theta} = \sqrt{2D_r}\dd{W_{\theta}}
 		\end{equation}
 		where $\theta$ is the particle orientation and $v$ is the magnitude of the self-propulsion velocity.
 		
 		As a consequence, the resulting finite-differences equations are:
 		\begin{equation} \label{eq:fin_diff1}
 			\begin{cases}
-				x_{n+1} = x_n + v \cos\theta \Delta t + \sqrt{2D_t \Delta t} \, W_{x,n},\\
-				y_{n+1} = y_n + v \sin\theta \Delta t + \sqrt{2D_t \Delta t} \, W_{y,n},\\
+				x_{n+1} = x_n + v \cos(\theta) \Delta t + \sqrt{2D_t \Delta t} \, W_{x,n},\\
+				y_{n+1} = y_n + v \sin(\theta) \Delta t + \sqrt{2D_t \Delta t} \, W_{y,n},\\
 				\theta_{n+1} = \theta_n + \omega \Delta t + \sqrt{2D_t \Delta t} \, W_{\theta,n}\\
 			\end{cases}
 		\end{equation}
@@ -308,8 +308,8 @@
 		It is possible to insert external forces and torques in the system, where \emph{external} means they are not due to the self-propulsion. Even though in literature there are examples of uniform external potentials, e.g.\ electric and magnetic fields, being applied on the ABP ensemble as a whole, in this work the only external force is the interaction between particles, which is applied in the low-Reynolds number regime as:
 		\begin{equation} \label{eq:fin_diff_with_forces}
 			\begin{cases}
-				x_{n+1} = x_n + \left( v \cos\theta + \frac{D_t}{k_B T} F_{ext,x} \right) \Delta t + \sqrt{2D_t \Delta t} \, W_{x,n},\\
-				y_{n+1} = y_n + \left( v \cos\theta + \frac{D_t}{k_B T} F_{ext,y} \right) \Delta t + \sqrt{2D_t \Delta t} \, W_{y,n},\\
+				x_{n+1} = x_n + \left( v \cos(\theta) + \frac{D_t}{k_B T} F_{ext,x} \right) \Delta t + \sqrt{2D_t \Delta t} \, W_{x,n},\\
+				y_{n+1} = y_n + \left( v \sin(\theta) + \frac{D_t}{k_B T} F_{ext,y} \right) \Delta t + \sqrt{2D_t \Delta t} \, W_{y,n},\\
 				\theta_{n+1} = \theta_n +\left(\omega + \frac{D_r}{k_B T}{}T_{ext}\right) \Delta t + \sqrt{2D_t \Delta t} \, W_{\theta,n}\\
 			\end{cases}
 		\end{equation}
@@ -318,15 +318,15 @@
 		\subsection{Stochastic integration}
 		The topic of integrating a stochastic differential equation (SDE) is a fundamental part of present work and an important object of investigation in the physics and mathematics community. The most simple SDE one can write is
 		\begin{equation} 
-			\mathrm{d}x = f(x)\mathrm{d}t + g(x)\mathrm{d}W 
+			\dd{x} = f(x)\dd{t} + g(x)\dd{W} 
 		\end{equation} 
-		where $\mathrm{d}W$ is the increment of a Wiener process $W(t)$, defined by its probability
+		where $\dd{W}$ is the increment of a Wiener process $W(t)$, defined by its probability
 		\begin{equation} 
 			P(W(t)) = \frac{1}{\sqrt{2 \pi t}} e^{-\frac{W(t)^2}{2t}}
 		\end{equation}
-		in which we assumed 0 mean and no correlation at different times, which reads $\mathrm{d}W = \xi(t)\mathrm{d}t$ with $ \langle \xi(t) \xi(t') \rangle = \delta(t-t')$.
+		in which we assumed 0 mean and no correlation at different times, which reads $\dd{W} = \xi(t)\dd{t}$ with $ \langle \xi(t) \xi(t') \rangle = \delta(t-t')$.
 		
-		Now, to solve such SDE, we need to compute integrals of the form $\int W \mathrm{d}W$. We start by defining the mean square limit as
+		Now, to solve such SDE, we need to compute integrals of the form $\int W \dd{W}$. We start by defining the mean square limit as
 		\begin{equation} 
 			\text{m.s.} \lim_{n \to \infty} X_n = X \iff \lim_{n \to \infty} \langle(X_n - X)^2\rangle = 0 
 		\end{equation}
@@ -342,11 +342,11 @@
 		
 		With all of this, we are ready to integrate our SDE, formally
 		\begin{equation} 
-			x(t) - x(0) = \int_{0}^{t} f(x(s)) \mathrm{d}s + \int_{0}^{t} g(x(s)) \mathrm{d}W
+			x(t) - x(0) = \int_{0}^{t} f(x(s)) \dd{s} + \int_{0}^{t} g(x(s)) \dd{W}
 		\end{equation} 
 		considering only the second term in the right-hand side, and Taylor-expanding it we get
 		\begin{equation} 
-			\int_0^t g(x) \, dW \approx \int_0^t dW \, \big[g(x(0)) + g'(x(0))(x(s) - x(0))\big]
+			\int_0^t g(x) \, \dd{W} \approx \int_0^t \dd{W} \, \big[g(x(0)) + g'(x(0))(x(s) - x(0))\big]
 		 \end{equation}.
 		 
 		 The Itô versus Stratonovich controversy poses a subtle but fundamental problem: since $g$ depends on $x$ which depends on $t$, to compute the $i$-th step when we have the $i-1$-th we need to evaluate $g$ at an instant $t_i^*$, subsequent to $t_i$, where the value of $x$ is not known yet, in principle. Only the Itô prescription solves this issue, using the concept of \emph{nonanticipating} functions.
@@ -356,28 +356,28 @@
 		Let us apply this theoretical notions to the equations for ABPs. Only accounting for $\theta$ and $x$, we have
 		\begin{equation} 
 			\begin{cases}
-			\mathrm{d}x = f_x(x)\mathrm{d}t + v_0\cos(\theta)\mathrm{d}t + \sqrt{2D_t}\mathrm{d}W_x \\
-			\mathrm{d}\theta = \sqrt{2D_r}\mathrm{d}W_\theta
+			\dd{x} = f_x(x)\dd{t} + v_0\cos(\theta)\dd{t} + \sqrt{2D_t}\dd{W_x} \\
+			\dd{\theta} = \sqrt{2D_r}\dd{W_\theta}
 			\end{cases} 
 		\end{equation} 
 		where in $f$ we included all possible interactions a particle can undergo. For now we set that part to 0 since in does not give particular problems and consider only the terms which contain stochastic parts. We integrate to get
 		\begin{equation}
 			\begin{cases}
-				x(h) - x(0) =  \int_{0}^{h}v_0 \cos(\theta(s)) \mathrm{d}s + \int_{0}^{h} \sqrt{2D_t}\mathrm{d}W \\
-			\theta(s) - \theta(0) \sim \sqrt{2D_r s} \sim o(\sqrt{s})
+				x(h) - x(0) =  \int_{0}^{h}v_0 \cos(\theta(s)) \dd{s} + \int_{0}^{h} \sqrt{2D_t}\dd{W} \\
+			\theta(s) - \theta(0) = \sqrt{2D_r s} \sim \order{\sqrt{s}}
 		    \end{cases}  
 	    \end{equation}
-		being $\int_{0}^{s}\mathrm{d}W = \sqrt{s} y_1$ with $y_1 \sim \mathcal{N}(0,1)$. We plug what obtained for $\theta$ in the first order Taylor expansion of cosine to get ($\theta_x \equiv \theta(x)$ for short)
+		being $\int_{0}^{s}\dd{W} = \sqrt{s} y_1$ with $y_1 \sim \mathcal{N}(0,1)$. We plug what obtained for $\theta$ in the first order Taylor expansion of cosine to get ($\theta_x \equiv \theta(x)$ for short)
 		\begin{align} 
-			x(h) - x(0) &=  \int_{0}^{h}v_0 \left[\cos(\theta_0) - \sin(\theta_0)(\theta_s-\theta_0)\right]\mathrm{d}s + \int_{0}^{h} \sqrt{2D_t}\mathrm{d}W  \\
-			& = \sqrt{2D_th} z_1 + hv_0 \cos\theta_0 - \sin \theta_0 y_1 \sqrt{h} \int_{0}^{h}\mathrm{d}s
+			x(h) - x(0) &=  \int_{0}^{h}v_0 \left[\cos(\theta_0) - \sin(\theta_0)(\theta_s-\theta_0)\right]\dd{s} + \int_{0}^{h} \sqrt{2D_t}\dd{W}  \\
+			& = \sqrt{2D_th} z_1 + hv_0 \cos\theta_0 - \sin \theta_0 y_1 \sqrt{h} \int_{0}^{h}\dd{s}
 	    \end{align}
-	    with $z_1 \sim \mathcal{N}(0,1)$, and we notice that the last term is $o(h^{3/2})$, leaving us with the first order.
+	    with $z_1 \sim \mathcal{N}(0,1)$, and we notice that the last term is $\order{h^{3/2}}$, leaving us with the first order.
 	    
 	    This makes what we saw for the finite difference equations correct.
 	    
 		\subsection{Algorithms}
-		
+		The topic of algorithms to integrate SDEs is pretty broad and quite a lot of literature has been produced on the subject. Here, we only give the details of what has been used in present work.
 		
 		\begin{algorithm}
 			\caption{The simulation algorithm} \label{alg:sim1}	
