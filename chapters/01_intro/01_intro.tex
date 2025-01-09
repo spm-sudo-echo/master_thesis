@@ -18,10 +18,10 @@
 	\begin{displayquote}
 		Many of the cells are very tiny, but they are very active \omissis Consider the possibility that we too can make a thing very small which does what we want — that we can manufacture an object that maneuvers at that level!
 		
-		\omissis it would be interesting in surgery if you could swallow the surgeon. You put the mechanical surgeon inside the blood vessel and it goes into the heart and "looks" around. \omissis It finds out which valve is the faulty one and takes a little knife and slices it out. Other small machines might be permanently incorporated in the body to assist some inadequately functioning organ.\footcite{Feynman}
+		\omissis it would be interesting in surgery if you could swallow the surgeon. You put the mechanical surgeon inside the blood vessel and it goes into the heart and "looks" around. \omissis It finds out which valve is the faulty one and takes a little knife and slices it out. Other small machines might be permanently incorporated in the body to assist some inadequately functioning organ.\cite{Feynman}
 	\end{displayquote}
 	
-	The scaling laws of physical quantities, especially regarding friction and hydrodynamics, prevent the construction of a micrometer scale robot which is just a miniaturized version of a macroscopic one. Swimming in a fluid for the typical size and speed we are interested in-meaning, at low Reynolds number $\mathrm{Re} \equiv \frac{\rho v L}{\eta}$-is quite a different game than what we are used to in the macroscopic world. When inertia is negligible, it is impossible to swim using a \emph{reciprocal motion}, that is, a cyclic motion that follows the same path forward and back \cite{purcell_life_1977}. Needles to say that turning a propeller with a miniaturized macroscopic motor won't be optimal at this scale, since its starting torque would be extremely large. These huge difficulties are encountered if one just wants to swim in a simple fluid. Using a micro robot in real life brings some other challenges in the problem, such as swimming in viscoelastic media like hyaluronic acid lattices or shrinking through the small interstices in between living cells.
+	The scaling laws of physical quantities, especially regarding friction and hydrodynamics, prevent the construction of a micrometer scale robot which is just a miniaturized version of a macroscopic one. Swimming in a fluid for the typical size and speed we are interested in-meaning, at low Reynolds number $\mathrm{Re} \equiv \rho v L/\eta$-is quite a different game than what we are used to in the macroscopic world. When inertia is negligible, it is impossible to swim using a \emph{reciprocal motion}, that is, a cyclic motion that follows the same path forward and back \cite{purcell_life_1977}. Needles to say that turning a propeller with a miniaturized macroscopic motor won't be optimal at this scale, since its starting torque would be extremely large. These huge difficulties are encountered if one just wants to swim in a simple fluid. Using a micro robot in real life brings some other challenges in the problem, such as swimming in viscoelastic media like hyaluronic acid lattices or shrinking through the small interstices in between living cells.
 	
 	One way of solving this kind of problems is through bio-inspiration: tackling challenges by mimicking the gimmicks nature uses to overcome them. The aim of CELLOIDS, the project inside of which this work has taken place, is to build a micro-scale intelligent robotic system that takes inspiration from the amoeboid propulsion of immune cells. The CELLOIDS’ concept for a microrobot is a phospholipids GUV (Giant Unilamellar Vesicle) filled with a suspension of ABPs. A single ABP is a Janus sphere, with an inert hemisphere and a catalytic one, which turns a fuel into some products generating a gradient in the concentration field in its vicinity; this makes the solvent flow around the particle causing it to move. In particular, the most studied Janus Sphere in this field is a \ch{SiO2} sphere where \ch{Pt} is deposed using some techniques to coat just one hemisphere; the fuel is \ch{H2O2} that is decomposed in 
 	\begin{align}
@@ -54,7 +54,7 @@
 	
 	In the following section the Vicsek model will often be cited. This is the right time to give a brief introduction to it with the authors' words:
 	 \begin{displayquote}
-		The only rule of the model is: at each time step a given particle driven with a constant absolute velocity assumes the average direction of motion of the particles in its neighborhood of radius r with some random perturbation added.\footcite{vicsek_novel_1995}
+		The only rule of the model is: at each time step a given particle driven with a constant absolute velocity assumes the average direction of motion of the particles in its neighborhood of radius r with some random perturbation added.\cite{vicsek_novel_1995}
 	 \end{displayquote}
 	 Although extremely simple, this model is of paramount importance in the study of active matter since it can be studied in terms of a phase transition and recreates in some way the behavior of real living systems.
 	
@@ -63,8 +63,10 @@
 	The next few papers focus on systems which are more akin to what will be investigated from chapter~\ref{chap:int_impl} on. \parencite{martin-gomez_collective_2018} analyzes how an explicit polar aligning interaction can make the system transition to an ordered flocking phase, where almost all particles align their orientation in the same direction, even though an orientational noise is present. The model is built taking into account an aligning torque between particles $i$ and $j$ which goes as $K \sin{(\theta_{i} - \theta_{j})}$, only within a certain distance, and a repulsive potential $\epsilon \left(\frac{\sigma}{r}\right)^{12}$ to take into account the excluded volume.
 	
 	The parameters of the system are the Péclet number $\mathrm{Pe} = \frac{v_0}{\sigma \gamma}$ which is the ratio between the self propulsion velocity and the product of the characteristic length of the particles and the rotational diffusion coefficient and $g = \frac{K}{4\pi \sigma^2 \gamma}$ which quantifies the relative intensity of the orientational coupling strength and the reorienting noise. The order parameter is the mean global polarization
-	
-   	\[ P = \frac{1}{N}\left| \sum_{k=1}^{N} \exp{(i \theta_k(t))} \right|\]
+
+   	 \begin{equation}
+   	 P = \frac{1}{N}\left| \sum_{k=1}^{N} \exp(i \theta_k(t)) \right|
+   	 \end{equation}
   	 which is $\sim 0$ in the disordered phase and $> 0$ in the flocking phase. The authors build a phase diagram in the $\mathrm{Pe}-g$ plane Figure \ref{fig:martin_flocking1}, which shows the separation between disorder and flocking as well as intermediate clustering phases, one with a microscopic cluster structure and one where a macroscopic single cluster structure arises.
 	
 	\begin{figure}[h]
@@ -78,30 +80,32 @@
 	
 	In the next part authors focus on clustering phenomena, noting that the cluster size distribution decays exponentially for $g < g*$ and algebraically for $g > g*$. This defines the two phases of microscopic and macroscopic clustering.
 	Introducing two new order parameters
-	\[ P_x = \left\langle \left| \frac{1}{N} \sum_{i=1}^N \cos(\theta_i) \right| \right\rangle ; \quad
+	\begin{equation} 
+	P_x = \left\langle \left| \frac{1}{N} \sum_{i=1}^N \cos(\theta_i) \right| \right\rangle ; \quad
 	P_y = \left\langle \left| \frac{1}{N} \sum_{i=1}^N \sin(\theta_i) \right| \right\rangle,
- \]
- it is possible to distinguish between lane-like and band-like behavior in aligned clusters.
+ 	\end{equation}
+ 	it is possible to distinguish between lane-like and band-like behavior in aligned clusters.
  
- \begin{figure}[htp]
-	 	\centering
-	 	\includegraphics[width=\singfigwidth]{martin_laneband.png}
-	 	\caption{\parencite{martin-gomez_collective_2018}}
-	 	\label{fig:martin_flocking2}
- \end{figure}
- 
- The authors use the radial distribution function 
- \[ g(r) = \frac{1}{N} \left\langle \sum_{j \neq i} \sum_{i} \delta \left( r - |\mathbf{r}_i - \mathbf{r}_j| \right) \right\rangle
- \]
+	 \begin{figure}[htp]
+		 	\centering
+		 	\includegraphics[width=\singfigwidth]{martin_laneband.png}
+		 	\caption{\parencite{martin-gomez_collective_2018}}
+		 	\label{fig:martin_flocking2}
+	 \end{figure}
+	 
+	 The authors use the radial distribution function 
+	 \begin{equation} 
+	 g(r) = \frac{1}{N} \left\langle \sum_{j \neq i} \sum_{i} \delta \left( r - |\mathbf{r}_i - \mathbf{r}_j| \right) \right\rangle
+	 \end{equation}
 	to characterize the global structure of the largest cluster. Increasing the coupling $g$ at fixed Péclet number makes the peaks higher and shifts them to larger distances, showing that the system is developing a longer range order.
 	
 	\begin{figure}[htp]
 		\centering
 		\subfloat[][Polarization and its susceptibility]{\includegraphics[width=\subfigwidth]{martin_phasetransition.png}}\quad
-  \subfloat[][Pair correlation function and static structure factor]{\includegraphics[width=\subfigwidth]{martin_gofr.png}}
- 
-  \caption{\parencite{martin-gomez_collective_2018}}
-  \label{fig:martin_flocking3}
+		  \subfloat[][Pair correlation function and static structure factor]{\includegraphics[width=\subfigwidth]{martin_gofr.png}}
+		 
+		  \caption{\parencite{martin-gomez_collective_2018}}
+		  \label{fig:martin_flocking3}
 	\end{figure}
 	
 	In \parencite{caprini_spontaneous_2020}, authors investigate the alignment of instantaneous velocities in cases where motility-induced phase separation occurs. Most literature focuses on the effect that a central 2-body potential, or an explicit aligning interaction which couples the orientational degrees of freedom of single particles, has on the system, but the interplay between phase separation of particles systems and alignment in their velocity has hardly been studied.
@@ -109,8 +113,9 @@
 	In the aforementioned paper, it is shown how, when ABPs systems with a simple repulsive only Weeks-Chandler-Andersen potential phase-separate in a cluster, their velocity tend to form aligned domains, regardless the self propulsion orientation. For this reason, the global polarization is not a good order parameter, even when the computation is restricted to clusters, thus the authors introduce the spatial correlation function of the velocity orientation $Q_i(r) = 1-2\sum_{j} \frac{d{ij}}{\mathcal{N}_k \pi } $, being $d_{ij} = \mathrm{min}\left[|\theta_i - \theta_j|, 2 \pi - |\theta_i - \theta_j| \right]$ the angular distance between two particles and $\mathcal{N}_k$ is the number of particles in a circular shell around the i-th particle, taken with a thickness $\bar{r} = \mathrm{argmax} \{g(r)\}$, and mean radius $k\bar{r}$ with integer $k$. 
 	
 	It is possible to derive an order parameter from $Q(R)$ integrating it
-	\[ 
-	R = \int Q(r) dr \]
+	\begin{equation} 
+	R = \int Q(r) dr 
+	\end{equation}
 	where the integral is performed on the cluster domain when present. 
 	This seems to be a good order parameter: varying the reorientation time $1/D_r$, $R$ is discontinuous at the point where the MIPS occurs and the result is consistent with established MIPS order parameters as shown in Figure \ref{fig:caprini1}.
 	
@@ -240,17 +245,29 @@
 	Before adding the self-propulsion velocity, it is worthwhile to outline some facts about Passive Brownian motion. The first formulation of the theory of Brownian motion was obtained by Albert Einstein in a 1905 paper, where the mean square displacement was given in terms of a linear relation with time, with a diffusion coefficient $D_t$ as $\sqrt{\bar{x}^2} = \sqrt{2D_t t}$. Here, we outline the derivation as it was presented by Paul Langevin some years afterwards, following \cite{gardiner_handbook_2004}.
 	
 	It is known from statistical mechanics that a Brownian particle in equilibrium will have as mean kinetic energy
-	\[ \langle \frac{1}{2}mv^2 \rangle =  \frac{1}{2} k_B T\]
+	\begin{equation} 
+	\langle \frac{1}{2}mv^2 \rangle =  \frac{1}{2} k_B T
+	\end{equation}
 	where $T$ is the absolute temperature and $k_B$ is Boltzmann's constant. If we assume the same formula as in macroscopic hydrodynamics, the viscous drag acting on the particle will be of the form $-6 \pi \eta a \dv{x}{t}$, being $a$ the particle's radius and $\eta$ the viscosity of the fluid. Due to the random collisions with the fluid molecules, a passive Brownian particle experiences a \emph{fluctuating force} $X$. The equation of motion for the particle is thus
-	\[ m \dv[2]{x}{t} = -6 \pi \eta a \dv{x}{t} + X \]
+	\begin{equation} 
+	m \dv[2]{x}{t} = -6 \pi \eta a \dv{x}{t} + X 
+	\end{equation}
 	which we multiply by $x$ getting
-	\[ \frac{m}{2} \dv[2]{t}(x^2) - mv^2  = -3 \pi \eta a \dv{(x^2)}{t} + Xx \]
+	\begin{equation} 
+	\frac{m}{2} \dv[2]{t}(x^2) - mv^2  = -3 \pi \eta a \dv{(x^2)}{t} + Xx 
+	\end{equation}
 	where we called $v = \dv{x}{t}$. Averaging on the ensemble of particles we have
-	\[ \frac{m}{2} \dv[2]{\langle x^2 \rangle}{t}  + 3 \pi \eta a \dv{\langle x^2 \rangle}{t} = k_B T \]
+	\begin{equation} 
+	\frac{m}{2} \dv[2]{\langle x^2 \rangle}{t}  + 3 \pi \eta a \dv{\langle x^2 \rangle}{t} = k_B T 
+	\end{equation}
 	where the value for the mean kinetic energy was plugged in and we averaged the product $Xx$ to zero, being $X$ highly irregular (in modern times we just write everything in terms of a 0 mean Gaussian stochastic process, namely a Wiener process). The general solution to the differential equation for $\langle x^2 \rangle$ is 
-	\[ \dv{\langle x^2 \rangle}{t} = \frac{k_B T}{3 \pi \eta a} + C \exp(-6 \pi \eta a t / m)\]
+	\begin{equation} 
+	\dv{\langle x^2 \rangle}{t} = \frac{k_B T}{3 \pi \eta a} + C \exp(-6 \pi \eta a t / m)
+	\end{equation}
 	with $C$ an arbitrary constant. It is possible to neglect the exponential, since Langevin estimated its characteristic time about $10^{-8}$ s, and then integrate to get the equation
-	\[ \langle x^2 \rangle - \langle x_0^2 \rangle = \frac{k_B T}{3 \pi \eta a}t\]
+	\begin{equation} 
+	\langle x^2 \rangle - \langle x_0^2 \rangle = \frac{k_B T}{3 \pi \eta a}t
+	\end{equation}
 	which corresponds to what Einstein found out if $D_t \equiv k_B T/(6 \pi \eta a)$.
 	
     Adapting this framework to our case-study, where the particle's orientation is considered, we need to take in to account both random forces and torques so that its motion is purely diffusive, both in position and orientation with the following diffusion coefficients
@@ -266,7 +283,9 @@
 	where $\mathbf{F}_{th}$ is the random force given by the collisions with the fluid molecules.
 	
 	Given that a typical Brownian particle will have a characteristic body-length in the order of $ \mathrm{\sim\mu m}$ and a velocity of $\sim\mu \mathrm{m s}^{-1}$ the system can be studied in low-Reynolds number regime being 
-	\[Re = \frac{\rho v a}{\eta} \sim 10^{-6} \]  
+	\begin{equation}
+	Re = \frac{\rho v a}{\eta} \sim 10^{-6} 
+	\end{equation}  
 	where $\rho$ is the fluid density, $v$ is the particle speed, $a$ is the particle radius and $\eta$ is the fluid viscosity and the values of density and viscosity for water were plugged in. As a consequence of this fact, inertial effects can be neglected and it is possible to study the system in the \emph{overdamped} regime, turning the Langevin equation \ref{eq:lang1} into
 	\begin{equation} \label{eq:lang2}
 		\gamma_t \mathbf{\dot{r}} = \mathbf{F}_{th}
@@ -428,20 +447,26 @@
 			\begin{algorithmic}[1]
 				\For{n in timesteps}
 				\For{i in particles in ensemble}
-				\State{$\vec{F}_{i,n} = \sum_{j}^{Np}{\vec{F}_{ij}(\vec{r}_{i,j}(\vec{r}_{i,n}, \vec{r}_{j,n}))}$}
 				\State{$w_{i,n} \sim \mathcal{N}(0, \sqrt{2D_t \Delta t})$}
 				\State{$z_{i,n} \sim \mathcal{N}(0, \sqrt{2D_r \Delta t})$}
+				\State{$\vec{F}_{i,n} = \sum_{j}^{Np}{\vec{F}_{ij}(\vec{r}_{i,j}(\vec{r}_{i,n}, \vec{r}_{j,n}))}$}
 				\State{$ \vec{r}_{i,\hat{n}}\gets \vec{r_n} + w_{i,n} + v (\cos\theta_{i,n}, \sin\theta_{i,n})\Delta t + \vec{F}_{i,n}\Delta t / \gamma _t $}
 				\State{$\theta_{i,\hat{n}}\gets \theta_{i,n} + z_{i,n} + \omega_{i,n} \Delta t + T_{i,n} \Delta t/\gamma _r$}
+				%\EndFor
+				%\For{i in particles in ensemble}
 				\State{$\vec{F}_{i,\hat{n}} = \sum_{j}^{Np}{\vec{F}_{ij}(\vec{r}_{i,j}(\vec{r}_{i,\hat{\hat{n}}}, \vec{r}_{j,\hat{n}}))}$}
-				\State{$ \vec{r}_{i,n+1}\gets \vec{r_n} + w_{i,n} + \frac{\Delta t}{2}\left[v (\cos\theta_{i,n}, \sin\theta_{i,n}) + \vec{F}_{i,n} / \gamma _t + v (\cos\theta_{i,\hat{n}}, \sin\theta_{i,\hat{n}}) + \vec{F}_{i,\hat{n}} / \gamma _t\right] $}
+				\State{$\delta \vec{r} \gets \frac{\Delta t}{2}\left[v (\cos\theta_{i,n}, \sin\theta_{i,n}) + \vec{F}_{i,n} / \gamma _t + v (\cos\theta_{i,\hat{n}}, \sin\theta_{i,\hat{n}}) + \vec{F}_{i,\hat{n}} / \gamma _t\right]$}
+				\State{$ \vec{r}_{i,n+1}\gets \vec{r_n} + w_{i,n} + \delta \vec{r} $}
 				\State{$\theta_{i,n+1}\gets \theta_{i,n} + z_{i,n} + \frac{\Delta t}{2}\left[\omega_{i,n} \Delta t + T_{i,n}/\gamma _r + \omega_{i,\hat{n}} \Delta t + T_{i,\hat{n}} /\gamma _r\right]$}
 				\EndFor
 				\EndFor
 			\end{algorithmic}
 		\end{algorithm}
-		Now one can ask which is the "best" algorithm. The answer lies in two distinct topics: deterministic accuracy and stochastic behavior.
+		Now one can ask which is the "best" algorithm. The answer lies in two distinct topics: deterministic accuracy and stochastic behavior. Regarding deterministic accuracy, one can analyze which is the order of the numerical error made in the integration, obtaining that, being a first order algorithm, Euler scheme is accurate up to $\order{h}$, while Heun is $\order{h^2}$, making it better especially when working with highly nonlinear and steep potentials.
 		
+		In order to analyze stochastic behavior, if one is interested in large time behavior, it is possible to study the equilibrium distribution $P(x)$. In particular, a system described by $\dot{x} = -V'(x) + \sqrt{2D}\xi(t)$, the equilibrium distribution should be $P(x, \infty)_{\text{true}} = N \exp(-V(x)/D)$, while a simulated distribution will be $P(x, \infty)_{\text{true}} = N' \exp(-\qty(V(x) + hS(h,x))/D)$, with an error $S$. It is possible to show \cite{mannella_integration_2011} that for Euler $S(h,x) = (V')^2/4 - DV''/2$ while Heun has $S(h,x) = \order{h}$.
 		
+		Analyses suggest that Heun scheme is among the most convenient algorithms, since higher order schemes do not do better, but they are much more expensive to implement on a computer. 
 		
+		With respect to Euler, Heun is more expensive as well: if we restrict to the specific case of sets of interacting particles, the pseudo code in \ref{alg:heun} shows how this algorithm has to compute all the forces twice in order to perform a single step. This is undoubtedly true, but in most cases Heun scheme allows big increases in simulation time steps, making it possible to simulate larger times.		
 \end{document}
