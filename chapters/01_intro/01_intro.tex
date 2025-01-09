@@ -317,14 +317,18 @@
 		
 		\subsection{Stochastic integration}
 		The topic of integrating a stochastic differential equation (SDE) is a fundamental part of present work and an important object of investigation in the physics and mathematics community. The most simple SDE one can write is
-		\begin{equation} 
+		\begin{equation} \label{eq:sde1}
+			\dv{x}{t} = f(x) + g(x)\xi(t)
+		\end{equation}
+		in which $\xi(t)$ is a stochastic process we assumed to be Gaussian with 0 mean and no correlation at different times, which reads $ \langle \xi(t) \xi(t') \rangle = \delta(t-t')$. If we define  $\dd{W} = \xi(t)\dd{t}$, equation \ref{eq:sde1} is equivalent to
+		\begin{equation} \label{eq:sde2}
 			\dd{x} = f(x)\dd{t} + g(x)\dd{W} 
 		\end{equation} 
 		where $\dd{W}$ is the increment of a Wiener process $W(t)$, defined by its probability
 		\begin{equation} 
 			P(W(t)) = \frac{1}{\sqrt{2 \pi t}} e^{-\frac{W(t)^2}{2t}}
 		\end{equation}
-		in which we assumed 0 mean and no correlation at different times, which reads $\dd{W} = \xi(t)\dd{t}$ with $ \langle \xi(t) \xi(t') \rangle = \delta(t-t')$.
+		.
 		
 		Now, to solve such SDE, we need to compute integrals of the form $\int W \dd{W}$. We start by defining the mean square limit as
 		\begin{equation} 
@@ -353,7 +357,7 @@
 		 
 		 With all of this said, it is possible to state that the type of calculus used, i.e.~the value of $\alpha$, is actually a parameter of the model and there is literature showing that the physical quantities obtained through simulations are different if one chooses a method over another \cite{mannella_ito_2012}.	
 		
-		Let us apply this theoretical notions to the equations for ABPs. Only accounting for $\theta$ and $x$, we have
+		Let us apply this theoretical notions to the equations for ABPs. One must be very careful when dealing with discretization step in stochastic integration, especially when dealing with nonlinear functions of noise terms, for it is difficult to know \emph{a priori} which are the correct expansions at any order. Only accounting for $\theta$ and $x$, we have
 		\begin{equation} 
 			\begin{cases}
 			\dd{x} = f_x(x)\dd{t} + v_0\cos(\theta)\dd{t} + \sqrt{2D_t}\dd{W_x} \\
@@ -367,20 +371,32 @@
 			\theta(s) - \theta(0) = \sqrt{2D_r s} \sim \order{\sqrt{s}}
 		    \end{cases}  
 	    \end{equation}
-		being $\int_{0}^{s}\dd{W} = \sqrt{s} y_1$ with $y_1 \sim \mathcal{N}(0,1)$. We plug what obtained for $\theta$ in the first order Taylor expansion of cosine to get ($\theta_x \equiv \theta(x)$ for short)
+		being $\int_{0}^{s}\dd{W} = \sqrt{s} Y_1$ with $Y_1 \sim \mathcal{N}(0,1)$. We plug what obtained for $\theta$ in the first order Taylor expansion of cosine to get ($\theta_x \equiv \theta(x)$ for short)
 		\begin{align} 
 			x(h) - x(0) &=  \int_{0}^{h}v_0 \left[\cos(\theta_0) - \sin(\theta_0)(\theta_s-\theta_0)\right]\dd{s} + \int_{0}^{h} \sqrt{2D_t}\dd{W}  \\
-			& = \sqrt{2D_th} z_1 + hv_0 \cos\theta_0 - \sin \theta_0 y_1 \sqrt{h} \int_{0}^{h}\dd{s}
+			& = \sqrt{2D_th} Z_1 + hv_0 \cos\theta_0 - \sin \theta_0 Y_1 \sqrt{h} \int_{0}^{h}\dd{s}
 	    \end{align}
-	    with $z_1 \sim \mathcal{N}(0,1)$, and we notice that the last term is $\order{h^{3/2}}$, leaving us with the first order.
+	    with $Z_1 \sim \mathcal{N}(0,1)$, and we notice that the last term is $\order{h^{3/2}}$, leaving us with the first order unchanged.
 	    
 	    This makes what we saw for the finite difference equations correct.
 	    
 		\subsection{Algorithms}
-		The topic of algorithms to integrate SDEs is pretty broad and quite a lot of literature has been produced on the subject. Here, we only give the details of what has been used in present work.
+		The topic of algorithms to integrate SDEs is pretty broad and quite a lot of literature has been produced on the subject. Here, we only give the details of what has been used in present thesis.
+		
+		The simplest method to integrate differential equation is the Euler scheme, which was first applied to ODEs in XVIII century. It is a first order method and it is the basis to all higher order schemes. As we did before, we take the first order expansion in the integration step $h$ to integrate equation \ref{eq:sde2}
+		\begin{equation}
+		x(h) - x(0) = \int_0^h (f_0 + g_0 \xi(t)) \dd{t} = h f_0 + g_0 \int_0^h \xi(t) \dd{t}
+		\end{equation}
+		which in general is not correct: in stochastic integration, being $\int_{0}^{h} \dd{W} \sim \order{\sqrt{h}}$, some unexpected $\order{h}$ terms, which are combination of lower orders, tend to appear. In particular, it is straightforward to show that the correct first order in $h$ is 
+		\begin{equation}
+		x(h) - x(0) = g_0 Z_1(h) + f_0 h + \frac{1}{2} g_0' g_0 Z_1(h)^2
+		\end{equation}
+		being $Z_1\sim \mathcal{N}(0,\sqrt{h})$ \cite{mannella_integration_2011}. 
+		
+		Anyway, for cases like ours where noise is purely additive (i.e. $g(x) = \sqrt{2D}$, the last term is $0$ and the simple-minded first order is correct. Basically, this algorithm means that at any step one should propagate with the first order of the deterministic part and then add a randomly generated Gaussian number with 0 mean and the right variance. A pseudo code for Euler algorithm applied to the case of interacting ABPs is in \ref{alg:sim1}.
 		
 		\begin{algorithm}
-			\caption{The simulation algorithm} \label{alg:sim1}	
+			\caption{The Euler algorithm} \label{alg:sim1}	
 			\begin{algorithmic}[1]
 				\For{i in particles in ensemble}
 				\State{$ \vec{r}_{i}\gets \vec{r}_{i,0} $}\Comment{position $\vec{r}_{i,0}$ is randomly initialized in the simulation space}
@@ -399,5 +415,33 @@
 			\end{algorithmic}
 		\end{algorithm}
 		
-
+		The first higher order correction to Euler is the Heun scheme. This algorithm involves the calculation of an intermediate step $x_{\text{int}}$ which helps in dealing with the nonlinearity of the deterministic function $f$. It works as follows
+		\begin{equation}
+			\begin{aligned}
+				x_{\text{int}} &= x(0) + \sqrt{2D} Z_1(h) + f_0 h\\
+				x(h) &= x(0) + \sqrt{2D} Z_1(h) + \frac{h}{2} \qty(f_0 + f(x_{\text{int}})).
+			\end{aligned}
+		\end{equation}
+		
+		\begin{algorithm}
+			\caption{The Heun algorithm} \label{alg:heun}	
+			\begin{algorithmic}[1]
+				\For{n in timesteps}
+				\For{i in particles in ensemble}
+				\State{$\vec{F}_{i,n} = \sum_{j}^{Np}{\vec{F}_{ij}(\vec{r}_{i,j}(\vec{r}_{i,n}, \vec{r}_{j,n}))}$}
+				\State{$w_{i,n} \sim \mathcal{N}(0, \sqrt{2D_t \Delta t})$}
+				\State{$z_{i,n} \sim \mathcal{N}(0, \sqrt{2D_r \Delta t})$}
+				\State{$ \vec{r}_{i,\hat{n}}\gets \vec{r_n} + w_{i,n} + v (\cos\theta_{i,n}, \sin\theta_{i,n})\Delta t + \vec{F}_{i,n}\Delta t / \gamma _t $}
+				\State{$\theta_{i,\hat{n}}\gets \theta_{i,n} + z_{i,n} + \omega_{i,n} \Delta t + T_{i,n} \Delta t/\gamma _r$}
+				\State{$\vec{F}_{i,\hat{n}} = \sum_{j}^{Np}{\vec{F}_{ij}(\vec{r}_{i,j}(\vec{r}_{i,\hat{\hat{n}}}, \vec{r}_{j,\hat{n}}))}$}
+				\State{$ \vec{r}_{i,n+1}\gets \vec{r_n} + w_{i,n} + \frac{\Delta t}{2}\left[v (\cos\theta_{i,n}, \sin\theta_{i,n}) + \vec{F}_{i,n} / \gamma _t + v (\cos\theta_{i,\hat{n}}, \sin\theta_{i,\hat{n}}) + \vec{F}_{i,\hat{n}} / \gamma _t\right] $}
+				\State{$\theta_{i,n+1}\gets \theta_{i,n} + z_{i,n} + \frac{\Delta t}{2}\left[\omega_{i,n} \Delta t + T_{i,n}/\gamma _r + \omega_{i,\hat{n}} \Delta t + T_{i,\hat{n}} /\gamma _r\right]$}
+				\EndFor
+				\EndFor
+			\end{algorithmic}
+		\end{algorithm}
+		Now one can ask which is the "best" algorithm. The answer lies in two distinct topics: deterministic accuracy and stochastic behavior.
+		
+		
+		
 \end{document}
