@@ -3,7 +3,7 @@
 
 \begin{document} 
 \chapter{Introduction}
-	The phenomenon of (passive) Brownian Motion is a well investigated topic in physics since 1827, when Robert Brown studied the motion of pollen grains suspended in water. The list of physicists who dealt with the topic contains names such as Einstein and Langevin \parencite{gardiner_handbook_2004}, whose main contribution is the first formalization of Brownian motion in terms of a differential equation, Ornstein and Uhlenbeck, who calculated fundamental properties such as the mean-square displacement of a Brownian particle \parencite{uhlenbeck_theory_1930}. Since then, scientists across various fields have explored the properties of Brownian Particles systems in numerous variations, one of which is Active Brownian Particles (ABP). 
+	The phenomenon of (passive) Brownian Motion is a well investigated topic in physics since 1827, when Robert Brown studied the motion of pollen grains suspended in water. The list of physicists who dealt with the topic contains names such as Einstein and Langevin \parencite{gardiner_handbook_2004}, whose main contribution is the first formalization of Brownian motion in terms of a differential equation, Ornstein and Uhlenbeck, who calculated fundamental properties such as the mean-square displacement of a Brownian particle in 2D \parencite{uhlenbeck_theory_1930}. Since then, scientists across various fields have explored the properties of Brownian Particles systems in numerous variations, one of which is Active Brownian Particles (ABP). 
 	
 	ABPs are distinguished by their ability to extract energy from the environment and use it to propel themselves making them a fundamental model for non-equilibrium active matter systems.	
 	The motility mechanism can be mechanic, like cilia or flagella used by micro-organisms, or thermodynamic, like phoresis of various nature. 
@@ -469,4 +469,12 @@
 		Analyses suggest that Heun scheme is among the most convenient algorithms, since higher order schemes do not do better, but they are much more expensive to implement on a computer. 
 		
 		With respect to Euler, Heun is more expensive as well: if we restrict to the specific case of sets of interacting particles, the pseudo code in \ref{alg:heun} shows how this algorithm has to compute all the forces twice in order to perform a single step. This is undoubtedly true, but in most cases Heun scheme allows big increases in simulation time steps, making it possible to simulate larger times.		
+		
+		\section{Methods}
+		All the simulation and analysis code for this thesis was written in \julia, except for the machine learning and inference part, where the Graph Network definition and training makes use of Python libraries like PyTorch and PyTorch-geometric, along with standard scientific computing tools like NumPy and Pandas.
+		
+		Heun was chosen as the standard integration scheme for all the simulations, integration steps are indicated case by case. All the simulations were performed with real units, so that particles have a radius of $2\text{ }\mathrm{\mu m}$ and the value for solvent viscosity is kept fixed at $\eta = 10^{-3}$ P.
+		
+		All simulations were performed in a 2 dimensional environment, where particles are disks, featuring periodic boundary conditions and a non-superposition condition (hard sphere correction). Given that positions are simulated in open periodic boundary, all interactions are calculated periodically too, taking the shortest between the in-box and the periodic distance .
+		
 \end{document}
