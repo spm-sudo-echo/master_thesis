@@ -44,7 +44,6 @@
 	
 	The last objective of the project is to build a Deep Learning based tool which, when trained starting from a minimal set of simulation data, is able to infer the interaction potential between couples of particles both in simulated and experimentally observed situations.
 	
-	
 	\section{Literature and State of the Art}
 	
 	Active matter is a lively field and plenty of literature has been produced on the topic. We will go through some of the  different papers that tackle the problem of understanding how active Brownian particles, both single and systems, behave with and without interactions.
@@ -469,12 +468,5 @@
 		Analyses suggest that Heun scheme is among the most convenient algorithms, since higher order schemes do not do better, but they are much more expensive to implement on a computer. 
 		
 		With respect to Euler, Heun is more expensive as well: if we restrict to the specific case of sets of interacting particles, the pseudo code in \ref{alg:heun} shows how this algorithm has to compute all the forces twice in order to perform a single step. This is undoubtedly true, but in most cases Heun scheme allows big increases in simulation time steps, making it possible to simulate larger times.		
-		
-		\section{Methods}
-		All the simulation and analysis code for this thesis was written in \julia, except for the machine learning and inference part, where the Graph Network definition and training makes use of Python libraries like PyTorch and PyTorch-geometric, along with standard scientific computing tools like NumPy and Pandas.
-		
-		Heun was chosen as the standard integration scheme for all the simulations, integration steps are indicated case by case. All the simulations were performed with real units, so that particles have a radius of $2\text{ }\mathrm{\mu m}$ and the value for solvent viscosity is kept fixed at $\eta = 10^{-3}$ P.
-		
-		All simulations were performed in a 2 dimensional environment, where particles are disks, featuring periodic boundary conditions and a non-superposition condition (hard sphere correction). Given that positions are simulated in open periodic boundary, all interactions are calculated periodically too, taking the shortest between the in-box and the periodic distance .
 		
 \end{document}
