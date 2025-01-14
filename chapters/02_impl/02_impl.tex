@@ -23,6 +23,13 @@
 	
 	The idea is to take into account the underlying particle's asymmetry in simulations. It is a fact that the two faces of a Janus particle have different physical and chemical properties, which make them interact differently depending on the angle between their orientations and the line connecting their centers \cite{singh_pair_2024}. This can be due to a plethora of effects like chemical gradients, electrical forces or hydrodynamics, but this model takes only the asymmetry and uses it along with standard potentials, to create a minimal dry framework that mimics wet dynamics. In doing so, we also show that this model displays some interesting statistical mechanics properties.
 	
+	\begin{figure}[htp]
+		\centering
+		\includegraphics[width=\textwidth]{singpart_draw.png}
+		\caption{}
+		\label{fig:geom_model}
+	\end{figure}
+	
 	\section{Methods}
 	All the simulation and analysis code for this thesis was written in \julia, except for the machine learning and inference part, where the Graph Network definition and training makes use of Python libraries like PyTorch and PyTorch-geometric, along with standard scientific computing tools like NumPy and Pandas.
 	
@@ -112,8 +119,16 @@
 	\end{figure}
 	This is of paramount importance for speed. While a complete calculation of all the possible forces between $n$ particles is an $\order{n^2}$ algorithm (the actual number of possible interactions is $n(n-1)$), the number of particles in a box of given area is constant in $n$ if density remains fixed, so, scaling up the number of particles in the same conditions will be less demanding in terms of computational power.
 	
-	Inserting a range in interactions makes straightforward to apply them in a periodic fashion. Original code had a function to reflect particles in periodic boundary conditions, which worked in a very fast vectorized way (pseudo code for naive version is in algorithm \ref{alg:pbc}).
+	Inserting a range in interactions makes straightforward to apply them in a periodic fashion. Original code had a function to reflect particles in periodic boundary conditions, which worked in a very fast vectorized way (pseudo code for naive version is in algorithm \ref{alg:pbc}). The idea is: take one particle and make it the \emph{central} one, then shift coordinates of the other particles so that the \emph{central} is in $(0,0)$, now just apply periodic boundary conditions to the shifted coordinates. This process should guarantee that the \emph{central} particle interacts only once with any of the others, following a simple rule: when choosing between the true particle and the periodically shifted one the interacting particle is the closest one. An explanation of this process can be found in Figure \ref{fig:periodicint}.
+	
+	\begin{figure}[htp]
+		\centering
+		\includegraphics[width=\textwidth]{periodic_interaction.png}
+		\caption{Red: original points with Z as central point and its interaction box sticking out on the opposite side. Blue: shifted points (blue) w.r.t.\ Z, Green: shifted points with PBC applied.}
+		\label{fig:periodicint}
+	\end{figure}
 	
 	\section{Aligning Interactions}
+	
 
 \end{document}
