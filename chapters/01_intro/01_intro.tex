@@ -23,13 +23,13 @@
 	
 	The scaling laws of physical quantities, especially regarding friction and hydrodynamics, prevent the construction of a micrometer scale robot which is just a miniaturized version of a macroscopic one. Swimming in a fluid for the typical size and speed we are interested in-meaning, at low Reynolds number $\mathrm{Re} \equiv \rho v L/\eta$-is quite a different game than what we are used to in the macroscopic world. When inertia is negligible, it is impossible to swim using a \emph{reciprocal motion}, that is, a cyclic motion that follows the same path forward and back \cite{purcell_life_1977}. Needles to say that turning a propeller with a miniaturized macroscopic motor won't be optimal at this scale, since its starting torque would be extremely large. These huge difficulties are encountered if one just wants to swim in a simple fluid. Using a micro robot in real life brings some other challenges in the problem, such as swimming in viscoelastic media like hyaluronic acid lattices or shrinking through the small interstices in between living cells.
 	
-	One way of solving this kind of problems is through bio-inspiration: tackling challenges by mimicking the gimmicks nature uses to overcome them. The aim of CELLOIDS, the project inside of which this work has taken place, is to build a micro-scale intelligent robotic system that takes inspiration from the amoeboid propulsion of immune cells. The CELLOIDS’ concept for a microrobot is a phospholipids GUV (Giant Unilamellar Vesicle) filled with a suspension of ABPs. A single ABP is a Janus sphere, with an inert hemisphere and a catalytic one, which turns a fuel into some products generating a gradient in the concentration field in its vicinity; this makes the solvent flow around the particle causing it to move. In particular, the most studied Janus Sphere in this field is a \ch{SiO2} sphere where \ch{Pt} is deposed using some techniques to coat just one hemisphere; the fuel is \ch{H2O2} that is decomposed in 
+	One way of solving this kind of problems is through bio-inspiration: tackling challenges by mimicking the gimmicks nature uses to overcome them. The aim of CELLOIDS, the project inside of which this work has taken place, is to build a micro-scale intelligent robotic system that takes inspiration from the amoeboid propulsion of immune cells. CELLOIDS’ concept for a microrobot is a phospholipids GUV (Giant Unilamellar Vesicle) filled with a suspension of ABPs. A single ABP is a Janus sphere, with an inert hemisphere and a catalytic one, which turns a fuel into some products generating a gradient in the concentration field in its vicinity; this makes the solvent flow around the particle causing it to move. In particular, the most studied Janus Sphere in this field is a \ch{SiO2} sphere where \ch{Pt} is deposed using some techniques to coat just one hemisphere; the fuel is \ch{H2O2} that is decomposed in 
 	\begin{align}
 		\ch{2 H2O2 ->[Pt] 2 H2O + O2}
 	\end{align}
 	using platinum as catalyst.
 	
-	The GUV’s walls are deformable and can be pushed from the inside by ABPs, leading to further deformation and, in the end, motility, mimicking the behavior of living cells that can shrink through the tiny interstices of a biological tissue.
+%	The GUV’s walls are deformable and can be pushed from the inside by ABPs, leading to further deformation and, in the end, motility, mimicking the behavior of living cells that can shrink through the tiny interstices of a biological tissue.
 	
 	\section{Objectives}	
 	In the previously described framework, collective behaviors and emergent properties of ABPs systems, both self-induced and caused by the interaction with a rigid or deformable confinement are of paramount importance for the microrobot to work properly. Regarding the self-induced behaviors, the most investigated is Motility-Induced Phase Separation \parencite{cates_motility-induced_2015}, caused by the concurrence between the excluded volume of the particles (non superimposable hard spheres) and their activity. A confinement-induced emergent property is e.g.~propulsion-induced accumulation, in which motile particles tend to cluster at the boundary of the confinement \parencite{marconi_towards_2015}.
@@ -270,7 +270,7 @@
 	which corresponds to what Einstein found out if $D_t \equiv k_B T/(6 \pi \eta a)$.
 	
     Adapting this framework to our case-study, where the particle's orientation is considered, we need to take in to account both random forces and torques so that its motion is purely diffusive, both in position and orientation with the following diffusion coefficients
-	\begin{equation}
+	\begin{equation} \label{eq:diff_coeff}
 		D_t = \frac{k_B T}{\gamma_t} \quad D_r = \frac{k_B T}{\gamma_r} 
 	\end{equation}
 	
@@ -411,16 +411,11 @@
 		\end{equation}
 		being $Z_1\sim \mathcal{N}(0,\sqrt{h})$ \cite{mannella_integration_2011}. 
 		
-		Anyway, for cases like ours where noise is purely additive (i.e. $g(x) = \sqrt{2D}$, the last term is $0$ and the simple-minded first order is correct. Basically, this algorithm means that at any step one should propagate with the first order of the deterministic part and then add a randomly generated Gaussian number with 0 mean and the right variance. A pseudo code for Euler algorithm applied to the case of interacting ABPs is in \ref{alg:sim1}.
+		Anyway, for cases like ours where noise is purely additive (i.e. $g(x) = \sqrt{2D}$, the last term is $0$ and the simple-minded first order is correct. Basically, this algorithm means that at any step one should propagate with the first order of the deterministic part and then add a randomly generated Gaussian number with 0 mean and the right variance. A pseudo code for Euler algorithm applied to the case of interacting ABPs is in \ref{alg:euler}.
 		
 		\begin{algorithm}
-			\caption{The Euler algorithm} \label{alg:sim1}	
+			\caption{The Euler algorithm} \label{alg:euler}	
 			\begin{algorithmic}[1]
-				\For{i in particles in ensemble}
-				\State{$ \vec{r}_{i}\gets \vec{r}_{i,0} $}\Comment{position $\vec{r}_{i,0}$ is randomly initialized in the simulation space}
-				\State{$\theta_{i}\gets \theta_{i,0}$}\Comment {$\theta_{i,0} \sim \mathrm{Uniform}([0, 2\pi])$}
-				\State{$v\gets v_0$}\Comment{Can be initialized as a constant or a random variable}
-				\EndFor
 				\For{n in timesteps}
 				\For{i in particles in ensemble}
 				\State{$\vec{F}_{i,n} = \sum_{j}^{Np}{\vec{F}_{ij,n}}$}

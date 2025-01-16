@@ -4,38 +4,72 @@
 \begin{document}
 \chapter[Interaction Implementation]{Implementation of interactions in simulations}
 \label{chap:int_impl}
-	\section{Model}
-	There are several examples in literature of aligning interactions applied to ABPs systems. Most of them involve applying a torque which explicitly depends on the difference between the orientation angle of the two interacting particles; some of them have a constant torque which is applied to particles closer than a certain distance. To the best of our knowledge, nobody tried before to implement an interaction in the system which unifies the central force and the torque. 
+
+	\section{Simulation Framework}
+	In order to simulate most physical systems, some fixed steps are needed and our case study makes no exception. The main nodes of our simulation framework are:
+	\begin{enumerate}
+		\item Creation and preparation of all needed files
+		\item Initialization of particle ensemble inside the simulation box
+		\item Updating loop: a \verb|for| loop on time steps, which includes:
+		\begin{enumerate}
+			\item Force computation at time $n$, starting from positions at time $n$
+			\item Generation of the needed random numbers for noise
+			\item Integrator step: one step of the integration algorithm to get the ensemble at time $n+1$
+			\item File writing of positions and orientations of all particles in ensemble
+			\item Computation and file writing of global properties, e.g.\ polarization, pair correlation function etc.
+		\end{enumerate}
+		\item Files closing
+		\item Plotting of necessary quantities, saving of animation for dynamics
+	\end{enumerate}
 	
-	The model used in this thesis aims to keep a minimal amount of parameters while coupling positions and orientations of interacting particles, actually using only one more parameter than a force-only model.
+	The main file that gets created at point 1.\ is the \emph{history} file, the one referred to in (d), to store positions and orientations of all particles. It gets prepared as a comma spaced values (CSV) files, where the column names are written in advance. This makes data more human understandable when manual checks are needed, as well as more universally readable, that is particularly useful when exchanging them between languages, since they seamlessly integrate in the \verb|DataFrame| format.
 	
-	If one was to apply a central force to a set of particles, the way would be computing a distance matrix between the positions of particles' centers, calculating the absolute value of the force with a function $F(r)$, and applying it to particle positions, splitting the two components (we are simulating in 2D).
+	Point 2.\ is where physics begin. Particles position are randomly initialized, with a uniform distribution in the simulation space. Here is where non-superposition conditions are applied the first time: we need to make sure that particles are not generated in superimposed positions to avoid nonphysical effects. At this point it is possible to compute forces and torques acting on every particle, which are needed to compute positions at the next step.  
 	
-	Here every particle is identified by two positions: its center of mass, which lies in its geometric center, and an interaction center, which is translated with respect to the center of mass of an amount $\alpha R$ in the direction of self-propulsion, so that the off center position of each particle writes:
-	\begin{equation}
-		\vec{x}_{oc} = \vec{x}_{cm} + \alpha R 
-		\begin{pmatrix}
-			\cos(\theta)\\
-			\sin(\theta)
-		\end{pmatrix}
-	\end{equation}
-	where $\theta$ is the self-propulsion direction, $R$ is the particle's radius, and $-1 < \alpha < 1$. This way distances, and hence forces, are computed starting from off center positions; applying forces to such positions results both in a translation effect and in a torque applied to the particle, coupling the two degrees of freedom.
-	
-	The idea is to take into account the underlying particle's asymmetry in simulations. It is a fact that the two faces of a Janus particle have different physical and chemical properties, which make them interact differently depending on the angle between their orientations and the line connecting their centers \cite{singh_pair_2024}. This can be due to a plethora of effects like chemical gradients, electrical forces or hydrodynamics, but this model takes only the asymmetry and uses it along with standard potentials, to create a minimal dry framework that mimics wet dynamics. In doing so, we also show that this model displays some interesting statistical mechanics properties.
-	
-	\begin{figure}[htp]
+	From the computational point of view, our simulation framework is based upon object oriented programming: particle ensemble is initialized as an instance of the ABPE class, which holds as attributes all the variables that define the state of the system at a certain time. 
+	\begin{table}[h]
 		\centering
-		\includegraphics[width=\textwidth]{singpart_draw.png}
-		\caption{}
-		\label{fig:geom_model}
-	\end{figure}
+		\begin{tabular}{c|cl}
+			\textbf{Variable} & \textbf{Type} & \textbf{Description} \\
+			\hline
+			\texttt{Np}  & \texttt{Int64} & Number of particles \\
+			\texttt{L}   & \texttt{Float64} & Size of observation space ($\mu$m) \\
+			\texttt{R}   & \texttt{Float64} & Radius ($\mu$m) \\
+			\texttt{T}   & \texttt{Float64} & Temperature (K) \\
+			\texttt{v}   & \texttt{Vector\{Float64\}} & Self-Propulsion Velocity ($\mu$m/s) \\
+			\texttt{$\mathtt{\omega}$}   & \texttt{Vector\{Float64\}} & Self-Propulsion Angular velocity (rad/s) \\
+			\texttt{DT}  & \texttt{Float64} & Translational diffusion coefficient ($\mu$m$^2$/s) \\
+			\texttt{DR}  & \texttt{Float64} & Rotational diffusion coefficient (rad$^2$/s) \\
+			\texttt{x}   & \texttt{Vector\{Float64\}} & X position ($\mu$m) \\
+			\texttt{y}   & \texttt{Vector\{Float64\}} & Y position ($\mu$m) \\
+			\texttt{$\mathtt{\theta}$}   & \texttt{Vector\{Float64\}} & Orientation (rad) \\
+		\end{tabular}
+		\caption{Structure definition of \texttt{ABPE2} in Julia}
+		\label{tab:ABPE2}
+	\end{table}
+	Clearly, all global variables are numbers and all single particle variables, such as positions, are vectors of Np elements. Some of variables are redundant, e.g.\ diffusion coefficients can be easily found starting from $T\text{ and } R$, as in \ref{eq:diff_coeff}, but it is useful to have them pre-computed for speed sake.
 	
-	\section{Methods}
-	All the simulation and analysis code for this thesis was written in \julia, except for the machine learning and inference part, where the Graph Network definition and training makes use of Python libraries like PyTorch and PyTorch-geometric, along with standard scientific computing tools like NumPy and Pandas.
+	In point 3.\ positions and orientations get updated with both the deterministic and stochastic parts of the dynamics. This operation can be done updating a single instance of ABPE class or appending to a pre-allocated vector one instance for every time step. The first method is more memory efficient, and it is the one to prefer if no memory is needed, i.e.\ only step $n$ counts to determine what happens at step $n+1$. A minimal example of this workflow is in pseudo code \ref{alg:sim1}, with Euler as an integrator.
 	
-	Heun was chosen as the standard integration scheme for all the simulations, integration steps vary with the different potentials and are indicated case by case. All the simulations were performed with real units, so that particles have a radius of $2\text{ }\mathrm{\mu m}$ and the value for solvent viscosity is kept fixed at $\eta = 10^{-3}$ P.
-	
-	All simulations were performed in a 2 dimensional square environment, where particles are disks, featuring periodic boundary conditions and a non-superposition condition (hard sphere correction). Given that positions are simulated in open periodic boundary, all interactions are calculated periodically too, taking the shortest between the in-box and the periodic distance.
+	\begin{algorithm}
+		\caption{The simulation algorithm} \label{alg:sim1}	
+		\begin{algorithmic}[1]
+			\For{i in particles in ensemble}
+			\State{$ \vec{r}_{i}\gets \vec{r}_{i,0} $}\Comment{position $\vec{r}_{i,0}$ is randomly initialized in the simulation space}
+			\State{$\theta_{i}\gets \theta_{i,0}$}\Comment {$\theta_{i,0} \sim \mathrm{Uniform}([0, 2\pi])$}
+			\State{$v\gets v_0$}\Comment{Can be initialized as a constant or a random variable}
+			\EndFor
+			\For{n in timesteps}
+			\For{i in particles in ensemble}
+			\State{$\vec{F}_{i,n} = \sum_{j}^{Np}{\vec{F}_{ij,n}}$}
+			\State{$w_{i,n} \sim \mathcal{N}(0, \sqrt{2D_t \Delta t})$}
+			\State{$z_{i,n} \sim \mathcal{N}(0, \sqrt{2D_r \Delta t})$}
+			\State{$ \vec{r}_{i,n+1}\gets \vec{r_n} + w_{i,n} + v (\cos\theta_{i,n}, \sin\theta_{i,n})\Delta t + \vec{F}_{i,n}\Delta t / \gamma _t $}
+			\State{$\theta_{i,n+1}\gets \theta_{i,n} + z_{i,n} + \omega_{i,n} \Delta t + T_{i,n} \Delta t/\gamma _r$}
+			\EndFor
+			\EndFor
+		\end{algorithmic}
+	\end{algorithm}  
 	
 	\section{Previous Developments}
 	All the code work in this thesis is built on top of an existing code written and used in Microscale Robotics Lab, which can be found in repository \cite{sharma_simulations_2023}. Existing code performed simulations on 2D active Brownian particles moving in open or closed boundary featuring confinement. 
@@ -114,7 +148,7 @@
 	\begin{figure}[htp]
 		\centering
 		\includegraphics[width=\textwidth]{lj_zero.png}
-		\caption{Cutoff for Lennard Jones force at $1/10$ of the minimum. The cutoff distance is $1.9\sigma$}
+		\caption{Cutoff for Lennard Jones force at $1/10$ of the minimum. The cutoff distance is $\sim 1.9\sigma$}
 		\label{fig:force_zero}
 	\end{figure}
 	This is of paramount importance for speed. While a complete calculation of all the possible forces between $n$ particles is an $\order{n^2}$ algorithm (the actual number of possible interactions is $n(n-1)$), the number of particles in a box of given area is constant in $n$ if density remains fixed, so, scaling up the number of particles in the same conditions will be less demanding in terms of computational power.
@@ -129,6 +163,38 @@
 	\end{figure}
 	
 	\section{Aligning Interactions}
+
+	There are several examples in literature of aligning interactions applied to ABPs systems. Most of them involve applying a torque which explicitly depends on the difference between the orientation angle of the two interacting particles; some of them have a constant torque which is applied to particles closer than a certain distance. To the best of our knowledge, nobody tried before to implement an interaction in the system which unifies the central force and the torque. 
+	
+	The model used in this thesis aims to keep a minimal amount of parameters while coupling positions and orientations of interacting particles, actually using only one more parameter than a force-only model.
+	
+	If one was to apply a central force to a set of particles, the way would be computing a distance matrix between the positions of particles' centers, calculating the absolute value of the force with a function $F(r)$, and applying it to particle positions, splitting the two components (we are simulating in 2D).
+	
+	Here every particle is identified by two positions: its center of mass, which lies in its geometric center, and an interaction center, which is translated with respect to the center of mass of an amount $\alpha R$ in the direction of self-propulsion, so that the off center position of each particle writes:
+	\begin{equation}
+		\vec{x}_{oc} = \vec{x}_{cm} + \alpha R 
+		\begin{pmatrix}
+			\cos(\theta)\\
+			\sin(\theta)
+		\end{pmatrix}
+	\end{equation}
+	where $\theta$ is the self-propulsion direction, $R$ is the particle's radius, and $-1 < \alpha < 1$. This way distances, and hence forces, are computed starting from off center positions; applying forces to such positions results both in a translation effect and in a torque applied to the particle, coupling the two degrees of freedom.
+	
+	The idea is to take into account the underlying particle's asymmetry in simulations. It is a fact that the two faces of a Janus particle have different physical and chemical properties, which make them interact differently depending on the angle between their orientations and the line connecting their centers \cite{singh_pair_2024}. This can be due to a plethora of effects like chemical gradients, electrical forces or hydrodynamics, but this model takes only the asymmetry and uses it along with standard potentials, to create a minimal dry framework that mimics wet dynamics. In doing so, we also show that this model displays some interesting statistical mechanics properties.
+	
+	\begin{figure}[htp]
+		\centering
+		\includegraphics[width=\textwidth]{singpart_draw.png}
+		\caption{}
+		\label{fig:geom_model}
+	\end{figure}
+	
+	\section{Methods}
+	All the simulation and analysis code for this thesis was written in \julia, except for the machine learning and inference part, where the Graph Network definition and training makes use of Python libraries like PyTorch and PyTorch-geometric, along with standard scientific computing tools like NumPy and Pandas.
+	
+	Heun was chosen as the standard integration scheme for all the simulations, integration steps vary with the different potentials and are indicated case by case. All the simulations were performed with real units, so that particles have a radius of $2\text{ }\mathrm{\mu m}$ and the value for solvent viscosity is kept fixed at $\eta = 10^{-3}$ P. If not indicated, standard temperature for simulations is held fixed at $300$ K.
+	
+	All simulations were performed in a 2 dimensional square environment, where particles are disks, featuring periodic boundary conditions and a non-superposition condition (hard sphere correction). Given that positions are simulated in open periodic boundary, all interactions are calculated periodically too, taking the shortest between the in-box and the periodic distance.
 	
 
 \end{document}
