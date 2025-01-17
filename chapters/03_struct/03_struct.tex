@@ -1,0 +1,73 @@
+\documentclass[../../master_thesis_np.tex]{subfiles}
+\graphicspath{{./imgs/}}
+
+\begin{document}
+	\chapter{Analysis of Structure and Dynamics}
+	Simulations of ABPs ensembles offer an interesting possibility: they make it possible to investigate the physical systems without the limitations that an experimental setup would have. In simulations it is possible to work in a case with the same number of agents every time, keeping the physical conditions fixed, without all non-idealities, having computational power and time as the only limitation. This is crucial to study statistical properties of a system that displays fascinating behaviors.
+	
+	\section{Methods}
+	Our investigation in structure and dynamics is based upon a small, but hopefully complete, set of tools that help unveiling how particles place themselves with respect to one another and how do they move {\color{blue} insert citation about 1994 Nobel, "where atoms are, what atoms do"}.
+	
+		\subsection{Pair Correlation Function}
+		Pair correlation function, \emph{radial distribution function}, or simply $g(r)$ is a statistical mechanic property of a system, which is a function only of the separation $r_{12} = \abs{\vb{r}_1 - \vb{r}_2}$ between any pair of particles. It quantifies how particle in an ensemble position one with respect to each other, giving information about the \emph{structure} of the system. This function plays a key role in physics of matter since it is possible to measure it in radiation-scattering experiments and it is often used in cases where, differently from our problem, particles' positions are not directly accessible.
+		
+		It is possible to derive definitions for $g(r)$ starting from first principles, like phase-space distribution functions, as it is done in \cite{hansen90a}. Here we will use the Dirac's $\delta$-based expression, since it the most useful in cases where particle's positions are known,
+		\begin{equation}
+			\left\langle \frac{1}{N} \sum_{i=1}^{N} \sum_{j=1}^{N}{}' \delta (\mathbf{r} - \mathbf{r}_j + \mathbf{r}_i) \right\rangle = \rho g(r)
+		\end{equation}
+		where the prime on the summation sign means not counting terms with $i = j$. It is possible to show that the left hand side approaches the value of the overall number density $\rho$ at large distance.
+		
+		In order to compute $g(r)$ in our simulations, we first need to take distances between all pairs of particles (counting twice the same couple) accounting for periodic boundary conditions as any particle became the center of the system, similarly to the periodic interaction method in section \ref{intrange}. Then, to simulate the behavior of a sum of deltas, we divide simulation space in bins by radius, where the area of each bin is computed as the intersection between a circular crown and a square, to respect the geometry of our simulation box without introducing biases. Now we just normalize by the number of particles and the density to make $g(r) \to 1$ at long distance.
+		
+		\subsection{Polarization}
+		Whenever the agents of a system have a preferred axis, as is the case for ABPs, it becomes worthwhile to analyze their nematic order, i.e.\ the order in the orientation degree of freedom of agents. This is useful especially when particles have non symmetric (in some axis) shape. Our particles are assumed to be perfectly symmetrical circles (spheres in 3D), but still, the presence of a well defined swimming direction introduces a relevant anisotropy in the system. 
+		
+		For global polarization, we use the following definition
+		\begin{equation}
+			P = \frac{1}{N} \abs{\sum_{k=1}^{N} e^{i \theta_k(t)}} 
+		\end{equation}
+		where $\theta_k$ is the orientation of $k$-th particle. This parameter is $1$ when all particles directions are aligned and $0$ when all particles are pointing in different directions. 
+		
+		\subsection{Cluster Size Distribution}
+		As discussed in section \ref{literature}, ensembles of ABPs tend to cluster when an attractive interaction is present or conditions (velocity, packing fraction) are right for MIPS to occur. In most cases, system clusters as a whole, leaving at most some particles in a gaseous phase outside of the cluster. Observing the evolution of such systems, nonetheless, it is possible to observe long periods of time during which ABPs are only partially clustered, moving in small groups across the simulation boards. 
+		
+		It is possible to extract some information about partial clusters from the $g(r)$, but, being originally created to study systems a whole, it is not the optimal tool. In order to get some insight about partial clustering, which often happens as a transient state before global clustering, we developed the cluster size distribution. 
+		
+		Our method was built using DBSCAN, a density-based clustering algorithm, which was originally created for data-science but, with the right parameters can become useful for physics. DBSCAN starts from a point and adds to the cluster associated with that point all the others which are at a distance of less than a threshold. A point having more than $Mp$ points in its vicinity is said \emph{core} or \emph{seed point}. A point in the vicinity of a \emph{core point} is a \emph{border point}. All the others are \emph{noise points}. Using $1$ as $Mp$ (i.e.\ a cluster must be formed with at least 2 points) and particle radius or interactions range as threshold distance, this algorithm's results correspond to the common sense conception of what a cluster is. The advantage of adapting an existing algorithm is that it has some very fast pre-built implementations which are probably more efficient than one could write from scratch.
+		
+		Getting cluster sizes as the result of a DBSCAN passage, it becomes easy to compute the sample cluster size distribution function, that means, plotting sizes on a histogram.
+		\subsection{Local Polarization}
+		As explained in previous section, local properties are useful to observe, in particular in transients. When aligning interactions are present and packing fraction is small or we are in a transient, small clusters of particles tend to align their directions, so that measuring the global polarization $P$ would get in the same result of a disordered system, that is, $0$. We can exploit the fact that clustering algorithms assign points to clusters and then measure how polarized the single groups are, meaning we compute a local polarization order parameter. Averaging over clusters, this parameter $\bar{P}$ will be close to $1$ even if $P$ is kept low by the different orientations of clusters, making it a good parameter to study local properties and short range interactions.
+		\begin{comment}
+			\section{Observed Collective Behaviors}
+			\subsection{Spring-Ring}
+			\subsection{Coulomb Flocking}
+			\section{Flocking as a Phase Transition}
+			\subsection{Theory of phase transitions}
+			\subsection{Coulomb with aligning interactions}
+			\begin{figure}[htp]
+				\centering
+				\includegraphics[width=\textwidth]{example-image-A}
+				\caption{}
+				\label{fig:phasetrans}
+			\end{figure}
+			
+			\begin{figure}[htp]
+				\centering
+				\includegraphics[width=\textwidth]example-image-A}
+			\caption{}
+			\label{fig:flock_rdf}
+			\end{figure}
+			
+			\section{Aligning Lennard Jones: Clustering and Local Order}
+			\subsection{Velocity}
+			\subsection{Velocity Distribution}
+			
+			\subsection{Angular Velocity}
+			\subsection{Orientation Coupling}
+		\end{comment}
+	
+	
+	
+
+\end{document}
