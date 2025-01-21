@@ -3,45 +3,50 @@
 
 \begin{document} 
 \chapter{Introduction}
-	The phenomenon of (passive) Brownian Motion is a well investigated topic in physics since 1827, when Robert Brown studied the motion of pollen grains suspended in water. The list of physicists who dealt with the topic contains names such as Einstein and Langevin \parencite{gardiner_handbook_2004}, whose main contribution is the first formalization of Brownian motion in terms of a differential equation, Ornstein and Uhlenbeck, who calculated fundamental properties such as the mean-square displacement of a Brownian particle in 2D \parencite{uhlenbeck_theory_1930}. Since then, scientists across various fields have explored the properties of Brownian Particles systems in numerous variations, one of which is Active Brownian Particles (ABP). 
+	The phenomenon of (passive) Brownian Motion is a well investigated topic in physics since 1827, when Robert Brown studied the motion of pollen grains suspended in water. A notable contribution in the mathematical formalization of Brownian motion was made by Einstein and Langevin \cite{gardiner_handbook_2004}. Later, Ornstein and Uhlenbeck \cite{uhlenbeck_theory_1930} studied some fundamental properties such as the mean-square displacement of a Brownian particle in 2D . Since then, researchers across various fields have explored the properties of Brownian Particles systems in numerous variations, one of which is Active Brownian Particles (ABP). 
 	
-	ABPs are distinguished by their ability to extract energy from the environment and use it to propel themselves making them a fundamental model for non-equilibrium active matter systems.	
-	The motility mechanism can be mechanic, like cilia or flagella used by micro-organisms, or thermodynamic, like phoresis of various nature. 
+	ABPs are distinguished by their ability to extract energy from the environment and use it to autonomously propel themselves, thus making them a fundamental model for non-equilibrium active matter systems.	
+	The motility mechanism can be mechanic, like cilia or flagella used by micro-organisms, or thermo- and chemodynamic, like phoresis of various nature \citeauthor{moran_phoretic_2017}.
 	
-	Incorporating self-propulsion within the Brownian framework enables the emergence of numerous novel behaviors, with collective dynamics being particularly noteworthy; even if the single agent details may differ, especially in propulsion mechanisms, it is possible to build minimal statistical physics models that mimic real world dynamics, leading the way to the discovery of new physics as well as methods to analyze real living beings' behaviors and new ideas in material science. 
+	Incorporating self-propulsion within the Brownian framework enables the emergence of numerous novel behaviors, among which self-organization being noteworthy and the subject of this thesis. Across different systems, details about a single particle may differ, especially in propulsion mechanisms, nonetheless it is possible to build minimal statistical physics models that mimic real world dynamics, leading the way to the discovery of new physics as well as methods to analyze real living beings' behaviors and new ideas in material science. 
 	
-	There are several model features and properties that can be exploited to develop both analysis methods and new technologies based on active matter, e.g.\ self organization and clustering are relevant in the study of bacterial and algae colonies, while in the artificial world much use can be made of properties like chaining, clustering or vortices.
-	\newpage
+	%There are several model features and properties that can be exploited to develop both analysis methods and new technologies based on active matter, e.g.\ self organization and clustering are relevant in the study of bacterial and algae colonies, while in the artificial world much use can be made of properties like chaining, clustering or vortices.
+
+
 	
 	\section{Micro Scale Robotics and CELLOIDS}
-	The first one to bring the concept of robotics at micro scale, especially for medical applications into a scientific context was Richard Feynman in the famous 1959 CalTech conference \citetitle{Feynman}, from which the following quote is taken:
+	The first one to bring the concept of robotics at micro scale, especially for medical applications into a scientific context was Richard Feynman in the famous 1959 CalTech conference \citetitle{Feynman} \cite{Feynman}, from which the following quote is taken:
 	\begin{displayquote}
 		Many of the cells are very tiny, but they are very active \omissis Consider the possibility that we too can make a thing very small which does what we want — that we can manufacture an object that maneuvers at that level!
 		
-		\omissis it would be interesting in surgery if you could swallow the surgeon. You put the mechanical surgeon inside the blood vessel and it goes into the heart and "looks" around. \omissis It finds out which valve is the faulty one and takes a little knife and slices it out. Other small machines might be permanently incorporated in the body to assist some inadequately functioning organ.\cite{Feynman}
+		\omissis it would be interesting in surgery if you could swallow the surgeon. You put the mechanical surgeon inside the blood vessel and it goes into the heart and "looks" around. \omissis It finds out which valve is the faulty one and takes a little knife and slices it out. Other small machines might be permanently incorporated in the body to assist some inadequately functioning organ.
 	\end{displayquote}
 	
-	The scaling laws of physical quantities, especially regarding friction and hydrodynamics, prevent the construction of a micrometer scale robot which is just a miniaturized version of a macroscopic one. Swimming in a fluid for the typical size and speed we are interested in-meaning, at low Reynolds number $\mathrm{Re} \equiv \rho v L/\eta$-is quite a different game than what we are used to in the macroscopic world. When inertia is negligible, it is impossible to swim using a \emph{reciprocal motion}, that is, a cyclic motion that follows the same path forward and back \cite{purcell_life_1977}. Needles to say that turning a propeller with a miniaturized macroscopic motor won't be optimal at this scale, since its starting torque would be extremely large. These huge difficulties are encountered if one just wants to swim in a simple fluid. Using a micro robot in real life brings some other challenges in the problem, such as swimming in viscoelastic media like hyaluronic acid lattices or shrinking through the small interstices in between living cells.
+	The scaling laws of physical quantities, especially regarding friction and hydrodynamics, makes it challenging to construct a micrometer scale robot which is just a miniaturized version of a macroscopic one. Moving in a fluid for the size and speed of few $\mu\text{m/s}$ we are interested in-meaning, at low Reynolds number $\mathrm{Re} \equiv \rho v L/\eta$-requires quite a different approach than what we are used to in the macroscopic world. When inertia is negligible, it is impossible to swim using a \emph{reciprocal motion}, that is, a cyclic motion that follows the same path forward and back \cite{purcell_life_1977}. Needles to say that turning a propeller with a miniaturized macroscopic motor won't be optimal at this scale, since its starting torque would be extremely large. These huge difficulties are encountered if one just wants to swim in a simple fluid. Using a micro robot inside a human body brings some other challenges in the problem, such as swimming in viscoelastic media like hyaluronic acid lattices or shrinking through the small interstices in between living cells. Most of the problems we enumerated have been solved by nature already e.g.\ immune cells can overcome pretty much all challenges mentioned in this paragraph. When trying to tackle said challenges a convenient approach would be imitating what has been already done in billions of years of evolution, instead of developing new strategies from scratch.
 	
-	One way of solving this kind of problems is through bio-inspiration: tackling challenges by mimicking the gimmicks nature uses to overcome them. The aim of CELLOIDS, the project inside of which this work has taken place, is to build a micro-scale intelligent robotic system that takes inspiration from the amoeboid propulsion of immune cells. CELLOIDS’ concept for a microrobot is a phospholipids GUV (Giant Unilamellar Vesicle) filled with a suspension of ABPs. A single ABP is a Janus sphere, with an inert hemisphere and a catalytic one, which turns a fuel into some products generating a gradient in the concentration field in its vicinity; this makes the solvent flow around the particle causing it to move. In particular, the most studied Janus Sphere in this field is a \ch{SiO2} sphere where \ch{Pt} is deposed using some techniques to coat just one hemisphere; the fuel is \ch{H2O2} that is decomposed in 
+	The aim of CELLOIDS, the project inside of which this work has taken place, is to build a micro-scale intelligent robotic system that takes inspiration from the amoeboid propulsion of immune cells. CELLOIDS’ concept for a microrobot is using a phospholipids GUV (Giant Unilamellar Vesicle), filled with ABPs, as robot's body. GUV’s walls are deformable and can be pushed from the inside by ABPs, leading to further deformation and, in the end, motility, mimicking the behavior of living cells that can shrink through a biological tissue. A single ABP is a Janus sphere, with an inert hemisphere and a catalytic one, which turns a fuel into some products generating a gradient in the concentration field in its vicinity; this makes the solvent flow around the particle causing it to move. In particular, the most studied Janus Sphere in this field is a \ch{SiO2} sphere where \ch{Pt} is deposed using a sputtering machine to coat just one hemisphere; the fuel is \ch{H2O2} that is decomposed in 
 	\begin{align}
 		\ch{2 H2O2 ->[Pt] 2 H2O + O2}
 	\end{align}
 	using platinum as catalyst.
 	
-%	The GUV’s walls are deformable and can be pushed from the inside by ABPs, leading to further deformation and, in the end, motility, mimicking the behavior of living cells that can shrink through the tiny interstices of a biological tissue.
 	
 	\section{Objectives}	
-	In the previously described framework, collective behaviors and emergent properties of ABPs systems, both self-induced and caused by the interaction with a rigid or deformable confinement are of paramount importance for the microrobot to work properly. Regarding the self-induced behaviors, the most investigated is Motility-Induced Phase Separation \parencite{cates_motility-induced_2015}, caused by the concurrence between the excluded volume of the particles (non superimposable hard spheres) and their activity. A confinement-induced emergent property is e.g.~propulsion-induced accumulation, in which motile particles tend to cluster at the boundary of the confinement \parencite{marconi_towards_2015}.
+	In the previously described framework, collective behaviors and emergent properties of ABPs systems, both self-induced and caused by the interaction with a rigid or deformable confinement are of paramount importance for the microrobot to work properly. Regarding the self-induced behaviors, the most investigated is Motility-Induced Phase Separation \cite{cates_motility-induced_2015}, caused by the concurrence between the excluded volume of the particles (non superimposable hard spheres) and their activity. A confinement-induced emergent property is e.g.~propulsion-induced accumulation, in which motile particles tend to cluster at the boundary of the confinement \cite{marconi_towards_2015}.
 	
-	The objective of this work is to develop a model, a simulation framework and a suite of analysis tools to study how an explicit interaction potential changes single and collective behaviors of an ABP system, always keeping in mind the experimental and applied point of view. The main novelty in the model is how a potential is applied. Specialized literature focuses on two types of interactions: aligning, involving the direction of particles, and non-aligning, which can be simple central potentials like a hard sphere excluded volume interaction; it is possible to find several interactions of both types in literature but this work tries to unify the two, linking coupling between the positions of a pair of particles (force) with coupling between the orientations of said particles (torque) with the objective of developing a minimal model that tries to mimic experimental observations.
+	The objective of this work is to develop a model, a simulation framework and a suite of analysis tools to study how an explicit interaction potential changes single and collective behaviors of an ABP system, while keeping in mind the experimental and applied point of view. 
 	
-	Here, the term \emph{minimal} means not only that a unique interaction potentials is used to couple both positional and orientational degrees of freedom, but also that this simple model could be enough to simulate real world phenomena without looking into the hydrodynamics, which will involve simulating not only the particles but the solvent as well, leading to extremely heavy simulations. Moreover, details about how the solvent flows around a phoretic ABP, as well as the concentration field around it, are still a matter of investigation and have been simulated mostly for single particles. Here, we preferred to stick with dry active matter modeling.
+	\subsection{Objective: Model}
+	As will be explained in detail in section \ref{alignint}, the main novelty in the model is how a potential is applied. Specialized literature focuses on two types of interactions: aligning, involving the direction of particles, and non-aligning, which can be central potentials like a hard sphere excluded volume interaction \cite{callegari_numerical_2019}; it is possible to find several interactions of both types in literature but this work tries to unify the two, linking coupling between the positions of a pair of particles (force) with coupling between the orientations of said particles (torque) with the objective of developing a minimal model that tries to mimic experimental observations.
 	
+	Active matter models can be either \emph{dry} or \emph{wet}: in \emph{dry} models the solvent is not explicitly simulated while \emph{wet} simulations solve equations both for colloidal and fluid particles, including all possible hydrodynamics. In this thesis we preferred to work with a lighter and simpler \emph{dry} model, trying to keep it as minimal as possible. Here, the term \emph{minimal} means not only that a unique interaction potentials is used to couple both positional and orientational degrees of freedom, but also that this simple model could be enough to simulate real world phenomena without looking into the hydrodynamics and chemistry involved. Moreover, details about how the solvent flows around a phoretic ABP, as well as the concentration field around it, are still a matter of investigation and have been simulated mostly for single particles.
+	
+	\subsection{Objective: Simulation Framework}
 	Given this novel modeling technique and its implementation, the next step of this work is to obtain a qualitative, eyesight agreement between simulations and experiments, making the \emph{in silico} experiment able to capture all the features and dynamics observed \emph{in vitro} scanning the different parameters.
 	
-	Moreover, with the right parameters, this model is capable of showing rich collective behaviors, making it a feasible alternative to study phase transitions in a statistical physics fashion. A glorious model in this field involving aligning interactions is the Vicsek model \parencite{vicsek_novel_1995}, which captures a plethora of natural world phenomena. Present work shows how a system with coupled positions and orientations can turn into a continuous Vicsek-like case study.
+	Moreover, with the right parameters, this model is capable of showing rich collective behaviors, making it a feasible alternative to study phase transitions in a statistical physics fashion. A glorious model in this field involving aligning interactions is the Vicsek model \cite{vicsek_novel_1995}, which captures a plethora of natural world phenomena. Present work shows how a system with coupled positions and orientations can turn into a continuous Vicsek-like case study.
 	
+	\subsection{Objective: Analysis}
 	The last objective of the project is to build a Deep Learning based tool which, when trained starting from a minimal set of simulation data, is able to infer the interaction potential between couples of particles both in simulated and experimentally observed situations.
 	
 	\section{Literature and State of the Art} \label{literature}
@@ -57,9 +62,9 @@
 	 \end{displayquote}
 	 Although extremely simple, this model is of paramount importance in the study of active matter since it can be studied in terms of a phase transition and recreates in some way the behavior of real living systems.
 	
-	Although not strictly related with present work,\parencite{cavagna_empirical_2010, ballerini_interaction_2008} are essential papers for the study of collective motion, for the problem of relating theoretical models and reality is tackled analyzing data of starling swarms in order to understand characteristics of interactions. Understandably, the system studied by \citeauthor{cavagna_empirical_2010, ballerini_interaction_2008} is pretty different from the active Brownian particles ensemble investigated in this project, with the fist difference being the dimensionality (a bird swarm, just like a school of fish moves in a 3D environment), but some of the problems reported in that paper are still present in these days active matter community.
+	Although not strictly related with present work,\cite{cavagna_empirical_2010, ballerini_interaction_2008} are essential papers for the study of collective motion, for the problem of relating theoretical models and reality is tackled analyzing data of starling swarms in order to understand characteristics of interactions. Understandably, the system studied by \citeauthor{cavagna_empirical_2010, ballerini_interaction_2008} is pretty different from the active Brownian particles ensemble investigated in this project, with the fist difference being the dimensionality (a bird swarm, just like a school of fish moves in a 3D environment), but some of the problems reported in that paper are still present in these days active matter community.
 	
-	The next few papers focus on systems which are more akin to what will be investigated from chapter~\ref{chap:int_impl} on. \parencite{martin-gomez_collective_2018} analyzes how an explicit polar aligning interaction can make the system transition to an ordered flocking phase, where almost all particles align their orientation in the same direction, even though an orientational noise is present. The model is built taking into account an aligning torque between particles $i$ and $j$ which goes as $K \sin{(\theta_{i} - \theta_{j})}$, only within a certain distance, and a repulsive potential $\epsilon \left(\frac{\sigma}{r}\right)^{12}$ to take into account the excluded volume.
+	The next few papers focus on systems which are more akin to what will be investigated from chapter~\ref{chap:int_impl} on. \cite{martin-gomez_collective_2018} analyzes how an explicit polar aligning interaction can make the system transition to an ordered flocking phase, where almost all particles align their orientation in the same direction, even though an orientational noise is present. The model is built taking into account an aligning torque between particles $i$ and $j$ which goes as $K \sin{(\theta_{i} - \theta_{j})}$, only within a certain distance, and a repulsive potential $\epsilon \left(\frac{\sigma}{r}\right)^{12}$ to take into account the excluded volume.
 	
 	The parameters of the system are the Péclet number $\mathrm{Pe} = \frac{v_0}{\sigma \gamma}$ which is the ratio between the self propulsion velocity and the product of the characteristic length of the particles and the rotational diffusion coefficient and $g = \frac{K}{4\pi \sigma^2 \gamma}$ which quantifies the relative intensity of the orientational coupling strength and the reorienting noise. The order parameter is the mean global polarization
 
@@ -71,7 +76,7 @@
 	\begin{figure}[h]
 		\centering
 		\includegraphics[width=\textwidth]{martin_phaseseparation.png}
-		\caption{\parencite{martin-gomez_collective_2018}}
+		\caption{\cite{martin-gomez_collective_2018}}
 		\label{fig:martin_flocking1}
 	\end{figure}
 	
@@ -88,7 +93,7 @@
 	 \begin{figure}[htp]
 		 	\centering
 		 	\includegraphics[width=\singfigwidth]{martin_laneband.png}
-		 	\caption{\parencite{martin-gomez_collective_2018}}
+		 	\caption{\cite{martin-gomez_collective_2018}}
 		 	\label{fig:martin_flocking2}
 	 \end{figure}
 	 
@@ -103,11 +108,11 @@
 		\subfloat[][Polarization and its susceptibility]{\includegraphics[width=\subfigwidth]{martin_phasetransition.png}}\quad
 		  \subfloat[][Pair correlation function and static structure factor]{\includegraphics[width=\subfigwidth]{martin_gofr.png}}
 		 
-		  \caption{\parencite{martin-gomez_collective_2018}}
+		  \caption{\cite{martin-gomez_collective_2018}}
 		  \label{fig:martin_flocking3}
 	\end{figure}
 	
-	In \parencite{caprini_spontaneous_2020}, authors investigate the alignment of instantaneous velocities in cases where motility-induced phase separation occurs. Most literature focuses on the effect that a central 2-body potential, or an explicit aligning interaction which couples the orientational degrees of freedom of single particles, has on the system, but the interplay between phase separation of particles systems and alignment in their velocity has hardly been studied.
+	In \cite{caprini_spontaneous_2020}, authors investigate the alignment of instantaneous velocities in cases where motility-induced phase separation occurs. Most literature focuses on the effect that a central 2-body potential, or an explicit aligning interaction which couples the orientational degrees of freedom of single particles, has on the system, but the interplay between phase separation of particles systems and alignment in their velocity has hardly been studied.
 	
 	In the aforementioned paper, it is shown how, when ABPs systems with a simple repulsive only Weeks-Chandler-Andersen potential phase-separate in a cluster, their velocity tend to form aligned domains, regardless the self propulsion orientation. For this reason, the global polarization is not a good order parameter, even when the computation is restricted to clusters, thus the authors introduce the spatial correlation function of the velocity orientation $Q_i(r) = 1-2\sum_{j} \frac{d{ij}}{\mathcal{N}_k \pi } $, being $d_{ij} = \mathrm{min}\left[|\theta_i - \theta_j|, 2 \pi - |\theta_i - \theta_j| \right]$ the angular distance between two particles and $\mathcal{N}_k$ is the number of particles in a circular shell around the i-th particle, taken with a thickness $\bar{r} = \mathrm{argmax} \{g(r)\}$, and mean radius $k\bar{r}$ with integer $k$. 
 	
@@ -121,18 +126,18 @@
 	\begin{figure}[htp]
 		\centering
 		\includegraphics[width=\textwidth]{caprini2.png}
-		\caption{\parencite{caprini_spontaneous_2020}}
+		\caption{\cite{caprini_spontaneous_2020}}
 		\label{fig:caprini1}
 	\end{figure}
 	
 	Going on, the article shows analitically how it is possible to rewrite the equation of motion for the velocity: considering the symmetry in the hexagonal lattice which the particles arrange into, such equation involves a term which depends on the difference between particle's velocity and average velocity of the six surrounding it, thus re-obtaining a Vicsek-like model without a specific aligning interaction.
 	
-	Some of the first papers cited in this section focus on animal behavior; it is believed that to better represent animal collective motion one have to implement some kind of vision in the model. \parencite{negi_emergent_2022} does so, with an aligning interaction similar to the one in \parencite{martin-gomez_collective_2018}, with the difference that the total torque on particle $i$ is calculated taking into account only particles in the \emph{vision cone} of particle $i$, i.e.\ a circular sector with center of mass of $i$ as center as shown in Figure \ref{fig:negi_vision1}, with a given aperture angle and radius. This is useful to see what happens when \emph{nonreciprocal} interactions, i.e.\ particle $i$ feels the effect of particle $j$ but the vice versa is not true.
+	Some of the first papers cited in this section focus on animal behavior; it is believed that to better represent animal collective motion one have to implement some kind of vision in the model. \cite{negi_emergent_2022} does so, with an aligning interaction similar to the one in \cite{martin-gomez_collective_2018}, with the difference that the total torque on particle $i$ is calculated taking into account only particles in the \emph{vision cone} of particle $i$, i.e.\ a circular sector with center of mass of $i$ as center as shown in Figure \ref{fig:negi_vision1}, with a given aperture angle and radius. This is useful to see what happens when \emph{nonreciprocal} interactions, i.e.\ particle $i$ feels the effect of particle $j$ but the vice versa is not true.
 	
 	\begin{figure}[htp]
 		\centering
 		\includegraphics[width=\singfigwidth]{negi_vision1.png}
-		\caption{\parencite{negi_emergent_2022}}
+		\caption{\cite{negi_emergent_2022}}
 		\label{fig:negi_vision1}
 	\end{figure}
 	
@@ -143,19 +148,19 @@
 		\centering
 		\subfloat[][Low packing fraction]{\includegraphics[width=\singfigwidth]{negi_vision2.png}} \\
 		\subfloat[][High packing fraction]{\includegraphics[width=\singfigwidth]{negi_vision3.png}}
-		\caption{\parencite{negi_emergent_2022}}
+		\caption{\cite{negi_emergent_2022}}
 		\label{fig:negi_vision2}
 	\end{figure}
 	
 	\subsection{Analysis of ABPs behavior in experiments}
-	There exists quite a large literature that delves into experiments involving active Brownian particles. \parencite{singh_pair_2024} analyzes what happens when two \ch{SiO2-Pt} Janus Particles come together in different configurations; authors take into account hydrodynamics and chemistry involved in the process, classifying the different possible cases. Although here we are trying to build a dry active matter simulation -means, absence of hydrodynamic and medium behavior is not simulated-papers like this accurately describe the phenomenology of these close encounters, which is essential to build minimal models that mimic real-world behavior. The main fact, supported both by simulations and experimental evidence, we can use is that particles do not long-range reorientation due to hydrodynamic or chemical interaction, and that the leading interactions are steric and near-contact chemical. 
+	There exists quite a large literature that delves into experiments involving active Brownian particles. \cite{singh_pair_2024} analyzes what happens when two \ch{SiO2-Pt} Janus Particles come together in different configurations; authors take into account hydrodynamics and chemistry involved in the process, classifying the different possible cases. Although here we are trying to build a dry active matter simulation -means, absence of hydrodynamic and medium behavior is not simulated-papers like this accurately describe the phenomenology of these close encounters, which is essential to build minimal models that mimic real-world behavior. The main fact, supported both by simulations and experimental evidence, we can use is that particles do not long-range reorientation due to hydrodynamic or chemical interaction, and that the leading interactions are steric and near-contact chemical. 
 	
 	Dispersing Janus colloids in a \ch{H2O2} solution in a quasi-2D environment, the types of configurations particles can scatter in are limited and categorized by the authors in four dynamical states. The classification of both approach and departure states, along with a relative frequency histogram is in \ref{fig:singh_pair1}.
 	
 	\begin{figure}[htp]
 		\centering
 		\includegraphics[width=\singfigwidth]{singh_pair1.jpeg}
-		\caption{\parencite{singh_pair_2024}}
+		\caption{\cite{singh_pair_2024}}
 		\label{fig:singh_pair1}
 	\end{figure}
 	
@@ -166,7 +171,7 @@
 	\begin{figure}[htp]
 		\centering
 		\includegraphics[width=\singfigwidth]{maity1.png}
-		\caption{\parencite{maity_spontaneous_2023}}
+		\caption{\cite{maity_spontaneous_2023}}
 		\label{fig:maity1}
 	\end{figure}
 	
@@ -176,7 +181,7 @@
 	\begin{figure}[htp]
 		\centering
 		\includegraphics[width=\singfigwidth]{ostapenko1.png}
-		\caption{\parencite{ostapenko_curvature-guided_2018}}
+		\caption{\cite{ostapenko_curvature-guided_2018}}
 		\label{fig:ostapenko1}
 	\end{figure}
 	
@@ -184,7 +189,7 @@
 	\begin{figure}[htp]
 		\centering
 		\includegraphics[width=\singfigwidth]{ostapenko2.png}
-		\caption{\parencite{ostapenko_curvature-guided_2018}}
+		\caption{\cite{ostapenko_curvature-guided_2018}}
 		\label{fig:ostapenko2}
 	\end{figure}
 	
@@ -198,7 +203,7 @@
 	\begin{figure}[htp]
 		\centering
 		\includegraphics[width=\singfigwidth]{bag1.png}
-		\caption{\parencite{bag_interaction_2021}}
+		\caption{\cite{bag_interaction_2021}}
 		\label{fig:bag1}
 	\end{figure}
 	
@@ -206,7 +211,7 @@
  	\begin{figure}[htp]
 		\centering
 		\includegraphics[width=\singfigwidth]{bag2.png}
-		\caption{\parencite{bag_interaction_2021}}
+		\caption{\cite{bag_interaction_2021}}
 		\label{fig:bag2}
 	\end{figure}
 	As Figure \ref{fig:bag2}(b) shows, pair correlation functions in the case of active repulsive particles is similar to that of passive attractive particles, since only structure-meaning: particles' positions-is involved, tricking the network into predicting an attractive potential. This is a good result in simulation context and sheds light on some theoretical statements, nonetheless this approach does not fit the objective of present thesis project, which tries to obtain \emph{actual} 2-body interactions in ABPs systems. 
@@ -218,7 +223,7 @@
 	 \begin{figure}[htp]
 		\centering
 		\includegraphics[width=\singfigwidth]{cranmer1.png}
-		\caption{\parencite{cranmer_discovering_2020}}
+		\caption{\cite{cranmer_discovering_2020}}
 		\label{fig:cranmer1}
 	\end{figure}
 	
@@ -231,7 +236,7 @@
 	\begin{figure}[htp]
 		\centering
 		\includegraphics[width=\singfigwidth]{ruiz1.png}
-		\caption{\parencite{ruiz-garcia_discovering_2024}}
+		\caption{\cite{ruiz-garcia_discovering_2024}}
 		\label{fig:ruiz1}
 	\end{figure}
 	In order to train the network, successive iterations are done, increasing the threshold distance to consider two particles as interacting. At the end of the training, the network gets tested and results show that it works well to predict both the self-propulsive force and the interaction potential. Having an internal way of taking into account the active velocity, this method works better than static structure-based ones, like \cite{bag_interaction_2021}, in out of equilibrium particles ensembles where MIPS takes place, learning a repulsive interaction even though the system is clustered. Clearly, ActiveNet fails at short distance, since very few data are presented. Having Brownian motion at his base, the studied system has an internal degree of randomness. The goal of a machine learning task should be to reduce the loss (difference between ground truth and predictions) to make it as small as the noise. This can be useful to estimate the diffusion coefficient and works well even with few examples, as long as the temperature is high enough. 
