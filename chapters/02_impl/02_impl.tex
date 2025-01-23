@@ -15,6 +15,7 @@
 			\item Force computation at time $n$, starting from positions at time $n$
 			\item Generation of the needed random numbers for noise
 			\item Integrator step: one step of the integration algorithm to get the ensemble at time $n+1$
+			\item Application of boundary conditions and hard sphere correction 
 			\item File writing of positions and orientations of all particles in ensemble
 			\item Computation and file writing of global properties, e.g.\ polarization, pair correlation function etc.
 		\end{enumerate}
@@ -22,11 +23,11 @@
 		\item Plotting of necessary quantities, saving of animation for dynamics
 	\end{enumerate}
 	
-	The main file that gets created at point 1.\ is the \emph{history} file, the one referred to in (d), to store positions and orientations of all particles. It gets prepared as a comma spaced values (CSV) files, where the column names are written in advance. This makes data more human understandable when manual checks are needed, as well as more universally readable, that is particularly useful when exchanging them between languages, since they seamlessly integrate in the \verb|DataFrame| format.
+	The main file that gets created at point 1.\ is the \emph{history} file, the one referred to in (d), to store positions and orientations of all particles. It gets prepared as a comma spaced values (CSV) files, where the column names are written in advance. CSV formatted files are more understandable and universally readable, which is useful when exchanging data between programming languages and manual checks are needed.
 	
-	Point 2.\ is where physics begin. Particles position are randomly initialized, with a uniform distribution in the simulation space. Here is where non-superposition conditions are applied the first time: we need to make sure that particles are not generated in superimposed positions to avoid nonphysical effects. At this point it is possible to compute forces and torques acting on every particle, which are needed to compute positions at the next step.  
+	In point 2.\ particles position are randomly initialized, with a uniform distribution in the simulation space. We need to make sure that particles are not superimposed to avoid nonphysical effects. At this point it is possible to compute forces and torques acting on every particle, which are needed to compute positions at the next step.  
 	
-	From the computational point of view, our simulation framework is based upon object oriented programming: particle ensemble is initialized as an instance of the ABPE class, which holds as attributes all the variables that define the state of the system at a certain time. 
+	From the computational point of view, our simulation framework is based upon object oriented programming: particle ensemble is initialized as an instance of the ABPE class, which holds all the variables that define the state of the system. 
 	\begin{table}[h]
 		\centering
 		\begin{tabular}{c|cl}
@@ -47,25 +48,25 @@
 		\caption{Structure definition of \texttt{ABPE2} in Julia}
 		\label{tab:ABPE2}
 	\end{table}
-	Clearly, all global variables are numbers and all single particle variables, such as positions, are vectors of Np elements. Some of variables are redundant, e.g.\ diffusion coefficients can be easily found starting from $T\text{ and } R$, as in \ref{eq:diff_coeff}, but it is useful to have them pre-computed for speed sake.
+	Global variables are numbers and all single particle variables, such as positions, are vectors of Np elements. %Some of variables are redundant, e.g.\ diffusion coefficients can be easily found starting from $T\text{ and } R$, as in \ref{eq:diff_coeff}, but it is useful to have them pre-computed for speed sake.
 	
-	In point 3.\ positions and orientations get updated with both the deterministic and stochastic parts of the dynamics. This operation can be done updating a single instance of ABPE class or appending to a pre-allocated vector one instance for every time step. The first method is more memory efficient, and it is the one to prefer if no memory is needed, i.e.\ only step $n$ counts to determine what happens at step $n+1$. A minimal example of this workflow is in pseudo code \ref{alg:sim1}, with Euler as an integrator.
+	In point 3.\ positions and orientations get updated with both the deterministic and stochastic parts of the dynamics. This operation can be done either by updating a single instance of ABPE class or by appending to a pre-allocated vector one instance for every time step. The first method is more memory efficient, and it is the one to prefer if no memory is needed, i.e.\ only step $n$ counts to determine what happens at step $n+1$. A minimal example of this workflow is in pseudo code \ref{alg:sim1}, with Euler as an integrator.
 	
 	\begin{algorithm}
 		\caption{The simulation algorithm} \label{alg:sim1}	
 		\begin{algorithmic}[1]
-			\For{i in particles in ensemble}
+			\For{$i$ in $[1,Np]$}
 			\State{$ \vec{r}_{i}\gets \vec{r}_{i,0} $}\Comment{position $\vec{r}_{i,0}$ is randomly initialized in the simulation space}
 			\State{$\theta_{i}\gets \theta_{i,0}$}\Comment {$\theta_{i,0} \sim \mathrm{Uniform}([0, 2\pi])$}
 			\State{$v\gets v_0$}\Comment{Can be initialized as a constant or a random variable}
 			\EndFor
 			\For{n in timesteps}
-			\For{i in particles in ensemble}
-			\State{$\vec{F}_{i,n} = \sum_{j}^{Np}{\vec{F}_{ij,n}}$}
+			\For{$i$ in $[1,Np]$}
+			\State{$\vec{F}_{i,n} = \sum_{j \neq i}^{Np}{\vec{F}_{ij,n}}$}
 			\State{$w_{i,n} \sim \mathcal{N}(0, \sqrt{2D_t \Delta t})$}
 			\State{$z_{i,n} \sim \mathcal{N}(0, \sqrt{2D_r \Delta t})$}
-			\State{$ \vec{r}_{i,n+1}\gets \vec{r_n} + w_{i,n} + v (\cos\theta_{i,n}, \sin\theta_{i,n})\Delta t + \vec{F}_{i,n}\Delta t / \gamma _t $}
-			\State{$\theta_{i,n+1}\gets \theta_{i,n} + z_{i,n} + \omega_{i,n} \Delta t + T_{i,n} \Delta t/\gamma _r$}
+			\State{$ \vec{r}_{i,n+1}\gets \vec{r_n} + w_{i,n} + v (\cos\theta_{i,n}, \sin\theta_{i,n})\Delta t + \vec{F}_{i,n}\Delta t D_t/k_B T $}
+			\State{$\theta_{i,n+1}\gets \theta_{i,n} + z_{i,n} + \omega_{i,n} \Delta t + T_{i,n} \Delta t D_r/k_B T$}
 			\EndFor
 			\EndFor
 		\end{algorithmic}
@@ -75,9 +76,9 @@
 	All the code work in this thesis is built on top of an existing code written and used in Microscale Robotics Lab, which can be found in repository \cite{sharma_simulations_2023}. Existing code performed simulations on 2D active Brownian particles moving in open or closed boundary featuring confinement. 
 	
 	\subsection{Boundary Conditions}
-	Original code featured open, periodic or hard boundary conditions. We will not go through all of them, but briefly open boundary conditions means just doing nothing, while a hard wall involves computing boundary's gradient in any point and using it as a locally straight wall condition.
+	Original code featured open, periodic or hard boundary conditions. We will not go through all of them, but briefly, open boundary conditions means just doing nothing, while a hard wall involves computing boundary's gradient in any point and using it as a locally straight wall condition.
 	
-	Periodic boundary conditions for a square simulation area are straightforward to make work if one places the origin of board's coordinate system in the center of the square box. Then, if L is square's side, limits for particles' motion will be $\pm L/2$ in both axes. The actual limit for them to be reflected is $L/2 + R$, meaning a particle must be entirely sticking out before being moved to the other side. Given all of this, the algorithm for these boundary condition works as in pseudo code \ref{alg:pbc}.
+	Periodic boundary conditions for a square simulation area are straightforward to make work if one places the origin in the center of the square. Then, if L is square's side, limits for particles' motion will be $\pm L/2$ in both axes. The actual limit for them to be reflected is $L/2 + R$, meaning a particle must be entirely sticking out before being moved to the other side. Given all of this, the algorithm for these boundary condition works as in algorithm \ref{alg:pbc}.
 	
 	\begin{algorithm}[htp]
 		\caption{Periodic Boundary Conditions} \label{alg:pbc}	
@@ -116,10 +117,10 @@
 			\centering
 			\includegraphics[width = 0.7\textwidth]{callegari_volpe_2019_hardsphere.png}
 			\label{fig:hardsphere}
-			\caption{ \cite{callegari_numerical_2019}}
+			\caption{If in one step two particles superimpose, hard sphere correction moves them at one diameter distance \cite{callegari_numerical_2019}}
 		\end{figure}
 
-	This operation involves calculating the distance matrix of a set of $n$ particles, i.e.~computing $n^2$ distances. Being a $O(n^2)$ algorithm, this kind of correction can become computationally demanding, especially for high density and velocity systems, where collisions and clustering are more likely to happen. Moreover, the one showed in algorithm \ref{alg:hardsphere} is just one step: there is no guarantee that after moving all particles every superposition will be removed. It becomes important to let the algorithm have a small tolerance, like $1/1000$ of particle radius and to cycle the correction until the number of superposition becomes $0$.
+	This operation involves calculating the distance matrix of a set of $n$ particles, i.e.\ computing $n^2$ distances. Being a $O(n^2)$ algorithm, this kind of correction can become computationally demanding, especially for high density and velocity systems, where collisions and clustering are more likely to happen. Moreover, the one showed in algorithm \ref{alg:hardsphere} is just one step: there is no guarantee that after moving all particles every superposition will be removed. It becomes important to let the algorithm have a small tolerance, like $1/1000$ of particle radius and to cycle the correction until the number of superposition becomes zero.
 	
 	Some works, such as \cite{martin-gomez_collective_2018, caprini_spontaneous_2020} use some kind of very steep repulsive potential ($\sim r^{-12}$) in order to simulate the excluded volume. In principle, since it does not require cycling, this approach seems faster, especially if one has to compute interactions anyway like in our case. During the development of this thesis some tests were run and, with all integration algorithms, even though computing the excluded volume effect is actually faster than applying a hard sphere correction, the steep potentials involved require a much smaller time step (1 or 2 orders of magnitude) which, in the end, makes simulating a fixed time lapse of dynamics slower.
 	
@@ -142,7 +143,7 @@
 	\section{Interactions Range} \label{intrange}
 	In some situations is useful to have a way to restrict the force computation only to particles closer than a threshold distance.
 	
-	One could do this to imitate a topological interaction at short range, where a particle only interacts with its nearest neighbors. In the case of circular particles (or spherical in 3D), setting the range to $3R$ is enough to get this effect, since two particles in contact will have their centers at $2R$ and no other particle can be at less than $3R$ in the same directions. This way, central particle will interact with 6 other particles at most (this is the number of nearest neighbors for circular particles in 2D) giving the effect of a nearest neighbor interaction in the case of contact. Clearly, this is not a \emph{true} topological interaction, where two nearest neighbors interact regardless their distance, but it can give similar effects if applied in high packing fraction cases, where particles come in contact.
+	One could do this to imitate a topological interaction at short range, where a particle only interacts with its nearest neighbors. In the case of circular particles (or spherical in 3D), setting the range to $3R$ is enough to get this effect, since two particles in contact will have their centers at $2R$ and no other particle can be at less than $3R$ in the same directions. This way, central particle will interact with 6 other particles at most (this is the number of nearest neighbors for hexagonal close packing order 2D) giving the effect of a nearest neighbor interaction in the case of contact. Clearly, this is not a \emph{true} topological interaction, where two nearest neighbors interact regardless their distance, but it can give similar effects if applied in high packing fraction cases, where particles come in contact.
 	
 	Moreover, when dealing with fast decreasing potentials, it is possible for the magnitude of the force between two particles to be less than the machine epsilon. If this is the case, it is obviously pointless to look into pairs of particles which are more than a certain distance apart. One can compute this distance for any given potential, provided some reference magnitude. An example is given in Figure \ref{fig:force_zero}.
 	\begin{figure}[htp]
@@ -180,17 +181,17 @@
 	\end{equation}
 	where $\theta$ is the self-propulsion direction, $R$ is the particle's radius, and $-1 < \alpha < 1$. This way distances, and hence forces, are computed starting from off center positions; applying forces to such positions results both in a translation effect and in a torque applied to the particle, coupling the two degrees of freedom.
 	
-	The idea is to take into account the underlying particle's asymmetry in simulations. It is a fact that the two faces of a Janus particle have different physical and chemical properties, which make them interact differently depending on the angle between their orientations and the line connecting their centers \cite{singh_pair_2024}. This can be due to a plethora of effects like chemical gradients, electrical forces or hydrodynamics, but this model takes only the asymmetry and uses it along with standard potentials, to create a minimal dry framework that mimics wet dynamics. In doing so, we also show that this model displays some interesting statistical mechanics properties.
+	The idea is to take into account the underlying particle's asymmetry in simulations. It is a fact that the two faces of a Janus particle have different physical and chemical properties, which make them interact differently depending on the angle between their orientations and the line connecting their centers \cite{singh_pair_2024}. This can be due to a plethora of effects like chemical gradients, electrical forces, hydrodynamics or fabrication defects, but this model takes only the asymmetry and uses it along with standard potentials, to create a minimal dry framework that mimics wet dynamics. In doing so, we also show that this model displays some interesting statistical mechanics properties.
 	
 	\begin{figure}[htp]
 		\centering
 		\includegraphics[width=\textwidth]{singpart_draw.png}
-		\caption{}
+		\caption{Red point: position from which interaction distances are calculated and to which force is applied. In this case, interacting position is at $0.5R$ from particle's center, in the direction of self propulsion, to the back.}
 		\label{fig:geom_model}
 	\end{figure}
 	
 	\section{Methods}
-	All the simulation and analysis code for this thesis was written in \julia\ \cite{julia}, except for the machine learning and inference part, where the Graph Network definition and training makes use of Python libraries like PyTorch and PyTorch-geometric, along with standard scientific computing tools like NumPy and Pandas.
+	All the simulation and analysis code for this thesis was written in \julia\ \cite{julia}, except for the machine learning and inference part, where the Graph Network definition and training makes use of Python libraries like PyTorch \citeauthor{pytorch} and PyTorch-geometric \citeauthor{pyg}, along with standard scientific computing tools like NumPy \citeauthor{numpy} and Pandas \citeauthor{pandas}.
 	
 	Heun was chosen as the standard integration scheme for all the simulations, integration steps vary with the different potentials and are indicated case by case. All the simulations were performed with real units, so that particles have a radius of $2\text{ }\mathrm{\mu m}$ and the value for solvent viscosity is kept fixed at $\eta = 10^{-3}$ P. If not indicated, standard temperature for simulations is held fixed at $300$ K.
 	
