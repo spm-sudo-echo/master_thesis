@@ -68,32 +68,70 @@
 			
 		We studied flocking as a II order phase transition, using the global polarization $P$ as order parameter and varying $\alpha$, to change the magnitude of orientations coupling. The range of interaction is $5 \mu \text{m}$, which, being $2.5R$, with $R$ particle radius, is enough to make particles interact only with one layer of particles around them, simulating a nearest-neighbor interaction. Though interactions range is so short, a long-range order establishes for large enough $\alpha$, making the whole ensemble polarize.
 		
-		As a result, Figure \ref{fig:phasetrans} shows the expected behavior of a II order phase transition: as the order parameter $P$ gets with a discontinuity from 0 to 1, its susceptibility diverges to a peak when $\alpha$ approaches critical value and then returns back close to zero.
+		As a result, Figure \ref{fig:phasetrans} shows the expected behavior of a II order phase transition: as the order parameter $P$ gets with a discontinuity from 0 to 1, its susceptibility diverges to a peak when $\alpha$ approaches critical value and then returns back close to zero (see, as a reference, Figure \ref{fig:martin_flocking3}).
 		
 		\begin{figure}[htp]
 			\centering
 			\subfloat[][]{\includegraphics[width= \subfigwidth]{phasetrans/polar.png}}\\
 			\subfloat[][]{\includegraphics[width= \subfigwidth]{phasetrans/suscpolar.png}}			
-			\caption{\textbf{NOT DEFINITIVE}}
+			\caption{\textbf{NOT DEFINITIVE} Diagrams for polarization and relative susceptivity for the transition to ordered phase.}
 			\label{fig:phasetrans}
 		\end{figure}
 		
+		\section{Aligning Lennard Jones: Clustering and Local Order}
+		Lennard Jones (LJ) is the potential which has the best chance of representing well real world dynamics (see section \ref{qualitative}), so it is worthwhile to study it in detail, to see how it affects individual and collective behaviors of ABPs ensembles. In order to do that, we investigated both global and local polarization, as well as clustering, to better understand the effects of the different model parameters on both positional and orientational degrees of freedom.
 		
-		\begin{comment}
-			\begin{figure}[htp]
-				\centering
-				\includegraphics[width=\textwidth]example-image-A}
-			\caption{}
-			\label{fig:flock_rdf}
-			\end{figure}
+		\subsection{Velocity}
+		In order to study the effect of velocity, we first computed all the quantities of interest in the case of passive particles with an aligning LJ interaction, and then added a self propulsion velocity. An active speed makes the system non-isotropic, giving a preferred direction to particles, so we also investigated how velocity interacts with the sign of the directional coupling parameter $\alpha$, repeating the analysis for positive and negative values of it.
+		
+		The interaction used is LJ with parameters $\sigma = 2R$, with $R$ particle's radius, and strength parameter $\epsilon \sigma = 0.1 J$. Magnitude of $\alpha$ is kept fixed at $0.5$, changing the sign. Simulations involved $250$ particles in a square of $175 \mu\text{m}$ side, for a resulting packing fraction of $\sim 0.1$. Simulation time is 1000 s. 
+		
+		\begin{figure}[htp]
+			\centering
+			\subfloat[][]{\includegraphics[width=.3\textwidth]{lj_velocity/polar_oc0.5_v0.0.png}}
+			\subfloat[][]{\includegraphics[width=.3\textwidth]{lj_velocity/polar_oc0.5_v10.0.png}}
+			\subfloat[][]{\includegraphics[width=.3\textwidth]{lj_velocity/polar_oc0.5_v20.0.png}}\\
+			\subfloat[][]{\includegraphics[width=.3\textwidth]{lj_velocity/polar_oc-0.5_v10.0.png}}
+			\subfloat[][]{\includegraphics[width=.3\textwidth]{lj_velocity/polar_oc-0.5_v20.0.png}}
 			
-			\section{Aligning Lennard Jones: Clustering and Local Order}
-			\subsection{Velocity}
-			\subsection{Velocity Distribution}
-			\subsection{Angular Velocity}
-			\subsection{Orientation Coupling}
-			\subsection{LJ strength $\epsilon$}
+			\caption{\textbf{NOT DEFINITIVE}  Average of 5 simulations, strip around line is stddeviation}
+			\label{fig:lj_velocity_pol}
+		\end{figure}
+		
+		In Figure \ref{fig:lj_velocity_pol} it is noticeable how an ensemble of passive particles with an aligning interaction has a baseline local polarization, while the global is almost zero. Adding self-propulsion has the consequence of making the system polarize, with a transient length that depends on the velocity: faster particles tend to align faster. A noteworthy characteristic is that particles with interacting position on the back do not tend to align at all.
+		
+		This can also be noticed in Figures \ref{fig:lj_velocity_situation} and \ref{fig:lj_velocity_cluster}, where, when the off center position is on the back, velocity tends to hinder clustering, bringing to a more sparse final situation. 
+		
+		\begin{figure}[htp]
+			\centering
+			\subfloat[][]{\includegraphics[width=.3\textwidth]{lj_velocity/situation_oc0.5_v0.0.png}}
+			\subfloat[][]{\includegraphics[width=.3\textwidth]{lj_velocity/situation_oc0.5_v10.0.png}}
+			\subfloat[][]{\includegraphics[width=.3\textwidth]{lj_velocity/situation_oc0.5_v20.0.png}}\\
+			\subfloat[][]{\includegraphics[width=.3\textwidth]{lj_velocity/situation_oc-0.5_v10.0.png}}
+			\subfloat[][]{\includegraphics[width=.3\textwidth]{lj_velocity/situation_oc-0.5_v20.0.png}}
 			
+			\caption{\textbf{NOT DEFINITIVE}  }
+			\label{fig:lj_velocity_situation}
+		\end{figure}
+		
+		
+		\begin{figure}[htp]
+			\centering
+			\subfloat[][]{\includegraphics[width=.3\textwidth]{lj_velocity/cluster_oc0.5_v0.0.png}}
+			\subfloat[][]{\includegraphics[width=.3\textwidth]{lj_velocity/cluster_oc0.5_v10.0.png}}
+			\subfloat[][]{\includegraphics[width=.3\textwidth]{lj_velocity/cluster_oc0.5_v20.0.png}}\\
+			\subfloat[][]{\includegraphics[width=.3\textwidth]{lj_velocity/cluster_oc-0.5_v10.0.png}}
+			\subfloat[][]{\includegraphics[width=.3\textwidth]{lj_velocity/cluster_oc-0.5_v20.0.png}}
+			
+			\caption{\textbf{NOT DEFINITIVE}  }
+			\label{fig:lj_velocity_cluster}
+		\end{figure}
+		
+		\begin{comment}		
+		\subsection{Velocity Distribution}
+		\subsection{Angular Velocity}
+		\subsection{Orientation Coupling}
+		\subsection{LJ strength $\epsilon$}			
 		\end{comment}
 	
 	

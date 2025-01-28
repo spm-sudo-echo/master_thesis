@@ -203,9 +203,25 @@
 	
 	Heun was chosen as the standard integration scheme for all the simulations, integration steps vary with the different potentials and are indicated case by case. All the simulations were performed with real units, so that particles have a radius of $2\text{ }\mathrm{\mu m}$ and the value for solvent viscosity is kept fixed at $\eta = 10^{-3}$ P. If not indicated, standard temperature for simulations is held fixed at $300$ K.
 	
+	We give here the expressions and parameters explanation for the potentials tested in this thesis. Spring force has two parameters, elastic constant $k$ and rest length $r_0$, so that 
+	\begin{equation}
+		V(r) = \frac{1}{2}k (r-r_0)^2 \rightarrow F(r) = -k(r-r_0)
+	\end{equation}.
+	What we will often call Coulomb force is actually a $r^-2$ order potential with a constant $k$ that does not involve charges and it is present only to adjust the strength of interaction, that writes
+	\begin{equation}
+		V(r) = -\frac{k}{r} \rightarrow F(r) = \frac{k}{r^2}
+	\end{equation} 
+	and any sign variation, as well as the difference between repulsive and attractive, is absorbed in $k$. The last interaction potential is Lennard Jones (LJ)
+	\begin{equation}
+		V(r) = 4\varepsilon \left[ \left(\frac{\sigma}{r}\right)^{12} - \left(\frac{\sigma}{r}\right)^{6} \right] \rightarrow F(r) = 24\varepsilon \frac{1}{r}\left[ 2 \left(\frac{\sigma}{r}\right)^{12}  - \left(\frac{\sigma}{r}\right)^{6} \right]
+	\end{equation}
+	where $\sigma$ is a location parameter that in our simulations will be fixed at the value of particle's diameter $2R$, and $\varepsilon$ adjusts the strength of interaction. This potential has an absolute minimum for $r = 2^{1/6}\sigma$.
+	
+	%PLOTS?
+	
 	All simulations were performed in a 2 dimensional square environment, where particles are disks, featuring periodic boundary conditions and a non-superposition condition (hard sphere correction). Given that positions are simulated in open periodic boundary, all interactions are calculated periodically too, taking the shortest between the in-box and the periodic distance.
 	
-	\section{Qualitative comparison between experiments and simulations}
+	\section{Qualitative comparison between experiments and simulations} \label{qualitative}
 	
 
 \end{document}
