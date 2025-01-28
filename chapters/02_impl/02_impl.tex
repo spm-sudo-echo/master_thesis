@@ -27,7 +27,7 @@
 	
 	In point 2.\ particles position are randomly initialized, with a uniform distribution in the simulation space. We need to make sure that particles are not superimposed to avoid nonphysical effects. At this point it is possible to compute forces and torques acting on every particle, which are needed to compute positions at the next step.  
 	
-	From the computational point of view, our simulation framework is based upon object oriented programming: particle ensemble is initialized as an instance of the ABPE class, which holds all the variables that define the state of the system. 
+	From the computational point of view, our simulation framework is based upon object oriented programming: particle ensemble is initialized as an instance of the ABPE class, which holds all the variables that define the state of the system at a certain time \ref{tab:ABPE2}. 
 	\begin{table}[h]
 		\centering
 		\begin{tabular}{c|cl}
@@ -35,15 +35,15 @@
 			\hline
 			\texttt{Np}  & \texttt{Int64} & Number of particles \\
 			\texttt{L}   & \texttt{Float64} & Size of observation space ($\mu$m) \\
-			\texttt{R}   & \texttt{Float64} & Radius ($\mu$m) \\
+			\texttt{R}   & \texttt{Float64} & Particle radius ($\mu$m) \\
 			\texttt{T}   & \texttt{Float64} & Temperature (K) \\
 			\texttt{v}   & \texttt{Vector\{Float64\}} & Self-Propulsion Velocity ($\mu$m/s) \\
 			\texttt{$\mathtt{\omega}$}   & \texttt{Vector\{Float64\}} & Self-Propulsion Angular velocity (rad/s) \\
-			\texttt{DT}  & \texttt{Float64} & Translational diffusion coefficient ($\mu$m$^2$/s) \\
-			\texttt{DR}  & \texttt{Float64} & Rotational diffusion coefficient (rad$^2$/s) \\
-			\texttt{x}   & \texttt{Vector\{Float64\}} & X position ($\mu$m) \\
-			\texttt{y}   & \texttt{Vector\{Float64\}} & Y position ($\mu$m) \\
-			\texttt{$\mathtt{\theta}$}   & \texttt{Vector\{Float64\}} & Orientation (rad) \\
+			$\mathtt{D_T}$  & \texttt{Float64} & Translational diffusion coefficient ($\mu$m$^2$/s) \\
+			$\mathtt{D_R}$  & \texttt{Float64} & Rotational diffusion coefficient (rad$^2$/s) \\
+			\texttt{x}   & \texttt{Vector\{Float64\}} & Particle X position ($\mu$m) \\
+			\texttt{y}   & \texttt{Vector\{Float64\}} & Particle Y position ($\mu$m) \\
+			\texttt{$\mathtt{\theta}$}   & \texttt{Vector\{Float64\}} & Particle orientation (rad) \\
 		\end{tabular}
 		\caption{Structure definition of \texttt{ABPE2} in Julia}
 		\label{tab:ABPE2}
@@ -55,13 +55,13 @@
 	\begin{algorithm}
 		\caption{The simulation algorithm} \label{alg:sim1}	
 		\begin{algorithmic}[1]
-			\For{$i$ in $[1,Np]$}
+			\For{$i$ in $[1,\mathtt{Np}]$}
 			\State{$ \vec{r}_{i}\gets \vec{r}_{i,0} $}\Comment{position $\vec{r}_{i,0}$ is randomly initialized in the simulation space}
 			\State{$\theta_{i}\gets \theta_{i,0}$}\Comment {$\theta_{i,0} \sim \mathrm{Uniform}([0, 2\pi])$}
 			\State{$v\gets v_0$}\Comment{Can be initialized as a constant or a random variable}
 			\EndFor
 			\For{n in timesteps}
-			\For{$i$ in $[1,Np]$}
+			\For{$i$ in $[1,\mathtt{Np}]$}
 			\State{$\vec{F}_{i,n} = \sum_{j \neq i}^{Np}{\vec{F}_{ij,n}}$}
 			\State{$w_{i,n} \sim \mathcal{N}(0, \sqrt{2D_t \Delta t})$}
 			\State{$z_{i,n} \sim \mathcal{N}(0, \sqrt{2D_r \Delta t})$}
@@ -120,15 +120,16 @@
 			\caption{If in one step two particles superimpose, hard sphere correction moves them at one diameter distance \cite{callegari_numerical_2019}}
 		\end{figure}
 
-	This operation involves calculating the distance matrix of a set of $n$ particles, i.e.\ computing $n^2$ distances. Being a $O(n^2)$ algorithm, this kind of correction can become computationally demanding, especially for high density and velocity systems, where collisions and clustering are more likely to happen. Moreover, the one showed in algorithm \ref{alg:hardsphere} is just one step: there is no guarantee that after moving all particles every superposition will be removed. It becomes important to let the algorithm have a small tolerance, like $1/1000$ of particle radius and to cycle the correction until the number of superposition becomes zero.
+	This operation involves calculating the distance matrix of a set of $\mathtt{N_p}$ particles, i.e.\ computing $\mathtt{N_p}^2$ distances. Being a $O(n^2)$ algorithm, this kind of correction can become computationally demanding, especially for high density and velocity systems, where collisions and clustering are more likely to happen. Moreover, correction showed in algorithm \ref{alg:hardsphere} is for only one step and it does not guarantee that zero superposition afterwards. It becomes important to let the algorithm have a small tolerance, like $1/1000$ of particle radius and to cycle the correction until the number of superposition becomes zero.
+
 	
-	Some works, such as \cite{martin-gomez_collective_2018, caprini_spontaneous_2020} use some kind of very steep repulsive potential ($\sim r^{-12}$) in order to simulate the excluded volume. In principle, since it does not require cycling, this approach seems faster, especially if one has to compute interactions anyway like in our case. During the development of this thesis some tests were run and, with all integration algorithms, even though computing the excluded volume effect is actually faster than applying a hard sphere correction, the steep potentials involved require a much smaller time step (1 or 2 orders of magnitude) which, in the end, makes simulating a fixed time lapse of dynamics slower.
+	In the work cited in section \ref{literature}, \citeauthor{martin-gomez_collective_2018} use a steep repulsive potential $\sim r^{-12}$ in order to simulate the excluded volume. In principle, since it does not require cycling, this approach seems faster, especially if one has to compute interactions anyway. During the development of this thesis some tests were run and, with all integration algorithms, even though computing the excluded volume effect is actually faster than applying a hard sphere correction, the steep potentials involved require a much smaller time step (1 or 2 orders of magnitude) hence, making the simulation slower.
 	
-	Since hard sphere corrections were implemented to study ABPs in confinement rather than open periodic boundary, this interaction could not take periodicity into account leading to possible superpositions at the simulation box borders.
+	Since hard sphere corrections were implemented to study ABPs in confinement rather than open periodic boundary, this interaction could not take periodicity into account leading to possible superpositions at boundaries.
 	
 	Finally, let us explain the physics behind this kind of correction. Moving superimposing particles of just the right amount to keep them in contact may seem a somehow strong assumption, since it is simulating a perfectly inelastic collision. Actually, if one wanted to simulate balls moving on a pool table, where macroscopic Newtonian dynamics take place, it would be easy to state whether collisions are elastic or not (in the mentioned case, yes). Here we can exploit what was found by, among others \citeauthor{singh_pair_2024} in \cite{singh_pair_2024}, where the contact time for Janus colloids was characterized, in different collision scenarios. They found contact times of the order of $\sim \text{s}$, similarly to what is often observed in Microscale Robotics Lab, motivating the choice of a completely inelastic collision, where adhesion forces keep particles together after the impact. 
 
-	\section{Periodic Steric Interactions}
+	\section{Modified Periodic Boundary Steric Interactions}
 	When boundary conditions are periodic, not taking them into account in steric interactions may cause some problems, on top of being not formally correct. With the hard sphere correction as it was described before, particles are moved only when their distance is less than a diameter. As explained before, with periodic boundary conditions, a particles is reflected e.g.~on the left side only when its center of mass is out of the right border of more than a radius, meaning the particle must be entirely out before being reflected. If not taken into account, this may leave a \emph{frame} of size R around the box where particles can superimpose. 
 	
 	In the new version of this correction, distances are not computed in a Euclidean fashion anymore, but x and y components are separately checked, taking $\Delta x = min \left\{ \abs{x_1-x_2}, \abs{x_1-x_2}-L \right\}$, and the same for $y$, where $L$ is the box size. If one of the two particles is coming out of the box, but it has not been reflected yet, and the other is at the boundary, their difference in one component is larger than $L$. This way it is possible to identify superpositions at the borders, giving the possibility to form cluster starting from a \emph{nucleation site} on the boundary. 
@@ -136,9 +137,16 @@
 	Another, more serious consequence is that, when working with potentials that feature a \emph{soft} non-superposition condition, like a diverging positive force at a $2R$ distance, two particles sticking out of the border on opposite sides may superimpose a lot before one of them gets reflected on the other side, but when this happens, the force between them diverges, leading to instabilities in the simulation.
 	
 	\section{All to All Central Potentials}
-	Spring, Coulomb, Lennard Jones, Yukawa, Weeks-Chandler-Anderson are just few examples of the myriad of central potentials that are used to model interactions in physics. The central potential is the basis of this thesis too, and having a fast implementation is crucial to simulate interactions in large systems of particles. 
+	Spring, Coulomb, Lennard Jones, Yukawa, Weeks-Chandler-Anderson are just few examples of the myriad of central potentials that are used to model interactions in physics. The central potential is the basis of this thesis too, and having a fast implementation is crucial to simulate interactions in dense systems. 
 	
-	The first step is to compute a distance matrix between the coordinates of all particles. Then a function $F(r)$ is applied to all the entries of this matrix to get the magnitude of the force between each pair of particles. We are simulating in 2D, so one way to get the radial direction for the force is to compute distance matrices both for $x$ and $y$ coordinates and then dividing them by the Euclidean distance matrix element-wise to get sine and cosine of the radial directions angle. Now the force is split in its two components and it can simply be added to the deterministic step in the coordinate as in algorithm \ref{alg:sim1}, given that we are in low Reynolds number regime. 
+	The first step is to compute a distance matrix between the coordinates of all particles. Then a function $F(d)$, only of inter-particle distance $d$, is applied to all the entries of this matrix to get the magnitude of the force between each pair of particles. In 2D, radial direction for the force can be computed from distance matrices both for $x$ and $y$ coordinates. If $d^x_{i,j} = x_i - x_j$ and $d^y_{i,j} = y_i - y_j$, then Euclidean distance is $d_{i,j} = \sqrt{(d^x_{i,j})^2 + (d^y_{i,j})^2}$, and if $\varphi_{i,j}$ is the radial direction from particle $i$ to particle $j$, then
+	\begin{equation}
+		\begin{cases}
+			\cos\varphi_{i,j} = d^x_{i,j}/d_{i,j}\\
+			\sin\varphi_{i,j} = d^y_{i,j}/d_{i,j}
+		\end{cases}
+	\end{equation}
+	splitting the force in its two components and it can simply be added to the deterministic step in the coordinate as in algorithm \ref{alg:sim1}, given that we are in low Reynolds number regime. 
 	
 	\section{Interactions Range} \label{intrange}
 	In some situations is useful to have a way to restrict the force computation only to particles closer than a threshold distance.
@@ -154,7 +162,7 @@
 	\end{figure}
 	This is of paramount importance for speed. While a complete calculation of all the possible forces between $n$ particles is an $\order{n^2}$ algorithm (the actual number of possible interactions is $n(n-1)$), the number of particles in a box of given area is constant in $n$ if density remains fixed, so, scaling up the number of particles in the same conditions will be less demanding in terms of computational power.
 	
-	Inserting a range in interactions makes straightforward to apply them in a periodic fashion. Original code had a function to reflect particles in periodic boundary conditions, which worked in a very fast vectorized way (pseudo code for naive version is in algorithm \ref{alg:pbc}). The idea is: take one particle and make it the \emph{central} one, then shift coordinates of the other particles so that the \emph{central} is in $(0,0)$, now just apply periodic boundary conditions to the shifted coordinates. This process should guarantee that the \emph{central} particle interacts only once with any of the others, following a simple rule: when choosing between the true particle and the periodically shifted one the interacting particle is the closest one. An explanation of this process can be found in Figure \ref{fig:periodicint}.
+	Inserting a range in interactions makes straightforward to apply them in a periodic fashion. Original code had a function to reflect particles in periodic boundary conditions, which worked in a very fast vectorized way (pseudo code in algorithm \ref{alg:pbc}). The idea is: take one particle and make it the \emph{central} one, then shift coordinates of the other particles so that the \emph{central} is in $(0,0)$, now just apply periodic boundary conditions to the shifted coordinates. This process should guarantee that the \emph{central} particle interacts only once with any of the others, following a simple rule: when choosing between the true particle and the periodically shifted one the interacting particle is the closest one. An explanation of this process can be found in Figure \ref{fig:periodicint}.
 	
 	\begin{figure}[htp]
 		\centering
@@ -165,7 +173,7 @@
 	
 	\section{Aligning Interactions} \label{alignint}
 
-	There are several examples in literature of aligning interactions applied to ABPs systems. Most of them involve applying a torque which explicitly depends on the difference between the orientation angle of the two interacting particles; some of them have a constant torque which is applied to particles closer than a certain distance. To the best of our knowledge, nobody tried before to implement an interaction in the system which unifies the central force and the torque. 
+	There are several examples in literature of aligning interactions applied to ABPs systems \cite{martin-gomez_collective_2018, callegari_numerical_2019}. Most of them involve applying a torque which explicitly depends on the difference between the orientation angle of the two interacting particles; some of them have a constant torque which is applied to particles closer than a certain distance. To the best of our knowledge, nobody tried before to implement an interaction in the system which unifies the central force and the torque. 
 	
 	The model used in this thesis aims to keep a minimal amount of parameters while coupling positions and orientations of interacting particles, actually using only one more parameter than a force-only model.
 	

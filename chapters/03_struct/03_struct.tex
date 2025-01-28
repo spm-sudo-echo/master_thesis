@@ -38,20 +38,48 @@
 		Getting cluster sizes as the result of a DBSCAN passage, it becomes easy to compute the sample cluster size distribution function, that is, plotting sizes on a histogram.
 		\subsection{Local Polarization}
 		As explained in previous section, local properties are useful to observe, in particular in transients. When aligning interactions are present and packing fraction is small or we are in a transient, small clusters of particles tend to align their directions, so that measuring the global polarization $P$ would get in the same result of a disordered system, close to $0$. We can exploit the fact that clustering algorithms assign points to clusters and then measure how polarized the single groups are, meaning we compute a local polarization order parameter. Averaging over clusters, this parameter $\bar{P}$ will be close to $1$ even if $P$ is kept low by the different orientations of clusters, making it a good parameter to study local properties and short range interactions.
-		\begin{comment}
-			\section{Observed Collective Behaviors}
-			\subsection{Spring-Ring}
-			\subsection{Coulomb Flocking}
-			\section{Flocking as a Phase Transition}
-			\subsection{Theory of phase transitions}
-			\subsection{Coulomb with aligning interactions}
-			\begin{figure}[htp]
-				\centering
-				\includegraphics[width=\textwidth]{example-image-A}
-				\caption{}
-				\label{fig:phasetrans}
-			\end{figure}
+		
+		\section{Coulomb Flocking as a Phase Transition}
+		As mentioned in section \ref{literature}, \citeauthor{martin-gomez_collective_2018}, as well as \citeauthor{negi_emergent_2022} showed how inserting an explicitly aligning interaction in the simulation can make the whole system polarize, meaning all particles move in the same direction. This phenomenon is called \emph{flocking}.
+		
+		Here, we show how a repulsive off centered interaction, although with limited range, can lead an ABPs system to reach a flocking state. The selected interaction force is $F(r) = kr^{-2}$, akin to a Coulomb or gravitational force, where $k$ is a constant. When both the off center magnitude $\alpha$ and the constant $k$ have a positive value, front sides of interacting particles repel each other, meaning that two particle swimming towards each other will tend to align their orientations. Here we stress the fact that when all particles in ensemble have the same velocity and clustering is not present, a head-to-head collision is by far the most frequent, and for sure a head-to-tail collision is almost impossible, since two particles with the same directions will chase each other without ever touching.
+		
+		\begin{figure}[htp]
+			\centering
+			\includegraphics[width=\textwidth]{alignment.png}
+			\caption{Behavior of two particles with aligning interactions, compared with excluded volume steric interaction only \citeauthor{martin-gomez_collective_2018}.}
+			\label{fig:alignment}
+		\end{figure}
+		
+		In Figure \ref{fig:alignment}, an example of how the alignment process works. Differently from our case, the interaction in mentioned work is an explicitly aligning torque where $T \sim \sin( \theta_{i}-\theta_{j} )$, where particles orientation are \emph{explicitly} included in the expression and $\abs{T}$ has a clear minimum where $\theta_{i} = \theta_{j}$. Our alignment comes automatically from applying a force to a non centered position. 
+		
+		In Figure \ref{fig:flock40}, an example of how flocking transition happens with $k = 10$, with an interaction range of $40 \mu \text{m}$.
+		\begin{figure}[htp]
+			\centering
+			\subfloat[][]{\includegraphics[width=.3\textwidth]{coulombrange40/situation0.5s.png}}
+			\subfloat[][]{\includegraphics[width=.3\textwidth]{coulombrange40/situation12.5s.png}}
+			\subfloat[][]{\includegraphics[width=.3\textwidth]{coulombrange40/situation25.0s.png}}\\
+			\subfloat[][]{\includegraphics[width=.3\textwidth]{coulombrange40/situation50.0s.png}}
+			\subfloat[][]{\includegraphics[width=.3\textwidth]{coulombrange40/situation100.0s.png}}
 			
+			\caption{\textbf{NOT DEFINITIVE} Flocking transition: all particles in the system tend to polarize after few seconds. }
+			\label{fig:flock40}
+		\end{figure}
+			
+		We studied flocking as a II order phase transition, using the global polarization $P$ as order parameter and varying $\alpha$, to change the magnitude of orientations coupling. The range of interaction is $5 \mu \text{m}$, which, being $2.5R$, with $R$ particle radius, is enough to make particles interact only with one layer of particles around them, simulating a nearest-neighbor interaction. Though interactions range is so short, a long-range order establishes for large enough $\alpha$, making the whole ensemble polarize.
+		
+		As a result, Figure \ref{fig:phasetrans} shows the expected behavior of a II order phase transition: as the order parameter $P$ gets with a discontinuity from 0 to 1, its susceptibility diverges to a peak when $\alpha$ approaches critical value and then returns back close to zero.
+		
+		\begin{figure}[htp]
+			\centering
+			\subfloat[][]{\includegraphics[width= \subfigwidth]{phasetrans/polar.png}}\\
+			\subfloat[][]{\includegraphics[width= \subfigwidth]{phasetrans/suscpolar.png}}			
+			\caption{\textbf{NOT DEFINITIVE}}
+			\label{fig:phasetrans}
+		\end{figure}
+		
+		
+		\begin{comment}
 			\begin{figure}[htp]
 				\centering
 				\includegraphics[width=\textwidth]example-image-A}
